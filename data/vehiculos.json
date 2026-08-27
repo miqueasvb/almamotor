@@ -76,5 +76,25 @@
       "img/vehiculos/mini-mini-cooper-s-2017/foto-1787870616862-6.jpg",
       "img/vehiculos/mini-mini-cooper-s-2017/foto-1787870618792-7.jpg"
     ]
+  },
+  {
+    "id": "fiat-cronos-precision-1-3-gse-cvt-bz-2023",
+    "marca": "Fiat",
+    "modelo": "Cronos Precision 1.3 GSE CVT BZ",
+    "anio": 2023,
+    "km": 43000,
+    "estado": "usado",
+    "combustible": "Nafta",
+    "transmision": "Automática",
+    "fotos": [
+      "img/vehiculos/fiat-cronos-precision-1-3-gse-cvt-bz-2023/foto-1787870687897-0.jpg",
+      "img/vehiculos/fiat-cronos-precision-1-3-gse-cvt-bz-2023/foto-1787870689703-1.jpg",
+      "img/vehiculos/fiat-cronos-precision-1-3-gse-cvt-bz-2023/foto-1787870691560-2.jpg",
+      "img/vehiculos/fiat-cronos-precision-1-3-gse-cvt-bz-2023/foto-1787870693284-3.jpg",
+      "img/vehiculos/fiat-cronos-precision-1-3-gse-cvt-bz-2023/foto-1787870695300-4.jpg",
+      "img/vehiculos/fiat-cronos-precision-1-3-gse-cvt-bz-2023/foto-1787870696916-5.jpg",
+      "img/vehiculos/fiat-cronos-precision-1-3-gse-cvt-bz-2023/foto-1787870698775-6.jpg",
+      "img/vehiculos/fiat-cronos-precision-1-3-gse-cvt-bz-2023/foto-1787870700433-7.jpg"
+    ]
   }
 ]
