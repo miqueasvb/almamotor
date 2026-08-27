@@ -187,5 +187,24 @@
       "img/vehiculos/volkswagen-gol-trend-2014/foto-1787871100859-4.jpg",
       "img/vehiculos/volkswagen-gol-trend-2014/foto-1787871102744-5.jpg"
     ]
+  },
+  {
+    "id": "renault-clio-mio-confort-plus-2014",
+    "marca": "Renault",
+    "modelo": "Clio Mio Confort Plus",
+    "anio": 2014,
+    "km": 112000,
+    "estado": "usado",
+    "combustible": "Nafta",
+    "transmision": "Manual",
+    "fotos": [
+      "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871135183-0.jpg",
+      "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871136894-1.jpg",
+      "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871138633-2.jpg",
+      "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871140276-3.jpg",
+      "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871142038-4.jpg",
+      "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871144264-5.jpg",
+      "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871145867-6.jpg"
+    ]
   }
 ]
