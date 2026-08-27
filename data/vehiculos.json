@@ -113,5 +113,23 @@
       "img/vehiculos/toyota-etios-x-2021/foto-1787870787775-3.jpg",
       "img/vehiculos/toyota-etios-x-2021/foto-1787870789495-4.jpg"
     ]
+  },
+  {
+    "id": "volkswagen-gol-trend-2021",
+    "marca": "Volkswagen",
+    "modelo": "Gol Trend",
+    "anio": 2021,
+    "km": 86000,
+    "estado": "usado",
+    "combustible": "Nafta",
+    "transmision": "Manual",
+    "fotos": [
+      "img/vehiculos/volkswagen-gol-trend-2021/foto-1787870903896-0.jpg",
+      "img/vehiculos/volkswagen-gol-trend-2021/foto-1787870905565-1.jpg",
+      "img/vehiculos/volkswagen-gol-trend-2021/foto-1787870907308-2.jpg",
+      "img/vehiculos/volkswagen-gol-trend-2021/foto-1787870909670-3.jpg",
+      "img/vehiculos/volkswagen-gol-trend-2021/foto-1787870911876-4.jpg",
+      "img/vehiculos/volkswagen-gol-trend-2021/foto-1787870913833-5.jpg"
+    ]
   }
 ]
