@@ -6,21 +6,14 @@ public_folder: "img/vehiculos"
 collections:
   - name: "vehiculos"
     label: "Vehículos"
-    folder: "content/vehiculos"
+    folder: "content"
     create: true
-    slug: "{{id}}"
-    extension: "json"
-    format: "json"
+    slug: "vehiculos"
+    file: "content/vehiculos.json" # Guarda todo en un JSON unificado
     fields:
-      - {label: "ID Único (ej: duster-2014)", name: "id", widget: "string"}
-      - {label: "Marca", name: "marca", widget: "string"}
+      - {label: "Marca", name: "marca", widget: "select", options: ["Ford", "Volkswagen", "Ram", "Toyota", "Jeep", "Fiat", "Chevrolet", "Peugeot", "BMW", "Mercedes-Benz", "Nissan", "Citroen", "Renault", "Mini"]}
       - {label: "Modelo", name: "modelo", widget: "string"}
-      - {label: "Año", name: "anio", widget: "string"}
+      - {label: "Año", name: "anio", widget: "number"}
       - {label: "Kilometraje", name: "km", widget: "number"}
-      - {label: "Estado", name: "estado", widget: "select", options: ["usado", "0km"]}
-      - {label: "Foto de Portada (Catálogo)", name: "foto", widget: "image"}
-      - label: "Galería de más fotos (Detalle)"
-        name: "galeria"
-        widget: "list"
-        field: {label: "Imagen", name: "imagen", widget: "image"}
-      - {label: "Descripción", name: "descripcion", widget: "text"}
+      - {label: "Estado", name: "estado", widget: "select", options: ["0km", "usado"]}
+      - {label: "Foto principal", name: "foto", widget: "image"}
