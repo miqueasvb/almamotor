@@ -27,12 +27,15 @@
     "anio": 2022,
     "km": 92000,
     "estado": "usado",
-    "combustible": "Diesel",
-    "transmision": "Manaul",
-    "descripcion": "esta bueno!",
+    "combustible": "Nafta",
+    "transmision": "Automática",
     "fotos": [
       "img/vehiculos/ram-ram-1500-2022/foto-1787866322826-0.webp",
-      "img/vehiculos/ram-ram-1500-2022/foto-1787866324690-1.jpg"
+      "img/vehiculos/ram-ram-1500-2022/foto-1787869866971-1.jpg",
+      "img/vehiculos/ram-ram-1500-2022/foto-1787869869102-2.jpg",
+      "img/vehiculos/ram-ram-1500-2022/foto-1787869870908-3.jpg",
+      "img/vehiculos/ram-ram-1500-2022/foto-1787869872743-4.jpg",
+      "img/vehiculos/ram-ram-1500-2022/foto-1787869874425-5.jpg"
     ]
   }
 ]
