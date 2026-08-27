@@ -1,1 +1,19 @@
-
+backend:
+  name: git-gateway
+  branch: main
+media_folder: "img/autos"
+public_folder: "/img/autos"
+collections:
+  - name: "vehiculos"
+    label: "Vehículos"
+    folder: "content/vehiculos"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "ID (ej: amarok-2023)", name: "id", widget: "string"}
+      - {label: "Modelo", name: "titulo", widget: "string"}
+      - {label: "Precio", name: "precio", widget: "string"}
+      - {label: "Año", name: "anio", widget: "string"}
+      - {label: "Kilometraje", name: "kilometraje", widget: "string"}
+      - {label: "Imagen Principal", name: "imagen", widget: "image"}
+      - {label: "Descripción", name: "descripcion", widget: "text"}
