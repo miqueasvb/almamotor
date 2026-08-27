@@ -6,7 +6,7 @@ public_folder: "/img"
 collections:
   - name: "vehiculos"
     label: "Vehículos"
-    folder: "content/vehiculos"
+    folder: "img/vehiculos"
     create: true
     slug: "{{slug}}"
     fields:
