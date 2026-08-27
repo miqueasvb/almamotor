@@ -1,12 +1,3 @@
 {
-  "vehiculos": [
-    {
-      "marca": "Renault",
-      "modelo": "Duster Tech 1.6",
-      "anio": 2013,
-      "km": 144000,
-      "estado": "usado",
-      "foto": "img/vehiculos/renault-duster-tech-1.6-2014.jpg"
-    }
-  ]
+  "vehiculos": []
 }
