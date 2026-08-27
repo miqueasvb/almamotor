@@ -169,5 +169,23 @@
       "img/vehiculos/renault-clio-mio-dynamique-2015/foto-1787871045178-5.jpg",
       "img/vehiculos/renault-clio-mio-dynamique-2015/foto-1787871046993-6.jpg"
     ]
+  },
+  {
+    "id": "volkswagen-gol-trend-2014",
+    "marca": "Volkswagen",
+    "modelo": "Gol Trend",
+    "anio": 2014,
+    "km": 140000,
+    "estado": "usado",
+    "combustible": "Nafta",
+    "transmision": "Manual",
+    "fotos": [
+      "img/vehiculos/volkswagen-gol-trend-2014/foto-1787871092921-0.jpg",
+      "img/vehiculos/volkswagen-gol-trend-2014/foto-1787871094652-1.jpg",
+      "img/vehiculos/volkswagen-gol-trend-2014/foto-1787871096932-2.jpg",
+      "img/vehiculos/volkswagen-gol-trend-2014/foto-1787871099100-3.jpg",
+      "img/vehiculos/volkswagen-gol-trend-2014/foto-1787871100859-4.jpg",
+      "img/vehiculos/volkswagen-gol-trend-2014/foto-1787871102744-5.jpg"
+    ]
   }
 ]
