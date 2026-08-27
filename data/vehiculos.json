@@ -131,5 +131,24 @@
       "img/vehiculos/volkswagen-gol-trend-2021/foto-1787870911876-4.jpg",
       "img/vehiculos/volkswagen-gol-trend-2021/foto-1787870913833-5.jpg"
     ]
+  },
+  {
+    "id": "toyota-corolla-xei-mt-2017",
+    "marca": "Toyota",
+    "modelo": "Corolla XEI MT",
+    "anio": 2017,
+    "km": 84000,
+    "estado": "usado",
+    "combustible": "Nafta",
+    "transmision": "Manual",
+    "fotos": [
+      "img/vehiculos/toyota-corolla-xei-mt-2017/foto-1787870972829-0.jpg",
+      "img/vehiculos/toyota-corolla-xei-mt-2017/foto-1787870974837-1.jpg",
+      "img/vehiculos/toyota-corolla-xei-mt-2017/foto-1787870976515-2.jpg",
+      "img/vehiculos/toyota-corolla-xei-mt-2017/foto-1787870978378-3.jpg",
+      "img/vehiculos/toyota-corolla-xei-mt-2017/foto-1787870980367-4.jpg",
+      "img/vehiculos/toyota-corolla-xei-mt-2017/foto-1787870982402-5.jpg",
+      "img/vehiculos/toyota-corolla-xei-mt-2017/foto-1787870984273-6.jpg"
+    ]
   }
 ]
