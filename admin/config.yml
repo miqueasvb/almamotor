@@ -1,8 +1,8 @@
 backend:
   name: git-gateway
   branch: main
-media_folder: "img/autos"
-public_folder: "/img/autos"
+media_folder: "img"
+public_folder: "/img"
 collections:
   - name: "vehiculos"
     label: "Vehículos"
@@ -10,8 +10,7 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      - {label: "ID (ej: amarok-2023)", name: "id", widget: "string"}
-      - {label: "Modelo", name: "titulo", widget: "string"}
+      - {label: "Título del Auto", name: "title", widget: "string"}
       - {label: "Precio", name: "precio", widget: "string"}
       - {label: "Año", name: "anio", widget: "string"}
       - {label: "Kilometraje", name: "kilometraje", widget: "string"}
