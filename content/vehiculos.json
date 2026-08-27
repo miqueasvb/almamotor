@@ -1,3 +1,20 @@
 {
-  "vehiculos": []
+    "id": "amarok-2018",
+    "marca": "Volkswagen",
+    "modelo": "Amarok",
+    "version": "V6 Highline",
+    "anio": "2018",
+    "condicion": "Usado",
+    "kilometraje": "138.000 km",
+    "combustible": "Diesel",
+    "transmision": "Automática",
+    "precio": "Consultar",
+    "descripcion": "La Volkswagen Amarok combina robustez y gran capacidad de carga con el manejo de una pickup mediana, ideal tanto para el trabajo como para el uso familiar.",
+    "fotos": [
+        "img/1.webp",
+        "img/11.webp",
+        "img/111.webp",
+        "img/1111.webp",
+        "img/11111.webp"
+    ]
 }
