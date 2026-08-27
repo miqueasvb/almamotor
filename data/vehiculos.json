@@ -150,5 +150,24 @@
       "img/vehiculos/toyota-corolla-xei-mt-2017/foto-1787870982402-5.jpg",
       "img/vehiculos/toyota-corolla-xei-mt-2017/foto-1787870984273-6.jpg"
     ]
+  },
+  {
+    "id": "renault-clio-mio-dynamique-2015",
+    "marca": "Renault",
+    "modelo": "Clio Mio Dynamique",
+    "anio": 2015,
+    "km": 170000,
+    "estado": "usado",
+    "combustible": "Nafta",
+    "transmision": "Manual",
+    "fotos": [
+      "img/vehiculos/renault-clio-mio-dynamique-2015/foto-1787871036401-0.jpg",
+      "img/vehiculos/renault-clio-mio-dynamique-2015/foto-1787871038210-1.jpg",
+      "img/vehiculos/renault-clio-mio-dynamique-2015/foto-1787871039690-2.jpg",
+      "img/vehiculos/renault-clio-mio-dynamique-2015/foto-1787871041732-3.jpg",
+      "img/vehiculos/renault-clio-mio-dynamique-2015/foto-1787871043562-4.jpg",
+      "img/vehiculos/renault-clio-mio-dynamique-2015/foto-1787871045178-5.jpg",
+      "img/vehiculos/renault-clio-mio-dynamique-2015/foto-1787871046993-6.jpg"
+    ]
   }
 ]
