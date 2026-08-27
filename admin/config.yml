@@ -1,18 +1,20 @@
 backend:
   name: git-gateway
   branch: main
-media_folder: "img"
-public_folder: "/img"
+media_folder: "img/vehiculos"
+public_folder: "img/vehiculos"
 collections:
   - name: "vehiculos"
     label: "Vehículos"
-    folder: "img/vehiculos"
+    folder: "content/vehiculos"
     create: true
     slug: "{{slug}}"
     fields:
-      - {label: "Título del Auto", name: "title", widget: "string"}
-      - {label: "Precio", name: "precio", widget: "string"}
+      - {label: "ID Único (ej: amarok-2018)", name: "id", widget: "string"}
+      - {label: "Marca", name: "marca", widget: "string"}
+      - {label: "Modelo", name: "modelo", widget: "string"}
       - {label: "Año", name: "anio", widget: "string"}
-      - {label: "Kilometraje", name: "kilometraje", widget: "string"}
-      - {label: "Imagen Principal", name: "imagen", widget: "image"}
+      - {label: "Kilometraje", name: "km", widget: "number"}
+      - {label: "Estado", name: "estado", widget: "select", options: ["usado", "0km"]}
+      - {label: "Foto Principal", name: "foto", widget: "image"}
       - {label: "Descripción", name: "descripcion", widget: "text"}
