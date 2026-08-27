@@ -925,15 +925,31 @@ const marcasInfo = {
     "Mini": "img/mini.png"
 };
 
-// IMPORTANTE: cada vehículo tiene su propio campo "foto" con el nombre de archivo
-// sugerido. Subí la imagen real de CADA unidad a la carpeta img/vehiculos/ con
-// ese mismo nombre de archivo (podés cambiar la extensión .jpg si tu foto es
-// .webp o .png, solo mantené el nombre). Mientras el archivo no exista en el
-// hosting, la tarjeta va a mostrar el logo de la marca como respaldo temporal
-// (ver función tarjetaHTML: const imagen = v.foto || marcasInfo[v.marca]).
-const vehiculos = [
-    { marca: "Volkswagen", modelo: "Amarok V6 Highline", anio: 2018, km: 138000, estado: "usado", foto: "img/vehiculos/volkswagen-amarok-v6-highline-2018.jpg" },
-];
+// Los vehículos ya NO se escriben acá a mano: se cargan desde data/vehiculos.json.
+// Para agregar, editar o quitar autos, usá el panel (admin.html) — él actualiza
+// ese archivo JSON automáticamente. "vehiculos" arranca vacío y se llena al cargar
+// la página (ver cargarVehiculos()).
+let vehiculos = [];
+
+async function cargarVehiculos() {
+    try {
+        const resp = await fetch("data/vehiculos.json", { cache: "no-store" });
+        vehiculos = await resp.json();
+    } catch (e) {
+        console.error("No se pudo cargar data/vehiculos.json", e);
+        vehiculos = [];
+    }
+}
+
+function slugify(v) {
+    return `${v.marca}-${v.modelo}-${v.anio || 's-n'}`
+        .toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+}
+
+function idDe(v) { return v.id || slugify(v); }
 
 // Estado de los filtros activos
 const filtros = {
@@ -974,20 +990,13 @@ function ordenar(lista) {
 }
 
 function tarjetaHTML(v) {
-    const imagen = v.foto || marcasInfo[v.marca];
+    const imagen = (v.fotos && v.fotos[0]) || marcasInfo[v.marca];
     const kmTexto = v.km == null ? "CONFIRMAR" : (v.km === 0 ? "0 km" : v.km.toLocaleString("es-AR") + " km");
     const anioTexto = v.anio == null ? "CONFIRMAR" : v.anio;
     const specs = [anioTexto, kmTexto].join(" · ");
-    
-    // Generamos el nombre del archivo HTML basado en la marca, modelo y año (ej: volkswagen-amarok-v6-highline-2018.html)
-    // Si querés priorizar un campo "detalle" manual en el objeto, podés mantenerlo, pero esto lo automatiza:
-    const slug = `${v.marca}-${v.modelo}-${v.anio || 's-n'}`
-        .toLowerCase()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Limpia tildes
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)/g, '');
-    
-    const enlaceHTML = v.detalle || `${slug}.html`;
+
+    // Todos los vehículos comparten la misma ficha (ficha.html) y se identifican por su "id"
+    const enlaceHTML = `ficha.html?id=${encodeURIComponent(idDe(v))}`;
 
     const overlay = `
                 <a href="${enlaceHTML}" class="vehiculo_img_overlay">
@@ -1094,7 +1103,8 @@ function inicializarDesdeURL() {
 }
 
 // ---- Listeners ----
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    await cargarVehiculos();
     poblarMarcas();
     inicializarDesdeURL();
     render();
