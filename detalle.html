@@ -23,77 +23,57 @@
 
     <!-- Base de datos de vehículos sincronizada -->
     <script>
-        const vehiculos = [
-            { id: "amarok-2018", marca: "Volkswagen", modelo: "Amarok V6 Highline", anio: 2018, km: 138000, estado: "usado", foto: "img/vehiculos/volkswagen-amarok-v6-highline-2018.jpg", descripcion: "Impecable, service al día, lista para transferir." },
-            { id: "bmw-x6", marca: "BMW", modelo: "X6", anio: null, km: null, estado: "usado", foto: "img/vehiculos/bmw-x6.jpg", descripcion: "Consultar equipamiento y financiación disponible." },
-            { id: "renault-duster", marca: "Renault", modelo: "Duster Tech 1.6", anio: 2014, km: 146000, estado: "usado", foto: "img/vehiculos/renault-duster-tech-1.6-2014.jpg", descripcion: "Buen estado general, cubiertas en buen estado." },
-            { id: "toyota-hilux-2014", marca: "Toyota", modelo: "Hilux", anio: 2014, km: null, estado: "usado", foto: "img/vehiculos/toyota-hilux-2014.jpg", descripcion: "Excelente andar, lista para trabajar." },
-            { id: "mini-cooper", marca: "Mini", modelo: "Cooper S", anio: 2017, km: 54000, estado: "usado", foto: "img/vehiculos/mini-cooper-s-2017.jpg", descripcion: "Muy cuidado, cubiertas en excelente estado." },
-            { id: "ram-1500", marca: "Ram", modelo: "1500", anio: 2022, km: 92000, estado: "usado", foto: "img/vehiculos/ram-1500-2022.webp", descripcion: "Potencia y confort al máximo nivel." },
-            { id: "toyota-yaris-2025", marca: "Toyota", modelo: "Yaris XLS + 1.5 CVT", anio: 2025, km: 0, estado: "0km", foto: "img/vehiculos/vacio.avif", descripcion: "Unidad 0km disponible para entrega inmediata." },
-            { id: "toyota-hilux-dx", marca: "Toyota", modelo: "Hilux DX 4x2", anio: null, km: 0, estado: "0km", foto: "img/vehiculos/vacio.avif", descripcion: "Unidad 0km lista para patentar." },
-            { id: "ford-ranger-raptor", marca: "Ford", modelo: "Ranger Raptor", anio: 2024, km: 85000, estado: "usado", foto: "img/vehiculos/vacio.avif", descripcion: "Preparada para todo terreno, excelente estado." },
-            { id: "fiat-cronos", marca: "Fiat", modelo: "Cronos Precision 1.3 GSE CVT BZ", anio: 2023, km: 43000, estado: "usado", foto: "img/vehiculos/fiat-cronos-precision-1.3-gse-cvt-bz-2023.jpg", descripcion: "Económico, moderno y con poco kilómetraje." },
-            { id: "volkswagen-taos", marca: "Volkswagen", modelo: "Taos Comfortline", anio: 2023, km: 121000, estado: "usado", foto: "img/vehiculos/vacio.avif", descripcion: "SUV familiar con gran confort de marcha." },
-            { id: "volkswagen-nivus", marca: "Volkswagen", modelo: "Nivus Comfort AT", anio: 2021, km: 81000, estado: "usado", foto: "img/vehiculos/vacio.avif", descripcion: "Diseño coupé moderno y gran tecnología a bordo." },
-            { id: "toyota-etios-2021", marca: "Toyota", modelo: "Etios X", anio: 2021, km: 72000, estado: "usado", foto: "img/vehiculos/toyota-etios-x-2021.jpg", descripcion: "Confiabilidad mecánica y bajo consumo." },
-            { id: "volkswagen-gol-2021", marca: "Volkswagen", modelo: "Gol Trend", anio: 2021, km: 86000, estado: "usado", foto: "img/vehiculos/volkswagen-gol-trend-2021.jpg", descripcion: "El clásico de siempre, ágil para la ciudad." },
-            { id: "ram-2500", marca: "Ram", modelo: "2500", anio: 2020, km: 93000, estado: "usado", foto: "img/vehiculos/vacio.avif", descripcion: "Fuerza bruta y lujo inigualable." },
-            { id: "chevrolet-s10", marca: "Chevrolet", modelo: "S10 High Country", anio: 2020, km: 108000, estado: "usado", foto: "img/vehiculos/vacio.avif", descripcion: "Tope de gama, máxima comodidad y potencia." },
-            { id: "chevrolet-cruze-2020", marca: "Chevrolet", modelo: "Cruze Premier AT", anio: 2020, km: 91000, estado: "usado", foto: "img/vehiculos/vacio.avif", descripcion: "Tecnología de punta y excelente andar en ruta." },
-            { id: "chevrolet-cruze-2017", marca: "Chevrolet", modelo: "Cruze LTZ AT", anio: 2017, km: 120000, estado: "usado", foto: "img/vehiculos/vacio.avif", descripcion: "Confort y andar excepcional." },
-            { id: "toyota-corolla-2017", marca: "Toyota", modelo: "Corolla XEI MT", anio: 2017, km: 84000, estado: "usado", foto: "img/vehiculos/toyota-corolla-xei-mt-2017.jpg", descripcion: "El auto más fiel del mercado, listo para rutear." },
-            { id: "fiat-palio", marca: "Fiat", modelo: "Palio Fire", anio: 2017, km: 80000, estado: "usado", foto: "img/vehiculos/vacio.avif", descripcion: "Económico y de mantenimiento accesible." },
-            { id: "ford-focus", marca: "Ford", modelo: "Focus SE Plus AT", anio: 2015, km: 126000, estado: "usado", foto: "img/vehiculos/vacio.avif", descripcion: "Excelente estabilidad y equipamiento completo." },
-            { id: "toyota-corolla-2015", marca: "Toyota", modelo: "Corolla XEI Pack CVT", anio: 2015, km: 185000, estado: "usado", foto: "img/vehiculos/vacio.avif", descripcion: "Caja automática suave y confort superior." },
-            { id: "renault-clio-2015", marca: "Renault", modelo: "Clio Mio Dynamique", anio: 2015, km: 170000, estado: "usado", foto: "img/vehiculos/renault-clio-mio-dynamique-2015.jpg", descripcion: "Práctico, económico y fácil de estacionar." },
-            { id: "toyota-hilux-2014-srv", marca: "Toyota", modelo: "Hilux SRV 3.0 4x2", anio: 2014, km: 190000, estado: "usado", foto: "img/vehiculos/vacio.avif", descripcion: "Motor 3.0 indestructible." },
-            { id: "volkswagen-gol-2014", marca: "Volkswagen", modelo: "Gol Trend", anio: 2014, km: 140000, estado: "usado", foto: "img/vehiculos/volkswagen-gol-trend-2014.jpg", descripcion: "Mantenimiento económico y gran durabilidad." },
-            { id: "renault-clio-2014", marca: "Renault", modelo: "Clio Mio Confort Plus", anio: 2014, km: 112000, estado: "usado", foto: "img/vehiculos/renault-clio-mio-confort-plus-2014.jpg", descripcion: "Ideal para primer auto o uso diario urbano." },
-            { id: "chevrolet-spin", marca: "Chevrolet", modelo: "Spin 1.8 LT", anio: 2013, km: 202000, estado: "usado", foto: "img/vehiculos/vacio.avif", descripcion: "Gran espacio interior y versatilidad familiar." },
-            { id: "volkswagen-fox", marca: "Volkswagen", modelo: "Fox Comfort", anio: 2012, km: 190000, estado: "usado", foto: "img/vehiculos/vacio.avif", descripcion: "Posición de manejo elevada y buen espacio." },
-            { id: "volkswagen-bora", marca: "Volkswagen", modelo: "Bora 1.8 T", anio: 2011, km: 173000, estado: "usado", foto: "img/vehiculos/vacio.avif", descripcion: "El clásico deportivo por excelencia." },
-            { id: "volkswagen-gol-2007", marca: "Volkswagen", modelo: "Gol 1.6", anio: 2007, km: 95000, estado: "usado", foto: "img/vehiculos/vacio.avif", descripcion: "Noble, fiel y económico." }
-        ];
+    // Lee el parámetro de la URL (ej: ?vehiculo=amarok-2018)
+    const params = new URLSearchParams(window.location.search);
+    const idVehiculo = params.get("vehiculo");
+    const contenedor = document.getElementById("detalle-container");
 
-        // Leer parámetro de la URL
-        const params = new URLSearchParams(window.location.search);
-        const idVehiculo = params.get("vehiculo");
+    if (idVehiculo) {
+        // Busca dinámicamente el archivo JSON creado por Decap CMS
+        fetch(`content/vehiculos/${idVehiculo}.json`)
+            .then(response => {
+                if (!response.ok) throw new Error("Vehículo no encontrado");
+                return response.json();
+            })
+            .then(vehiculoEncontrado => {
+                const mensajeWa = encodeURIComponent(`Hola, me interesa el ${vehiculoEncontrado.marca} ${vehiculoEncontrado.modelo} que vi en la web.`);
 
-        // Buscar el vehículo correspondiente
-        const vehiculoEncontrado = vehiculos.find(v => v.id === idVehiculo);
-        const contenedor = document.getElementById("detalle-container");
+                contenedor.innerHTML = `
+                    <div class="col-lg-7">
+                        <img src="${vehiculoEncontrado.foto}" alt="${vehiculoEncontrado.modelo}" style="width: 100%; border-radius: 8px; object-fit: cover;">
+                    </div>
+                    <div class="col-lg-5">
+                        <span style="color: #e31b23; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">${vehiculoEncontrado.marca}</span>
+                        <h1 style="font-size: 32px; font-weight: 700; margin-top: 5px;">${vehiculoEncontrado.modelo}</h1>
+                        <hr style="border-color: rgba(255,255,255,0.2);">
+                        <p><strong>Año:</strong> ${vehiculoEncontrado.anio || 'A confirmar'}</p>
+                        <p><strong>Kilometraje:</strong> ${vehiculoEncontrado.km != null ? Number(vehiculoEncontrado.km).toLocaleString() + ' km' : 'A confirmar'}</p>
+                        <p><strong>Estado:</strong> <span style="text-transform: uppercase;">${vehiculoEncontrado.estado}</span></p>
+                        <p style="margin-top: 20px; color: #ccc;">${vehiculoEncontrado.descripcion}</p>
 
-        if (vehiculoEncontrado) {
-            const mensajeWa = encodeURIComponent(`Hola, me interesa el ${vehiculoEncontrado.marca} ${vehiculoEncontrado.modelo} que vi en la web.`);
-            
-            contenedor.innerHTML = `
-                <div class="col-lg-7">
-                    <img src="${vehiculoEncontrado.foto}" alt="${vehiculoEncontrado.modelo}" style="width: 100%; border-radius: 8px; object-fit: cover;">
-                </div>
-                <div class="col-lg-5">
-                    <span style="color: #e31b23; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">${vehiculoEncontrado.marca}</span>
-                    <h1 style="font-size: 32px; font-weight: 700; margin-top: 5px;">${vehiculoEncontrado.modelo}</h1>
-                    <hr style="border-color: rgba(255,255,255,0.2);">
-                    <p><strong>Año:</strong> ${vehiculoEncontrado.anio || 'A confirmar'}</p>
-                    <p><strong>Kilometraje:</strong> ${vehiculoEncontrado.km != null ? vehiculoEncontrado.km.toLocaleString() + ' km' : 'A confirmar'}</p>
-                    <p><strong>Estado:</strong> <span style="text-transform: uppercase;">${vehiculoEncontrado.estado}</span></p>
-                    <p style="margin-top: 20px; color: #ccc;">${vehiculoEncontrado.descripcion}</p>
-                    
-                    <a href="https://wa.me/5493735610059?text=${mensajeWa}" target="_blank" class="btn btn-danger btn-lg mt-3" style="background-color: #e31b23; border: none; width: 100%;">
-                        Consultar por WhatsApp
-                    </a>
-                </div>
-            `;
-        } else {
-            contenedor.innerHTML = `
-                <div class="col-12 text-center">
-                    <h2>Vehículo no encontrado</h2>
-                    <p>El vehículo que buscás no existe o el enlace es incorrecto.</p>
-                    <a href="catalogo.html" class="btn btn-primary mt-3">Volver al catálogo</a>
-                </div>
-            `;
-        }
-    </script>
+                        <a href="https://wa.me/5493735610059?text=${mensajeWa}" target="_blank" class="btn btn-danger btn-lg mt-3" style="background-color: #e31b23; border: none; width: 100%;">
+                            Consultar por WhatsApp
+                        </a>
+                    </div>
+                `;
+            })
+            .catch(error => {
+                contenedor.innerHTML = `
+                    <div class="col-12 text-center">
+                        <h2>Vehículo no encontrado</h2>
+                        <p>El vehículo que buscás no existe o el enlace es incorrecto.</p>
+                        <a href="catalogo.html" class="btn btn-primary mt-3">Volver al catálogo</a>
+                    </div>
+                `;
+            });
+    } else {
+        contenedor.innerHTML = `
+            <div class="col-12 text-center">
+                <h2>No se especificó ningún vehículo</h2>
+                <a href="catalogo.html" class="btn btn-primary mt-3">Volver al catálogo</a>
+            </div>
+        `;
+    }
+</script>
 </body>
 </html>
