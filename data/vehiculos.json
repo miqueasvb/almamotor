@@ -56,5 +56,25 @@
       "img/vehiculos/renault-duster-tech-1-6-2014/foto-1787870456581-5.jpg",
       "img/vehiculos/renault-duster-tech-1-6-2014/foto-1787870458368-6.jpg"
     ]
+  },
+  {
+    "id": "mini-mini-cooper-s-2017",
+    "marca": "Mini",
+    "modelo": "Mini Cooper S",
+    "anio": 2017,
+    "km": 54000,
+    "estado": "usado",
+    "combustible": "Nafta",
+    "transmision": "Automática",
+    "fotos": [
+      "img/vehiculos/mini-mini-cooper-s-2017/foto-1787870606478-0.jpg",
+      "img/vehiculos/mini-mini-cooper-s-2017/foto-1787870608575-1.jpg",
+      "img/vehiculos/mini-mini-cooper-s-2017/foto-1787870610038-2.jpg",
+      "img/vehiculos/mini-mini-cooper-s-2017/foto-1787870611776-3.jpg",
+      "img/vehiculos/mini-mini-cooper-s-2017/foto-1787870613562-4.jpg",
+      "img/vehiculos/mini-mini-cooper-s-2017/foto-1787870615027-5.jpg",
+      "img/vehiculos/mini-mini-cooper-s-2017/foto-1787870616862-6.jpg",
+      "img/vehiculos/mini-mini-cooper-s-2017/foto-1787870618792-7.jpg"
+    ]
   }
 ]
