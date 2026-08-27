@@ -94,13 +94,24 @@
     .acciones_fila { display: flex; gap: 8px; }
     .acciones_fila button { padding: 6px 12px; font-size: 12.5px; }
 
-    .miniaturas_preview { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .miniaturas_preview { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; }
     .miniaturas_preview .item { position: relative; }
-    .miniaturas_preview img { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid var(--gris-borde); }
+    .miniaturas_preview .item.es_portada img { border-color: var(--rojo); box-shadow: 0 0 0 2px var(--rojo); }
+    .miniaturas_preview img { width: 84px; height: 64px; object-fit: cover; border-radius: 6px; border: 1px solid var(--gris-borde); display: block; }
+    .miniaturas_preview .etiqueta_portada {
+        position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+        background: var(--rojo); color: #fff; font-size: 9.5px; font-weight: 700; text-transform: uppercase;
+        padding: 2px 7px; border-radius: 10px; white-space: nowrap;
+    }
     .miniaturas_preview .quitar {
         position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%;
         background: #c2141c; color: #fff; border: none; font-size: 12px; cursor: pointer; line-height: 1;
     }
+    .miniaturas_preview .btn_portada {
+        position: absolute; top: -6px; left: -6px; width: 20px; height: 20px; border-radius: 50%;
+        background: #fff; color: #999; border: 1px solid var(--gris-borde); font-size: 11px; cursor: pointer; line-height: 1;
+    }
+    .miniaturas_preview .btn_portada:hover { background: #fff5cc; color: #c99a00; }
     .barra_progreso_wrap { background: #eee; border-radius: 6px; height: 8px; overflow: hidden; margin-top: 10px; }
     .barra_progreso { background: var(--rojo); height: 100%; width: 0%; transition: width 0.2s; }
     .oculto { display: none !important; }
@@ -233,7 +244,7 @@
             <div class="campo">
                 <label>Fotos</label>
                 <input type="file" id="fFotos" accept="image/*" multiple>
-                <small>La primera foto de la lista es la que se usa como portada en el catálogo. Podés reordenar arrastrando... por ahora se van agregando en el orden en que las seleccionás.</small>
+                <small>Las fotos se comprimen automáticamente al elegirlas, para que el sitio cargue rápido. La foto marcada como "Portada" es la que se muestra en la tarjeta del catálogo. Pasá el mouse sobre cualquier otra foto y tocá la ★ para hacerla portada.</small>
                 <div class="miniaturas_preview" id="previewFotos"></div>
             </div>
 
@@ -265,11 +276,17 @@ const MARCAS = ["Ford","Volkswagen","Ram","Toyota","Jeep","Fiat","Chevrolet","Pe
 const RUTA_JSON = "data/vehiculos.json";
 const PASSWORD_PANEL = "almamotor2026"; // <-- CAMBIÁ ESTA CONTRASEÑA antes de publicar el panel
 
+// Ajustes de optimización automática de fotos
+const FOTO_MAX_DIM = 1600;   // ancho/alto máximo en píxeles (las fotos de auto no necesitan más para verse bien)
+const FOTO_CALIDAD = 0.82;   // calidad JPEG (0 a 1). 0.82 es un buen equilibrio nitidez/peso
+
 let estado = {
     owner: "", repo: "", branch: "main", token: "",
     vehiculos: [], jsonSha: null,
     editandoId: null,
-    fotosNuevas: [] // {file, dataUrl}
+    // Lista única y ordenada de fotos. La posición 0 es la portada.
+    // Cada item: { tipo: "existing", url } o { tipo: "new", file, dataUrl }
+    fotos: []
 };
 
 /* =========================================================
@@ -319,6 +336,60 @@ function fileToDataUrl(file) {
         reader.onerror = reject;
         reader.readAsDataURL(file);
     });
+}
+
+function formatBytes(bytes) {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+// Carga una imagen (File/Blob) como elemento dibujable en canvas, sea cual sea su formato de origen
+async function cargarComoImagen(file) {
+    if (window.createImageBitmap) {
+        try { return await createImageBitmap(file); } catch (e) { /* seguimos con el fallback */ }
+    }
+    const dataUrl = await fileToDataUrl(file);
+    return await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = dataUrl;
+    });
+}
+
+// Redimensiona y comprime una foto en el navegador antes de subirla, para que el sitio quede liviano.
+// Si algo falla (formato raro, etc.), devuelve el archivo original sin tocar.
+async function optimizarImagen(file) {
+    try {
+        const img = await cargarComoImagen(file);
+        let { width, height } = img;
+        if (!width || !height) return file;
+
+        if (width > FOTO_MAX_DIM || height > FOTO_MAX_DIM) {
+            const ratio = Math.min(FOTO_MAX_DIM / width, FOTO_MAX_DIM / height);
+            width = Math.round(width * ratio);
+            height = Math.round(height * ratio);
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", FOTO_CALIDAD));
+        if (!blob) return file;
+
+        const nombreBase = file.name.replace(/\.[^.]+$/, "");
+        const archivoOptimizado = new File([blob], `${nombreBase}.jpg`, { type: "image/jpeg" });
+
+        // Si por algún motivo la "optimizada" quedó más pesada que la original, nos quedamos con la original
+        return archivoOptimizado.size < file.size ? archivoOptimizado : file;
+    } catch (e) {
+        console.warn("No se pudo optimizar la imagen, se sube la original:", e);
+        return file;
+    }
 }
 
 /* =========================================================
@@ -458,36 +529,56 @@ function poblarSelectMarcas() {
    ========================================================= */
 document.getElementById("fFotos").addEventListener("change", async (e) => {
     const files = Array.from(e.target.files);
-    for (const file of files) {
-        const dataUrl = await fileToDataUrl(file);
-        estado.fotosNuevas.push({ file, dataUrl });
-    }
     e.target.value = "";
+    if (files.length === 0) return;
+
+    const progresoWrap = document.getElementById("progresoWrap");
+    const barra = document.getElementById("barraProgreso");
+    const progresoTexto = document.getElementById("progresoTexto");
+    progresoWrap.classList.remove("oculto");
+
+    for (let i = 0; i < files.length; i++) {
+        progresoTexto.textContent = `Optimizando foto ${i + 1} de ${files.length}…`;
+        barra.style.width = `${Math.round((i / files.length) * 100)}%`;
+
+        const original = files[i];
+        const optimizada = await optimizarImagen(original);
+        const dataUrl = await fileToDataUrl(optimizada);
+        estado.fotos.push({ tipo: "new", file: optimizada, dataUrl, pesoOriginal: original.size });
+    }
+
+    barra.style.width = "100%";
+    progresoWrap.classList.add("oculto");
     renderPreviewFotos();
 });
 
 function renderPreviewFotos() {
     const wrap = document.getElementById("previewFotos");
-    wrap.innerHTML = estado.fotosNuevas.map((f, i) => `
-        <div class="item">
-            <img src="${f.dataUrl}">
-            <button type="button" class="quitar" onclick="quitarFotoNueva(${i})">×</button>
-        </div>
-    `).join("") + (estado.fotosExistentes || []).map((url, i) => `
-        <div class="item">
-            <img src="${url}">
-            <button type="button" class="quitar" onclick="quitarFotoExistente(${i})">×</button>
-        </div>
-    `).join("");
+    wrap.innerHTML = estado.fotos.map((f, i) => {
+        const src = f.tipo === "new" ? f.dataUrl : f.url;
+        const esPortada = i === 0;
+        const infoPeso = (f.tipo === "new")
+            ? `<div style="font-size:10px; color:#888; text-align:center; margin-top:3px;">${formatBytes(f.pesoOriginal)} → <strong style="color:#2c8a4b;">${formatBytes(f.file.size)}</strong></div>`
+            : "";
+        return `
+        <div class="item ${esPortada ? 'es_portada' : ''}">
+            <img src="${src}">
+            ${!esPortada ? `<button type="button" class="btn_portada" title="Hacer portada" onclick="hacerPortada(${i})">★</button>` : ''}
+            <button type="button" class="quitar" title="Quitar" onclick="quitarFoto(${i})">×</button>
+            ${esPortada ? `<span class="etiqueta_portada">Portada</span>` : ''}
+            ${infoPeso}
+        </div>`;
+    }).join("");
 }
 
-function quitarFotoNueva(i) {
-    estado.fotosNuevas.splice(i, 1);
+function hacerPortada(i) {
+    const [item] = estado.fotos.splice(i, 1);
+    estado.fotos.unshift(item);
     renderPreviewFotos();
 }
 
-function quitarFotoExistente(i) {
-    estado.fotosExistentes.splice(i, 1);
+function quitarFoto(i) {
+    estado.fotos.splice(i, 1);
     renderPreviewFotos();
 }
 
@@ -501,8 +592,7 @@ function limpiarFormulario() {
     document.getElementById("fCombustible").value = "";
     document.getElementById("fId").value = "";
     document.getElementById("fDescripcion").value = "";
-    estado.fotosNuevas = [];
-    estado.fotosExistentes = [];
+    estado.fotos = [];
     estado.editandoId = null;
     renderPreviewFotos();
     document.getElementById("formTituloCard").textContent = "Agregar vehículo";
@@ -523,8 +613,7 @@ function editarVehiculo(indice) {
     document.getElementById("fCombustible").value = v.combustible || "";
     document.getElementById("fId").value = estado.editandoId;
     document.getElementById("fDescripcion").value = v.descripcion || "";
-    estado.fotosNuevas = [];
-    estado.fotosExistentes = [...(v.fotos || [])];
+    estado.fotos = (v.fotos || []).map(url => ({ tipo: "existing", url }));
     renderPreviewFotos();
     document.getElementById("formTituloCard").textContent = `Editando: ${v.marca} ${v.modelo}`;
     document.getElementById("btnCancelarEdicion").classList.remove("oculto");
@@ -556,7 +645,7 @@ document.getElementById("btnGuardar").addEventListener("click", async () => {
     const descripcion = document.getElementById("fDescripcion").value.trim();
 
     if (!modelo) { mostrarMensaje("Completá al menos el modelo.", "error"); return; }
-    if ((estado.fotosNuevas.length + (estado.fotosExistentes || []).length) === 0) {
+    if (estado.fotos.length === 0) {
         if (!confirm("No cargaste ninguna foto. ¿Publicar igual? Se va a mostrar el logo de la marca.")) return;
     }
 
@@ -566,21 +655,29 @@ document.getElementById("btnGuardar").addEventListener("click", async () => {
     try {
         const id = estado.editandoId || slugify({ marca, modelo, anio });
 
-        // 1) Subir fotos nuevas a GitHub
+        // 1) Subir fotos nuevas a GitHub, manteniendo el ORDEN elegido (la posición 0 = portada)
         const progresoWrap = document.getElementById("progresoWrap");
         const barra = document.getElementById("barraProgreso");
         const progresoTexto = document.getElementById("progresoTexto");
         progresoWrap.classList.remove("oculto");
 
-        const urlsFotosNuevas = [];
-        for (let i = 0; i < estado.fotosNuevas.length; i++) {
-            const { file } = estado.fotosNuevas[i];
-            progresoTexto.textContent = `Subiendo foto ${i + 1} de ${estado.fotosNuevas.length}…`;
-            barra.style.width = `${Math.round(((i) / Math.max(estado.fotosNuevas.length,1)) * 100)}%`;
+        const totalNuevas = estado.fotos.filter(f => f.tipo === "new").length;
+        let subidas = 0;
+        const fotosFinal = [];
 
-            const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+        for (let i = 0; i < estado.fotos.length; i++) {
+            const f = estado.fotos[i];
+            if (f.tipo === "existing") {
+                fotosFinal.push(f.url);
+                continue;
+            }
+            subidas++;
+            progresoTexto.textContent = `Subiendo foto ${subidas} de ${totalNuevas}…`;
+            barra.style.width = `${Math.round(((subidas - 1) / Math.max(totalNuevas, 1)) * 100)}%`;
+
+            const ext = (f.file.name.split(".").pop() || "jpg").toLowerCase();
             const nombreArchivo = `img/vehiculos/${id}/foto-${Date.now()}-${i}.${ext}`;
-            const base64 = await fileToBase64(file);
+            const base64 = await fileToBase64(f.file);
 
             const resp = await fetch(ghUrl(nombreArchivo), {
                 method: "PUT",
@@ -593,14 +690,12 @@ document.getElementById("btnGuardar").addEventListener("click", async () => {
             });
             if (!resp.ok) {
                 const errData = await resp.json().catch(() => ({}));
-                throw new Error(`Error subiendo foto ${i + 1}: ${errData.message || resp.status}`);
+                throw new Error(`Error subiendo foto ${subidas}: ${errData.message || resp.status}`);
             }
-            urlsFotosNuevas.push(nombreArchivo);
+            fotosFinal.push(nombreArchivo);
         }
         barra.style.width = "100%";
         progresoTexto.textContent = "Fotos subidas. Actualizando catálogo…";
-
-        const fotosFinal = [...(estado.fotosExistentes || []), ...urlsFotosNuevas];
 
         const vehiculoFinal = {
             id, marca, modelo, anio, km, estado: estadoVeh,
