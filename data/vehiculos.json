@@ -19,5 +19,20 @@
       "img/1111111.webp",
       "img/11111111.webp"
     ]
+  },
+  {
+    "id": "ram-ram-1500-2022",
+    "marca": "Ram",
+    "modelo": "Ram 1500",
+    "anio": 2022,
+    "km": 92000,
+    "estado": "usado",
+    "combustible": "Diesel",
+    "transmision": "Manaul",
+    "descripcion": "esta bueno!",
+    "fotos": [
+      "img/vehiculos/ram-ram-1500-2022/foto-1787866322826-0.webp",
+      "img/vehiculos/ram-ram-1500-2022/foto-1787866324690-1.jpg"
+    ]
   }
 ]
