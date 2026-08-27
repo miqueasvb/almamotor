@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <title>Detalle del Vehículo | Alma Motor</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Tus estilos CSS habituales -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -14,66 +13,74 @@
         <a href="catalogo.html" class="btn btn-secondary mb-4">&larr; Volver al Catálogo</a>
         
         <div class="row" id="detalle-container">
-            <!-- Los datos se cargan dinámicamente con JavaScript -->
             <div class="col-12 text-center">
                 <h2>Cargando detalles del vehículo...</h2>
             </div>
         </div>
     </div>
 
-    <!-- Base de datos de vehículos sincronizada -->
     <script>
-    // Lee el parámetro de la URL (ej: ?vehiculo=amarok-2018)
-    const params = new URLSearchParams(window.location.search);
-    const idVehiculo = params.get("vehiculo");
-    const contenedor = document.getElementById("detalle-container");
+        const params = new URLSearchParams(window.location.search);
+        const idVehiculo = params.get("vehiculo");
+        const contenedor = document.getElementById("detalle-container");
 
-    if (idVehiculo) {
-        // Busca dinámicamente el archivo JSON creado por Decap CMS
-        fetch(`content/vehiculos/${idVehiculo}.json`)
-            .then(response => {
-                if (!response.ok) throw new Error("Vehículo no encontrado");
-                return response.json();
-            })
-            .then(vehiculoEncontrado => {
-                const mensajeWa = encodeURIComponent(`Hola, me interesa el ${vehiculoEncontrado.marca} ${vehiculoEncontrado.modelo} que vi en la web.`);
+        if (idVehiculo) {
+            fetch(`content/vehiculos/${idVehiculo}.json`)
+                .then(response => {
+                    if (!response.ok) throw new Error("Vehículo no encontrado");
+                    return response.json();
+                })
+                .then(vehiculoEncontrado => {
+                    const mensajeWa = encodeURIComponent(`Hola, me interesa el ${vehiculoEncontrado.marca} ${vehiculoEncontrado.modelo} que vi en la web.`);
 
-                contenedor.innerHTML = `
-                    <div class="col-lg-7">
-                        <img src="${vehiculoEncontrado.foto}" alt="${vehiculoEncontrado.modelo}" style="width: 100%; border-radius: 8px; object-fit: cover;">
-                    </div>
-                    <div class="col-lg-5">
-                        <span style="color: #e31b23; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">${vehiculoEncontrado.marca}</span>
-                        <h1 style="font-size: 32px; font-weight: 700; margin-top: 5px;">${vehiculoEncontrado.modelo}</h1>
-                        <hr style="border-color: rgba(255,255,255,0.2);">
-                        <p><strong>Año:</strong> ${vehiculoEncontrado.anio || 'A confirmar'}</p>
-                        <p><strong>Kilometraje:</strong> ${vehiculoEncontrado.km != null ? Number(vehiculoEncontrado.km).toLocaleString() + ' km' : 'A confirmar'}</p>
-                        <p><strong>Estado:</strong> <span style="text-transform: uppercase;">${vehiculoEncontrado.estado}</span></p>
-                        <p style="margin-top: 20px; color: #ccc;">${vehiculoEncontrado.descripcion}</p>
+                    // 1. Dibujamos la estructura principal y dejamos un div con id="galeria-fotos"
+                    contenedor.innerHTML = `
+                        <div class="col-lg-7">
+                            <img src="${vehiculoEncontrado.foto}" alt="${vehiculoEncontrado.modelo}" style="width: 100%; border-radius: 8px; object-fit: cover;">
+                            
+                            <!-- Acá se van a inyectar las fotos extra de la galería -->
+                            <div id="galeria-fotos" class="d-flex flex-wrap mt-3"></div>
+                        </div>
+                        <div class="col-lg-5">
+                            <span style="color: #e31b23; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">${vehiculoEncontrado.marca}</span>
+                            <h1 style="font-size: 32px; font-weight: 700; margin-top: 5px;">${vehiculoEncontrado.modelo}</h1>
+                            <hr style="border-color: rgba(255,255,255,0.2);">
+                            <p><strong>Año:</strong> ${vehiculoEncontrado.anio || 'A confirmar'}</p>
+                            <p><strong>Kilometraje:</strong> ${vehiculoEncontrado.km != null ? Number(vehiculoEncontrado.km).toLocaleString() + ' km' : 'A confirmar'}</p>
+                            <p><strong>Estado:</strong> <span style="text-transform: uppercase;">${vehiculoEncontrado.estado}</span></p>
+                            <p style="margin-top: 20px; color: #ccc;">${vehiculoEncontrado.descripcion}</p>
 
-                        <a href="https://wa.me/5493735610059?text=${mensajeWa}" target="_blank" class="btn btn-danger btn-lg mt-3" style="background-color: #e31b23; border: none; width: 100%;">
-                            Consultar por WhatsApp
-                        </a>
-                    </div>
-                `;
-            })
-            .catch(error => {
-                contenedor.innerHTML = `
-                    <div class="col-12 text-center">
-                        <h2>Vehículo no encontrado</h2>
-                        <p>El vehículo que buscás no existe o el enlace es incorrecto.</p>
-                        <a href="catalogo.html" class="btn btn-primary mt-3">Volver al catálogo</a>
-                    </div>
-                `;
-            });
-    } else {
-        contenedor.innerHTML = `
-            <div class="col-12 text-center">
-                <h2>No se especificó ningún vehículo</h2>
-                <a href="catalogo.html" class="btn btn-primary mt-3">Volver al catálogo</a>
-            </div>
-        `;
-    }
-</script>
+                            <a href="https://wa.me/5493735610059?text=${mensajeWa}" target="_blank" class="btn btn-danger btn-lg mt-3" style="background-color: #e31b23; border: none; width: 100%;">
+                                Consultar por WhatsApp
+                            </a>
+                        </div>
+                    `;
+
+                    // 2. Rellenamos la galería de fotos extra si existen
+                    const contenedorGaleria = document.getElementById("galeria-fotos");
+                    if (vehiculoEncontrado.galeria && vehiculoEncontrado.galeria.length > 0) {
+                        vehiculoEncontrado.galeria.forEach(imgUrl => {
+                            contenedorGaleria.innerHTML += `<img src="${imgUrl}" alt="Foto detalle" class="img-thumbnail m-1" style="width: 120px; height: 90px; object-fit: cover; background: #222; border-color: #444;">`;
+                        });
+                    }
+                })
+                .catch(error => {
+                    contenedor.innerHTML = `
+                        <div class="col-12 text-center">
+                            <h2>Vehículo no encontrado</h2>
+                            <p>El vehículo que buscás no existe o el enlace es incorrecto.</p>
+                            <a href="catalogo.html" class="btn btn-primary mt-3">Volver al catálogo</a>
+                        </div>
+                    `;
+                });
+        } else {
+            contenedor.innerHTML = `
+                <div class="col-12 text-center">
+                    <h2>No se especificó ningún vehículo</h2>
+                    <a href="catalogo.html" class="btn btn-primary mt-3">Volver al catálogo</a>
+                </div>
+            `;
+        }
+    </script>
 </body>
 </html>
