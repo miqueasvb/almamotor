@@ -9,13 +9,16 @@ collections:
     folder: "content/vehiculos"
     create: true
     slug: "{{slug}}"
-fields:
-  - {label: "ID Único", name: "id", widget: "string"}
-  - {label: "Título", name: "title", widget: "string"}
-  - {label: "Precio", name: "precio", widget: "string"}
-  - {label: "Foto de Portada (Catálogo)", name: "foto", widget: "image"}
-  - label: "Galería de más fotos (Detalle)"
-    name: "galeria"
-    widget: "list"
-    field: {label: "Imagen", name: "imagen", widget: "image"}
-  - {label: "Descripción", name: "descripcion", widget: "text"}
+    fields:
+      - {label: "ID Único (ej: amarok-2018)", name: "id", widget: "string"}
+      - {label: "Marca", name: "marca", widget: "string"}
+      - {label: "Modelo", name: "modelo", widget: "string"}
+      - {label: "Año", name: "anio", widget: "string"}
+      - {label: "Kilometraje", name: "km", widget: "number"}
+      - {label: "Estado", name: "estado", widget: "select", options: ["usado", "0km"]}
+      - {label: "Foto de Portada (Catálogo)", name: "foto", widget: "image"}
+      - label: "Galería de más fotos (Detalle)"
+        name: "galeria"
+        widget: "list"
+        field: {label: "Imagen", name: "imagen", widget: "image"}
+      - {label: "Descripción", name: "descripcion", widget: "text"}
