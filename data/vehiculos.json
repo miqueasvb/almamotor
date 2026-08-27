@@ -37,5 +37,24 @@
       "img/vehiculos/ram-ram-1500-2022/foto-1787869872743-4.jpg",
       "img/vehiculos/ram-ram-1500-2022/foto-1787869874425-5.jpg"
     ]
+  },
+  {
+    "id": "renault-duster-tech-1-6-2014",
+    "marca": "Renault",
+    "modelo": "Duster Tech 1.6",
+    "anio": 2014,
+    "km": 146000,
+    "estado": "usado",
+    "combustible": "Nafta",
+    "transmision": "Manual",
+    "fotos": [
+      "img/vehiculos/renault-duster-tech-1-6-2014/foto-1787870447123-0.jpg",
+      "img/vehiculos/renault-duster-tech-1-6-2014/foto-1787870449107-1.jpg",
+      "img/vehiculos/renault-duster-tech-1-6-2014/foto-1787870450802-2.jpg",
+      "img/vehiculos/renault-duster-tech-1-6-2014/foto-1787870452803-3.jpg",
+      "img/vehiculos/renault-duster-tech-1-6-2014/foto-1787870454631-4.jpg",
+      "img/vehiculos/renault-duster-tech-1-6-2014/foto-1787870456581-5.jpg",
+      "img/vehiculos/renault-duster-tech-1-6-2014/foto-1787870458368-6.jpg"
+    ]
   }
 ]
