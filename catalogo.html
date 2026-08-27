@@ -1,0 +1,1221 @@
+<!doctype html>
+<html class="no-js" lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Catálogo de Vehículos | Alma Motor Vehículos</title>
+    <meta name="description" content="Catálogo completo de vehículos 0km y usados. Filtrá por marca, estado y año.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Precarga de fuentes locales: evita el "flash" de tipografía al cargar/recargar la página -->
+    <link rel="preload" href="fonts/webfonts/oswald-v57-latin-600.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/webfonts/barlow-v13-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/themify-icons.css">
+    <link rel="stylesheet" href="css/nice-select.css">
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/gijgo.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/slicknav.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Estilos personalizados para el header agresivo multimarca y filtros horizontales -->
+    <style>
+        html {
+            scroll-behavior: auto !important;
+            scroll-padding-top: 90px;
+        }
+        html.lenis {
+            height: auto;
+        }
+        .lenis.lenis-smooth [data-aos] {
+            will-change: transform, opacity;
+        }
+        .main-header-area {
+            background-color: #111111 !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        .main-menu nav ul li a {
+            color: #ffffff !important;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        #navigation li {
+            vertical-align: middle;
+        }
+        #navigation li a {
+            vertical-align: middle;
+        }
+        .main-menu nav ul li a.nav_link_underline {
+            position: relative;
+        }
+        #navigation li a.nav_link_underline {
+            padding: 40px 0 26px 0 !important;
+        }
+        .main-menu nav ul li a.nav_link_underline .nav_txt {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+        .main-menu nav ul li a.nav_link_underline .nav_txt::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 0%;
+            height: 2px;
+            background-color: #ffffff;
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+        .main-menu nav ul li a.nav_link_underline:hover .nav_txt::after {
+            width: 100%;
+            left: 0%;
+        }
+        .main-menu nav ul li ul.submenu {
+            background: #1a1a1a !important;
+            border-top: 2px solid #e31b23;
+        }
+        .main-menu nav ul li ul.submenu li a {
+            color: #ffffff !important;
+        }
+        .main-menu nav ul li ul.submenu li a:hover {
+            color: #e31b23 !important;
+            background: #111111 !important;
+        }
+        .btn-sport-red {
+            background-color: #e31b23;
+            color: #ffffff !important;
+            font-family: 'Oswald', sans-serif;
+            padding: 10px 22px;
+            text-transform: uppercase;
+            font-weight: 700;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        .btn-sport-red:hover {
+            background-color: #c2141c;
+            color: #ffffff !important;
+            box-shadow: 0 0 15px rgba(227, 27, 35, 0.6);
+        }
+
+        .vehicle_btn,
+        .boxed-btn3-red {
+            display: inline-block !important;
+            background-color: #e31b23 !important;
+            color: #ffffff !important;
+            font-family: 'Oswald', sans-serif !important;
+            font-weight: 600 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            padding: 8px 18px !important;
+            border-radius: 4px !important;
+            border: none !important;
+            transition: 0.3s !important;
+        }
+        .vehicle_btn:hover,
+        .boxed-btn3-red:hover {
+            background-color: #c2141c !important;
+            color: #ffffff !important;
+        }
+
+        /* ===================================================
+           CATÁLOGO — Franja Horizontal Superior de Filtros
+           =================================================== */
+        * { box-sizing: border-box; }
+
+        .catalogo_hero {
+            background: #ffffff;
+            padding: 40px 0 20px;
+            border-bottom: 1px solid #ececec;
+        }
+        .catalogo_hero h1 {
+            color: #111111;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+        .catalogo_hero p {
+            color: #8a8a8a;
+            font-size: 14.5px;
+            margin: 0;
+        }
+        .catalogo_area {
+            background-color: #ffffff;
+            padding: 24px 0 90px;
+        }
+
+        /* Franja horizontal de filtros superior */
+        .filtros_franja {
+            background: #fcfcfc;
+            border: 1px solid #ececec;
+            border-radius: 6px;
+            padding: 18px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 15px;
+            justify-content: space-between;
+        }
+        .filtro_item_H {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex: 1;
+            min-width: 160px;
+        }
+        .filtro_item_H label {
+            font-size: 11.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            font-weight: 700;
+            color: #111111;
+            margin: 0;
+        }
+        .buscador_input_H, .select_H {
+            width: 100%;
+            padding: 7px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13.5px;
+            outline: none;
+            background: #fff;
+            color: #444;
+            transition: border-color 0.2s ease;
+        }
+        .buscador_input_H:focus, .select_H:focus {
+            border-color: #111111;
+        }
+        .btn_limpiar_H {
+            background: transparent;
+            border: 1px solid #ccc;
+            color: #666;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 7px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            height: 38px;
+            align-self: flex-end;
+        }
+        .btn_limpiar_H:hover {
+            background: #111;
+            color: #fff;
+            border-color: #111;
+        }
+
+        /* Tabs de estado integradas o superiores */
+        .estado_tabs_franja {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            width: 100%;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+        .estado_tab {
+            padding: 6px 14px;
+            font-weight: 600;
+            font-size: 13px;
+            color: #666;
+            background: #f1f1f1;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        .estado_tab:hover {
+            background: #e2e2e2;
+            color: #111;
+        }
+        .estado_tab.active {
+            background: #111;
+            color: #fff;
+        }
+
+        /* Barra superior de resultados y conteo */
+        .resultados_bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .resultados_count {
+            font-size: 14px;
+            color: #999999;
+        }
+        .resultados_count strong {
+            color: #111111;
+        }
+        .orden_select {
+            padding: 7px 4px;
+            border: none;
+            border-bottom: 1px solid #dddddd;
+            font-size: 13px;
+            color: #444444;
+            background: transparent;
+            border-radius: 0;
+        }
+
+        /* Tarjetas de vehículo */
+        .vehiculo_card {
+            background: #ffffff;
+            border: 1px solid #ececec;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .vehiculo_card:hover {
+            border-color: #d8d8d8;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+        .vehiculo_img {
+            position: relative;
+            background: #fafafa;
+            aspect-ratio: 3 / 2;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            overflow: hidden;
+        }
+        .vehiculo_img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 45%;
+            opacity: 1;
+            display: block;
+        }
+        .vehiculo_img_overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0);
+            opacity: 0;
+            transition: 0.25s ease;
+            z-index: 2;
+        }
+        .vehiculo_img:hover .vehiculo_img_overlay {
+            background: rgba(17,17,17,0.6);
+            opacity: 1;
+        }
+        .vehiculo_overlay_badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #fff;
+            color: #111;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 8px 16px;
+            border-radius: 30px;
+        }
+        .vehiculo_body {
+            padding: 15px 17px 17px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .vehiculo_marca {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #aaaaaa;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        .vehiculo_titulo {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111111;
+            margin-bottom: 9px;
+            line-height: 1.3;
+        }
+        .vehiculo_specs {
+            font-size: 12.5px;
+            color: #999999;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f2f2f2;
+            line-height: 1.5;
+        }
+        .vehiculo_footer {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+        .btn_consultar {
+            background: #111111;
+            color: #fff !important;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 9px 14px;
+            border-radius: 4px;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: background 0.2s ease;
+            width: 100%;
+            text-align: center;
+        }
+        .btn_consultar:hover {
+            background: #e31b23;
+            color: #fff !important;
+        }
+        .sin_resultados {
+            padding: 60px 20px;
+            text-align: center;
+            width: 100%;
+        }
+        .sin_resultados h4 {
+            font-size: 17px;
+            color: #333333;
+            margin-bottom: 6px;
+        }
+        .sin_resultados p {
+            color: #999999;
+            font-size: 13.5px;
+            margin-bottom: 18px;
+        }
+
+        /* Grilla: 3 columnas de vehículos */
+        .grilla_vehiculos {
+            display: flex;
+            flex-wrap: wrap;
+            margin-left: -10px;
+            margin-right: -10px;
+        }
+        .grilla_vehiculos > div {
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 991px) {
+            .grilla_vehiculos > div {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+        @media (max-width: 576px) {
+            .catalogo_hero { padding: 34px 0 20px; }
+            .catalogo_hero h1 { font-size: 22px; }
+            .grilla_vehiculos > div {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+            .vehiculo_img { padding: 0; }
+            .vehiculo_body { padding: 11px 12px 13px; }
+            .vehiculo_titulo { font-size: 13.5px; margin-bottom: 6px; }
+            .vehiculo_specs { font-size: 10.5px; margin-bottom: 10px; padding-bottom: 10px; }
+            .btn_consultar { padding: 7px 10px; font-size: 10px; }
+        }
+    </style>
+
+<style>
+/* ===== Menú móvil (fix navbar celulares) ===== */
+.mobile-menu-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: auto;
+}
+
+.mobile-menu-btn {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+    z-index: 99999;
+}
+.mobile-menu-btn span {
+    display: block;
+    width: 26px;
+    height: 3px;
+    background-color: #ffffff;
+    margin: 3px 0;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+.mobile-menu-btn.active span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+}
+.mobile-menu-btn.active span:nth-child(2) {
+    opacity: 0;
+}
+.mobile-menu-btn.active span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+}
+.mobile-nav-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 99997;
+}
+.mobile-nav-overlay.active {
+    display: block;
+}
+.mobile-nav-panel {
+    position: fixed;
+    top: 0;
+    right: -280px;
+    width: 260px;
+    max-width: 80%;
+    height: 100%;
+    background-color: #111111;
+    border-left: 3px solid #e31b23;
+    z-index: 99998;
+    padding: 80px 0 20px 0;
+    transition: right 0.35s ease;
+    overflow-y: auto;
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+}
+.mobile-nav-panel.active {
+    right: 0;
+}
+.mobile-nav-panel ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.mobile-nav-panel ul li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.mobile-nav-panel ul li a {
+    display: block;
+    padding: 15px 25px;
+    color: #ffffff !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    text-decoration: none !important;
+    transition: 0.3s;
+}
+.mobile-nav-panel ul li a:hover,
+.mobile-nav-panel ul li a:active {
+    color: #e31b23 !important;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+.mobile-nav-panel ul li a.mobile-nav-contact {
+    color: #e31b23 !important;
+}
+.mobile-nav-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 22px 25px 5px 25px;
+}
+.mobile-nav-social a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff !important;
+    font-size: 18px;
+    text-decoration: none !important;
+    transition: 0.3s ease;
+}
+.mobile-nav-social a.mobile-nav-whatsapp:hover {
+    background-color: #25D366;
+    transform: translateY(-2px);
+}
+.mobile-nav-social a.mobile-nav-instagram:hover {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    transform: translateY(-2px);
+}
+.mobile-nav-social a.mobile-nav-tiktok:hover {
+    background-color: #000000;
+    transform: translateY(-2px);
+}
+@media (min-width: 992px) {
+    .mobile-nav-panel,
+    .mobile-nav-overlay,
+    .mobile-menu-btn {
+        display: none !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+        <div class="header-area">
+            <div id="sticky-header" class="main-header-area" style="background-color: #111111; padding: 20px 0; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-xl-3 col-lg-3 col-md-6 col-6">
+                            <div class="logo">
+                                <a href="index.html">
+                                    <img src="img/logo almamotor.png" alt="Automoviles SRL" style="max-height: 55px; width: auto; display: block;">
+                                </a>
+                            </div>
+                        </div>
+                        
+<div class="col-xl-9 col-lg-9 d-none d-lg-block text-right">
+    <div class="main-menu" style="display: inline-block;">
+        <nav>
+            <ul id="navigation" style="margin: 0; padding: 0; list-style: none;">
+                <li style="display: inline-block; margin-left: 25px;"><a href="index.html" class="nav_link_underline" style="color: #ffffff; font-family: 'Oswald', sans-serif; font-weight: 600; text-transform: uppercase; font-size: 17px; letter-spacing: 1px; text-decoration: none;"><span class="nav_txt">INICIO</span></a></li>
+                <li style="display: inline-block; margin-left: 25px;"><a href="catalogo.html" class="nav_link_underline" style="color: #ffffff; font-family: 'Oswald', sans-serif; font-weight: 600; text-transform: uppercase; font-size: 17px; letter-spacing: 1px; text-decoration: none;"><span class="nav_txt">CATÁLOGO</span></a></li>
+                <li style="display: inline-block; margin-left: 25px;"><a href="#faq" class="nav_link_underline" style="color: #ffffff; font-family: 'Oswald', sans-serif; font-weight: 600; text-transform: uppercase; font-size: 17px; letter-spacing: 1px; text-decoration: none;"><span class="nav_txt">FAQ</span></a></li>
+                <li style="display: inline-block; margin-left: 25px;"><a href="clientes.html" class="nav_link_underline" style="color: #ffffff; font-family: 'Oswald', sans-serif; font-weight: 600; text-transform: uppercase; font-size: 17px; letter-spacing: 1px; text-decoration: none;"><span class="nav_txt">CLIENTES</span></a></li>
+                <li style="display: inline-block; margin-left: 25px;"><a href="nosotros.html" class="nav_link_underline" style="color: #ffffff; font-family: 'Oswald', sans-serif; font-weight: 600; text-transform: uppercase; font-size: 17px; letter-spacing: 1px; text-decoration: none;"><span class="nav_txt">NOSOTROS</span></a></li>
+                <li style="display: inline-block; margin-left: 25px;"><a href="#contacto" style="color: #ffffff; font-family: 'Oswald', sans-serif; font-weight: 600; text-transform: uppercase; font-size: 17px; letter-spacing: 1px; text-decoration: none; transition: 0.3s; background-color: #e31b23; padding: 8px 18px; border-radius: 4px;">CONTACTO</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+                        <div class="col-md-6 col-6 d-block d-lg-none text-right">
+                            <div class="mobile-menu-wrap">
+                                <button type="button" id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileNavPanel">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </button>
+                            </div>
+                            <div id="mobileNavOverlay" class="mobile-nav-overlay"></div>
+                            <div id="mobileNavPanel" class="mobile-nav-panel">
+                                <ul>
+                                    <li><a href="index.html">Inicio</a></li>
+                                    <li><a href="catalogo.html">Catálogo</a></li>
+                                    <li><a href="index.html#faq">FAQ</a></li>
+                                    <li><a href="clientes.html">Clientes</a></li>
+                                    <li><a href="nosotros.html">Nosotros</a></li>
+                                    <li><a href="#contacto" class="mobile-nav-contact">Contacto</a></li>
+                                </ul>
+                                <div class="mobile-nav-social">
+                                        <a href="https://wa.me/5493644355262" target="_blank" rel="noopener" class="mobile-nav-whatsapp" aria-label="Abrir WhatsApp">
+                                            <i class="fa fa-whatsapp"></i>
+                                        </a>
+                                        <a href="https://www.instagram.com/alma_motor_13/" target="_blank" rel="noopener" class="mobile-nav-instagram" aria-label="Abrir Instagram">
+                                            <i class="fa fa-instagram"></i>
+                                        </a>
+                                        <a href="https://www.tiktok.com/@alma_motor_13" target="_blank" rel="noopener" class="mobile-nav-tiktok" aria-label="Abrir TikTok">
+                                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="display:block;"><path d="M16.5 3c.3 1.8 1.4 3.3 3 4.2.9.5 1.9.8 3 .9v3.3c-1.6 0-3.2-.4-4.6-1.2v6.8c0 3.4-2.8 6.1-6.2 6-3.3-.1-6-2.9-5.9-6.2.1-3.2 2.7-5.8 6-5.9v3.4c-1.4-.2-2.7.8-2.9 2.2-.2 1.4.8 2.7 2.2 2.9 1.4.2 2.7-.8 2.9-2.2.03-.2.03-.4.03-.6V3h2.5z"/></svg>
+                                        </a>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+<!-- catalogo_hero -->
+<div class="catalogo_hero">
+    <div class="container">
+        <h1>Catálogo de Vehículos</h1>
+        <p>Filtrá por marca, estado y año para encontrar el vehículo ideal.</p>
+    </div>
+</div>
+
+<!-- catalogo_area -->
+<div class="catalogo_area">
+    <div class="container">
+
+        <!-- Franja horizontal superior de filtros -->
+        <div class="filtros_franja">
+            <!-- Tabs de estado dentro de la franja -->
+            <div class="estado_tabs_franja" id="estadoTabs">
+                <div class="estado_tab active" data-estado="todos">Todos</div>
+                <div class="estado_tab" data-estado="0km">0km</div>
+                <div class="estado_tab" data-estado="usado">Usados</div>
+            </div>
+
+            <!-- Buscador por texto -->
+            <div class="filtro_item_H">
+                <label for="buscador">Buscar</label>
+                <input type="text" class="buscador_input_H" id="buscador" placeholder="Marca o modelo...">
+            </div>
+
+            <!-- Filtro por Marca -->
+            <div class="filtro_item_H">
+                <label for="marcaSelect">Marca</label>
+                <select class="select_H" id="marcaSelect">
+                    <option value="">Todas las marcas</option>
+                </select>
+            </div>
+
+            <!-- Botón limpiar -->
+            <button class="btn_limpiar_H" id="btnLimpiar">Limpiar filtros</button>
+        </div>
+
+        <!-- Barra superior de resultados -->
+        <div class="resultados_bar">
+            <div class="resultados_count"><strong id="cantResultados">0</strong> vehículos encontrados</div>
+            <select class="orden_select" id="ordenSelect">
+                <option value="relevancia">Relevancia</option>
+                <option value="anio_desc">Año: más nuevo</option>
+                <option value="km_asc">Kilometraje: menor</option>
+            </select>
+        </div>
+
+        <!-- Grilla de vehículos en columnas de a 3 -->
+        <div class="row grilla_vehiculos" id="grillaVehiculos">
+        </div>
+
+        <!-- Bloque sin resultados (fuera de la grilla principal para evitar interferencias de diseño) -->
+        <div class="sin_resultados" id="sinResultados" style="display:none;">
+            <h4>No encontramos vehículos con esos filtros</h4>
+            <p>Probá ajustando la búsqueda o limpiando los filtros.</p>
+            <button class="btn_limpiar_H" id="btnLimpiar2">Limpiar filtros</button>
+        </div>
+
+    </div>
+</div>
+
+<div class="contact_anipat" id="contacto" style="position: relative; background-image: url('img/banner/contact_bg.png'); background-attachment: fixed; background-size: cover; background-position: center; padding: 100px 0; min-height: 800px; display: flex; align-items: center;">
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px); z-index: 1;"></div>
+
+    <div class="container" style="position: relative; z-index: 2;">
+        <div class="row align-items-center">
+            
+            <div class="col-lg-6 mx-auto">
+                <div class="section-heading" style="margin-bottom: 25px;">
+                    <span style="font-family: 'Oswald', sans-serif; color: #ffffff; background: rgba(255, 255, 255, 0.15); display: inline-block; padding: 6px 16px; border-radius: 6px; font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; border: 1px solid rgba(255,255,255,0.2);">Alma Motor - Saénz Peña</span>
+                    <h2 style="font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; color: #fff; font-size: 38px; font-weight: 700; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); margin-top: 15px; line-height: 1.2;">
+                        Tu próxima unidad te está esperando.
+                    </h2>
+                </div>
+                <p style="font-family: 'Barlow', sans-serif; color: #e0e0e0; font-size: 16px; text-shadow: 1px 1px 5px rgba(0,0,0,0.5); margin-bottom: 30px; line-height: 1.6;">
+                    Tu consulta no molesta!
+                </p>
+                
+                <div style="background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px); padding: 25px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                    
+    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+        <div style="background: #ffffff; color: #000000; width: 45px; height: 45px; border-radius: 50%; margin-right: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            <i class="fa fa-whatsapp" style="font-size: 22px; color: #000000;"></i>
+        </div>
+        <a href="https://wa.me/5493644355262" target="_blank" style="font-family: 'Barlow', sans-serif; color: #fff; font-weight: 600; font-size: 16px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s ease;" onmouseover="this.querySelector('.hover-dot').style.transform='scale(1)'; this.querySelector('.hover-dot').style.opacity='1';" onmouseout="this.querySelector('.hover-dot').style.transform='scale(0)'; this.querySelector('.hover-dot').style.opacity='0';">
+            Consultanos por WhatsApp
+            <span class="hover-dot" style="width: 8px; height: 8px; background-color: #ffffff; border-radius: 50%; display: inline-block; transform: scale(0); opacity: 0; transition: all 0.3s ease; box-shadow: 0 0 6px #ffffff;"></span>
+        </a>
+    </div>
+
+    <div style="display: flex; align-items: flex-start; margin-bottom: 20px;">
+        <div style="background: #ffffff; color: #000000; width: 45px; height: 45px; border-radius: 50%; margin-right: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            <i class="fa fa-phone" style="font-size: 20px; color: #000000;"></i>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+            <a href="tel:+543735610059" style="font-family: 'Barlow', sans-serif; color: #fff; font-weight: 600; font-size: 16px; text-decoration: none;">3735-610059 <span style="color: #e0e0e0; font-weight: 400; font-size: 14px;">(Kevin)</span></a>
+            <a href="tel:+543644355262" style="font-family: 'Barlow', sans-serif; color: #fff; font-weight: 600; font-size: 16px; text-decoration: none;">3644-355262 <span style="color: #e0e0e0; font-weight: 400; font-size: 14px;">(German)</span></a>
+            <a href="tel:+543644445415" style="font-family: 'Barlow', sans-serif; color: #fff; font-weight: 600; font-size: 16px; text-decoration: none;">3644-445415 <span style="color: #e0e0e0; font-weight: 400; font-size: 14px;">(Braian)</span></a>
+        </div>
+    </div>
+
+    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+        <div style="background: #ffffff; color: #000000; width: 45px; height: 45px; border-radius: 50%; margin-right: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            <i class="fa fa-clock-o" style="font-size: 20px; color: #000000;"></i>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+            <span style="font-family: 'Barlow', sans-serif; color: #fff; font-weight: 600; font-size: 16px; line-height: 1.2;">Horarios de Atención</span>
+            <span style="font-family: 'Barlow', sans-serif; color: #e0e0e0; font-weight: 400; font-size: 14px; opacity: 0.9;">Lunes a Viernes: 8:00 a 12:00 y 16:00 a 20:00 hs<br>Sábados: 9:00 a 13:00 hs</span>
+        </div>
+    </div>
+
+    <div style="display: flex; align-items: center;">
+        <div style="background: #ffffff; color: #000000; width: 45px; height: 45px; border-radius: 50%; margin-right: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+            <i class="fa fa-instagram" style="font-size: 20px; color: #000000;"></i>
+        </div>
+        <div>
+            <a href="https://www.instagram.com/alma_motor_13/" target="_blank" style="font-family: 'Barlow', sans-serif; color: #fff; font-weight: 600; font-size: 15px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s ease;" onmouseover="this.querySelector('.hover-dot').style.transform='scale(1)'; this.querySelector('.hover-dot').style.opacity='1';" onmouseout="this.querySelector('.hover-dot').style.transform='scale(0)'; this.querySelector('.hover-dot').style.opacity='0';">
+                Seguinos en Instagram
+                <span class="hover-dot" style="width: 8px; height: 8px; background-color: #ffffff; border-radius: 50%; display: inline-block; transform: scale(0); opacity: 0; transition: all 0.3s ease; box-shadow: 0 0 6px #ffffff;"></span>
+            </a>
+        </div>
+    </div>
+
+</div>
+</div>
+            
+        </div>
+    </div>
+</div>
+
+<!-- footer_start -->
+    <footer class="footer" style="background-color: #0d0d0d; color: #b0b0b0; font-family: 'Barlow', sans-serif; border-top: 2px solid #222; position: relative;">
+        <div class="footer_top" style="padding: 80px 0 50px 0;">
+            <div class="container">
+                <div class="row">
+                    
+                    <div class="col-xl-4 col-md-6 col-lg-4 mb-4 mb-lg-0">
+                        <div class="footer_widget">
+                            <div class="footer_logo" style="margin-bottom: 20px;">
+                                <a href="index.html">
+                                    <img src="img/alma motor footer.png" alt="Automoviles SRL" style="max-height: 50px; width: auto; display: block;">
+                                </a>
+                            </div>
+                            <p class="address_text" style="color: #999; font-size: 14px; line-height: 1.6; margin-bottom: 25px;">
+                                Especialistas en compra, venta y financiación de vehículos 0km y usados seleccionados. Tu próximo auto con la confianza que buscás.
+                            </p>
+                            <div class="socail_links">
+                                <ul style="margin: 0; padding: 0; list-style: none; display: flex; gap: 12px;">
+                                    <li>
+                                        <a href="#" target="_blank" style="width: 38px; height: 38px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #fff; transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='#e31b23'; this.style.transform='translateY(-3px)';" onmouseout="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.transform='translateY(0)';">
+                                            <i class="fa fa-facebook"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://www.instagram.com/alma_motor_13/" target="_blank" style="width: 38px; height: 38px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #fff; transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='#e31b23'; this.style.transform='translateY(-3px)';" onmouseout="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.transform='translateY(0)';">
+                                            <i class="fa fa-instagram"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://wa.me/5493644355262" target="_blank" style="width: 38px; height: 38px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #fff; transition: all 0.3s ease;" onmouseover="this.style.backgroundColor='#e31b23'; this.style.transform='translateY(-3px)';" onmouseout="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.transform='translateY(0)';">
+                                            <i class="fa fa-whatsapp"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 offset-xl-1 col-md-6 col-lg-4 mb-4 mb-lg-0">
+                        <div class="footer_widget">
+                            <h3 class="footer_title" style="color: #fff; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; position: relative; padding-bottom: 8px;">
+                                Secciones
+                                <span style="position: absolute; left: 0; bottom: 0; width: 30px; height: 2px; background-color: #e31b23;"></span>
+                            </h3>
+                            <ul class="links" style="margin: 0; padding: 0; list-style: none;">
+                                <li style="margin-bottom: 10px;"><a href="index.html" style="color: #aaa; text-decoration: none; font-size: 14px; transition: 0.3s;" onmouseover="this.style.color='#e31b23'" onmouseout="this.style.color='#aaa'">Inicio</a></li>
+                                <li style="margin-bottom: 10px;"><a href="catalogo.html" style="color: #aaa; text-decoration: none; font-size: 14px; transition: 0.3s;" onmouseover="this.style.color='#e31b23'" onmouseout="this.style.color='#aaa'">Ver catálogo</a></li>
+                                <li style="margin-bottom: 10px;"><a href="clientes.html" style="color: #aaa; text-decoration: none; font-size: 14px; transition: 0.3s;" onmouseover="this.style.color='#e31b23'" onmouseout="this.style.color='#aaa'">Clientes</a></li>
+                                <li style="margin-bottom: 10px;"><a href="nosotros.html" style="color: #aaa; text-decoration: none; font-size: 14px; transition: 0.3s;" onmouseover="this.style.color='#e31b23'" onmouseout="this.style.color='#aaa'">Nosotros</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-md-6 col-lg-4">
+                        <div class="footer_widget">
+                            <h3 class="footer_title" style="color: #fff; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; position: relative; padding-bottom: 8px;">
+                                Ubicación y Horarios
+                                <span style="position: absolute; left: 0; bottom: 0; width: 30px; height: 2px; background-color: #e31b23;"></span>
+                            </h3>
+                            <ul class="address_line" style="margin: 0; padding: 0; list-style: none;">
+                                <li style="color: #aaa; font-size: 14px; margin-bottom: 14px; display: flex; align-items: flex-start; gap: 12px;">
+                                    <i class="fa fa-map-marker" style="color: #e31b23; font-size: 16px; width: 16px; text-align: center; line-height: 1.4; flex-shrink: 0;"></i>
+                                    <span style="line-height: 1.4;">Calle 14 esquina 13 - Centro - Sáenz Peña</span>
+                                </li>
+                                <li style="color: #aaa; font-size: 14px; margin-bottom: 14px; display: flex; align-items: flex-start; gap: 12px;">
+                                    <i class="fa fa-map-marker" style="color: #e31b23; font-size: 16px; width: 16px; text-align: center; line-height: 1.4; flex-shrink: 0;"></i>
+                                    <span style="line-height: 1.4;">Calle 14 esquina 25 - Centro - Sáenz Peña</span>
+                                </li>
+                                <li style="color: #aaa; font-size: 14px; display: flex; align-items: flex-start; gap: 12px;">
+                                    <i class="fa fa-clock-o" style="color: #e31b23; font-size: 16px; width: 16px; text-align: center; line-height: 1.4; flex-shrink: 0;"></i>
+                                    <span style="line-height: 1.4;">Lun a Vie: 8:00 a 12:00 y 16:00 a 20:00 hs<br>Sábados: 9:00 a 13:00 hs</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    <div class="copy-right_text" style="background-color: #050505; padding: 20px 0; border-top: 1px solid rgba(255,255,255,0.05);">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-left mb-2 mb-md-0">
+                    <p class="copy_right" style="margin: 0; color: #777; font-size: 13px;">
+                        &copy; <script>document.write(new Date().getFullYear());</script> <strong>Alma Motor - Saénz Peña</strong>. Todos los derechos reservados.
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-right">
+                    <div style="display: inline-flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                        <span style="color: #777; font-size: 13px;">Developed by</span>
+                        <a href="https://instagram.com/rubit.studios" target="_blank" style="display: inline-block;">
+                            <img src="img/rubit-studios.png" alt="Rubit Studios" style="max-height: 22px; width: auto; display: block; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </footer>
+    <!-- footer_end -->
+
+<!-- JS here -->
+<script src="js/vendor/modernizr-3.5.0.min.js"></script>
+<script src="js/vendor/jquery-1.12.4.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/owl.carousel.min.js"></script>
+<script src="js/isotope.pkgd.min.js"></script>
+<script src="js/waypoints.min.js"></script>
+<script src="js/imagesloaded.pkgd.min.js"></script>
+<script src="js/scrollIt.js"></script>
+<script src="js/jquery.scrollUp.min.js"></script>
+<script src="js/wow.min.js"></script>
+<script src="js/nice-select.min.js"></script>
+<script src="js/jquery.slicknav.min.js"></script>
+<script src="js/jquery.magnific-popup.min.js"></script>
+<script src="js/plugins.js"></script>
+
+<script>
+/* =========================================================
+   CATÁLOGO DE VEHÍCULOS (Franja Horizontal)
+   ========================================================= */
+
+const marcasInfo = {
+    "Ford": "img/7.webp",
+    "Volkswagen": "img/volkswagen.png",
+    "Ram": "img/ram.png",
+    "Toyota": "img/toyota.png",
+    "Jeep": "img/jeep.png",
+    "Fiat": "img/fiat.webp",
+    "Chevrolet": "img/chevrolet.webp",
+    "Peugeot": "img/peugeot.png",
+    "BMW": "img/bmw.svg",
+    "Mercedes-Benz": "img/mercedes.svg",
+    "Nissan": "img/nissan.svg",
+    "Citroen": "img/Citroen-Logo.png",
+    "Renault": "img/renault.png",
+    "Mini": "img/mini.png"
+};
+
+// IMPORTANTE: cada vehículo tiene su propio campo "foto" con el nombre de archivo
+// sugerido. Subí la imagen real de CADA unidad a la carpeta img/vehiculos/ con
+// ese mismo nombre de archivo (podés cambiar la extensión .jpg si tu foto es
+// .webp o .png, solo mantené el nombre). Mientras el archivo no exista en el
+// hosting, la tarjeta va a mostrar el logo de la marca como respaldo temporal
+// (ver función tarjetaHTML: const imagen = v.foto || marcasInfo[v.marca]).
+const vehiculos = [
+    { marca: "Volkswagen", modelo: "Amarok V6 Highline", anio: 2018, km: 138000, estado: "usado", foto: "img/vehiculos/volkswagen-amarok-v6-highline-2018.jpg" },
+];
+
+// Estado de los filtros activos
+const filtros = {
+    estado: "todos",
+    marca: "",
+    busqueda: "",
+    orden: "relevancia"
+};
+
+function poblarMarcas() {
+    const select = document.getElementById("marcaSelect");
+    const marcasUnicas = Object.keys(marcasInfo);
+    marcasUnicas.forEach(m => {
+        const cant = vehiculos.filter(v => v.marca === m).length;
+        select.innerHTML += `<option value="${m}">${m} (${cant})</option>`;
+    });
+}
+
+function aplicarFiltros() {
+    return vehiculos.filter(v => {
+        if (filtros.estado !== "todos" && v.estado !== filtros.estado) return false;
+        if (filtros.marca && v.marca !== filtros.marca) return false;
+        if (filtros.busqueda) {
+            const texto = (v.marca + " " + v.modelo).toLowerCase();
+            if (!texto.includes(filtros.busqueda.toLowerCase())) return false;
+        }
+        return true;
+    });
+}
+
+function ordenar(lista) {
+    const arr = [...lista];
+    switch (filtros.orden) {
+        case "anio_desc": arr.sort((a, b) => (b.anio ?? -Infinity) - (a.anio ?? -Infinity)); break;
+        case "km_asc": arr.sort((a, b) => (a.km ?? Infinity) - (b.km ?? Infinity)); break;
+    }
+    return arr;
+}
+
+function tarjetaHTML(v) {
+    const imagen = v.foto || marcasInfo[v.marca];
+    const kmTexto = v.km == null ? "CONFIRMAR" : (v.km === 0 ? "0 km" : v.km.toLocaleString("es-AR") + " km");
+    const anioTexto = v.anio == null ? "CONFIRMAR" : v.anio;
+    const specs = [anioTexto, kmTexto].join(" · ");
+    
+    // Generamos el nombre del archivo HTML basado en la marca, modelo y año (ej: volkswagen-amarok-v6-highline-2018.html)
+    // Si querés priorizar un campo "detalle" manual en el objeto, podés mantenerlo, pero esto lo automatiza:
+    const slug = `${v.marca}-${v.modelo}-${v.anio || 's-n'}`
+        .toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Limpia tildes
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+    
+    const enlaceHTML = v.detalle || `${slug}.html`;
+
+    const overlay = `
+                <a href="${enlaceHTML}" class="vehiculo_img_overlay">
+                    <span class="vehiculo_overlay_badge">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        Ver más
+                    </span>
+                </a>`;
+
+    return `
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="vehiculo_card">
+            <div class="vehiculo_img">
+                <img src="${imagen}" alt="${v.marca} ${v.modelo}" onerror="this.onerror=null;this.src='${marcasInfo[v.marca]}';this.classList.add('foto_faltante');">${overlay}
+            </div>
+            <div class="vehiculo_body">
+                <div class="vehiculo_marca">${v.marca}</div>
+                <div class="vehiculo_titulo">${v.modelo}</div>
+                <div class="vehiculo_specs">${specs}</div>
+                <div class="vehiculo_footer">
+                    <a class="enlace_ver_mas" href="${enlaceHTML}">
+                        Ver más
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+function render() {
+    const filtrados = ordenar(aplicarFiltros());
+    const grilla = document.getElementById("grillaVehiculos");
+    const sinResultados = document.getElementById("sinResultados");
+
+    document.getElementById("cantResultados").textContent = filtrados.length;
+
+    grilla.innerHTML = "";
+
+    if (filtrados.length === 0) {
+        sinResultados.style.display = "block";
+    } else {
+        sinResultados.style.display = "none";
+        filtrados.forEach(v => {
+            grilla.insertAdjacentHTML('beforeend', tarjetaHTML(v));
+        });
+    }
+}
+
+function actualizarURL() {
+    const params = new URLSearchParams();
+    if (filtros.marca) params.set("marca", filtros.marca);
+    if (filtros.estado !== "todos") params.set("estado", filtros.estado);
+    if (filtros.busqueda) params.set("q", filtros.busqueda);
+    const nuevaURL = window.location.pathname + (params.toString() ? "?" + params.toString() : "");
+    window.history.replaceState({}, "", nuevaURL);
+}
+
+function limpiarFiltros() {
+    filtros.estado = "todos";
+    filtros.marca = "";
+    filtros.busqueda = "";
+    filtros.orden = "relevancia";
+
+    document.getElementById("buscador").value = "";
+    document.getElementById("marcaSelect").value = "";
+    document.getElementById("ordenSelect").value = "relevancia";
+    
+    document.querySelectorAll(".estado_tab").forEach(t => t.classList.remove("active"));
+    document.querySelector('.estado_tab[data-estado="todos"]').classList.add("active");
+
+    actualizarURL();
+    render();
+}
+
+function inicializarDesdeURL() {
+    const params = new URLSearchParams(window.location.search);
+    const marcaParam = params.get("marca");
+    const estadoParam = params.get("estado");
+    const qParam = params.get("q");
+
+    if (marcaParam) {
+        const marcaLimpia = Object.keys(marcasInfo).find(k => k.toLowerCase() === marcaParam.toLowerCase());
+        if (marcaLimpia) {
+            filtros.marca = marcaLimpia;
+            document.getElementById("marcaSelect").value = marcaLimpia;
+        }
+    }
+    if (estadoParam && ["0km", "usado"].includes(estadoParam)) {
+        filtros.estado = estadoParam;
+        document.querySelectorAll(".estado_tab").forEach(t => t.classList.remove("active"));
+        document.querySelector(`.estado_tab[data-estado="${estadoParam}"]`).classList.add("active");
+    }
+    if (qParam) {
+        filtros.busqueda = qParam;
+        document.getElementById("buscador").value = qParam;
+    }
+}
+
+// ---- Listeners ----
+document.addEventListener("DOMContentLoaded", () => {
+    poblarMarcas();
+    inicializarDesdeURL();
+    render();
+
+    document.querySelectorAll(".estado_tab").forEach(tab => {
+        tab.addEventListener("click", () => {
+            document.querySelectorAll(".estado_tab").forEach(t => t.classList.remove("active"));
+            tab.classList.add("active");
+            filtros.estado = tab.dataset.estado;
+            actualizarURL();
+            render();
+        });
+    });
+
+    document.getElementById("buscador").addEventListener("input", (e) => {
+        filtros.busqueda = e.target.value;
+        actualizarURL();
+        render();
+    });
+
+    document.getElementById("marcaSelect").addEventListener("change", (e) => {
+        filtros.marca = e.target.value;
+        actualizarURL();
+        render();
+    });
+
+    document.getElementById("ordenSelect").addEventListener("change", (e) => { filtros.orden = e.target.value; render(); });
+
+    document.getElementById("btnLimpiar").addEventListener("click", limpiarFiltros);
+    document.getElementById("btnLimpiar2").addEventListener("click", limpiarFiltros);
+});
+</script>
+
+<a href="https://wa.me/5493735610059?text=Hola,%20me%20gustaría%20más%20información" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Abrir chat de WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" fill="currentColor">
+    <path d="M12.04 2c-5.52 0-10 4.48-10 10 0 1.77.46 3.45 1.28 4.9L2 22l5.25-1.35c1.4.75 3.01 1.15 4.79 1.15 5.52 0 10-4.48 10-10s-4.48-10-10-10zm0 18.15c-1.46 0-2.88-.39-4.11-1.13l-.3-.18-3.1.8.83-3.02-.2-.31c-.82-1.3-1.25-2.81-1.25-4.36 0-4.51 3.67-8.18 8.18-8.18s8.18 3.67 8.18 8.18-3.67 8.18-8.18 8.18zm4.48-6.15c-.25-.12-1.47-.72-1.69-.8-.22-.09-.38-.12-.54.12-.17.25-.62.8-.76.96-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.48-1.39-1.73-.15-.25-.02-.39.11-.51.11-.11.25-.29.38-.43.12-.14.17-.24.25-.4.09-.17.04-.31-.02-.43-.06-.12-.54-1.31-.74-1.8-.2-.48-.4-.41-.54-.42l-.46-.01c-.16 0-.42.06-.64.31-.22.25-.85.83-.85 2.02s.87 2.34.99 2.5c.12.17 1.72 2.62 4.17 3.67.58.25 1.03.4 1.38.51.58.18 1.11.15 1.53.09.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.29z"/>
+  </svg>
+</a>
+
+<script>
+(function () {
+    var btn = document.getElementById('mobileMenuBtn');
+    var panel = document.getElementById('mobileNavPanel');
+    var overlay = document.getElementById('mobileNavOverlay');
+    if (!btn || !panel || !overlay) return;
+
+    function closeMenu() {
+        btn.classList.remove('active');
+        panel.classList.remove('active');
+        overlay.classList.remove('active');
+        btn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+    function openMenu() {
+        btn.classList.add('active');
+        panel.classList.add('active');
+        overlay.classList.add('active');
+        btn.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    }
+
+    btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (panel.classList.contains('active')) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    });
+
+    overlay.addEventListener('click', closeMenu);
+
+    Array.prototype.forEach.call(panel.querySelectorAll('a'), function (link) {
+        link.addEventListener('click', closeMenu);
+    });
+
+    window.addEventListener('resize', function () {
+        if (window.innerWidth >= 992) {
+            closeMenu();
+        }
+    });
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const lenis = new Lenis({
+            duration: 1.1,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 0.95,
+            smoothTouch: false
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        window.addEventListener('resize', () => lenis.resize());
+
+        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (!targetId || targetId.length < 2) return;
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    e.preventDefault();
+                    lenis.scrollTo(targetElement, {
+                        offset: -90,
+                        duration: 1.2
+                    });
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
