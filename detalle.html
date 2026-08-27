@@ -1,85 +1,170 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8">
-    <title>Detalle del Vehículo | Alma Motor</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alma Motor, Sáenz Peña</title>
+    <!-- CSS de Bootstrap y FontAwesome (Asegurate de tenerlos vinculados o adaptados a tu proyecto) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; color: #333; }
+        .breadcrumb_vehicle { background-color: #1a1a1a; padding: 30px 0; color: #fff; }
+        .back_link { color: #ccc; text-decoration: none; font-size: 14px; }
+        .back_link:hover { color: #fff; text-decoration: none; }
+        .badge_meta { background: #333; color: #fff; padding: 5px 12px; border-radius: 4px; font-size: 12px; margin-right: 8px; text-transform: uppercase; }
+        .badge_new { background: #e63946; }
+        .vehicle_detail_area { padding: 40px 0; }
+        .gallery_main { position: relative; background: #000; border-radius: 8px; overflow: hidden; height: 400px; display: flex; align-items: center; justify-content: center; }
+        .gallery_main img { width: 100%; height: 100%; object-fit: cover; }
+        .gallery_arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: #fff; border: none; padding: 10px 15px; cursor: pointer; font-size: 18px; border-radius: 4px; transition: background 0.3s; }
+        .gallery_arrow:hover { background: rgba(0,0,0,0.8); }
+        .gallery_prev { left: 15px; }
+        .gallery_next { right: 15px; }
+        .gallery_thumbs { display: flex; gap: 10px; margin-top: 15px; overflow-x: auto; padding-bottom: 5px; }
+        .gallery_thumbs img { width: 80px; height: 60px; object-fit: cover; border-radius: 4px; cursor: pointer; opacity: 0.6; border: 2px solid transparent; transition: all 0.3s; }
+        .gallery_thumbs img.active, .gallery_thumbs img:hover { opacity: 1; border-color: #e63946; }
+        .vehicle_info_box { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .brand_tag { font-size: 13px; font-weight: 600; color: #e63946; text-transform: uppercase; letter-spacing: 1px; }
+        .vehicle_info_box h1 { font-size: 26px; font-weight: 700; margin: 5px 0 20px 0; }
+        .spec_list { list-style: none; padding: 0; margin: 0 0 20px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+        .spec_list li { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f8f9fa; font-size: 14px; }
+        .spec_list li:last-child { border-bottom: none; }
+        .spec_list li span:first-child { color: #666; font-weight: 500; }
+        .spec_list li span:last-child { font-weight: 600; color: #111; }
+        .vehicle_desc { font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 25px; }
+        .whatsapp_btn_detail { display: block; background: #25d366; color: #fff; text-align: center; padding: 14px; border-radius: 6px; font-weight: 600; text-decoration: none; transition: background 0.3s; }
+        .whatsapp_btn_detail:hover { background: #1ebe5d; color: #fff; text-decoration: none; }
+    </style>
 </head>
-<body style="background-color: #111; color: #fff;">
+<body>
 
-    <div class="container" style="padding: 60px 0;">
-        <a href="catalogo.html" class="btn btn-secondary mb-4">&larr; Volver al Catálogo</a>
-        
-        <div class="row" id="detalle-container">
-            <div class="col-12 text-center">
-                <h2>Cargando detalles del vehículo...</h2>
+    <!-- BREADCRUMB / CABECERA DEL VEHÍCULO -->
+    <div class="breadcrumb_vehicle">
+        <div class="container">
+            <a href="catalogo.html" class="back_link"><i class="fa fa-angle-left"></i> Volver al catálogo</a>
+            <h2 id="vehiculo-titulo" style="color:#fff; font-weight:700; margin: 12px 0 10px 0;">Cargando...</h2>
+            <div>
+                <span id="vehiculo-anio" class="badge_meta badge_new">----</span>
+                <span id="vehiculo-condicion" class="badge_meta">----</span>
             </div>
         </div>
     </div>
 
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const idVehiculo = params.get("vehiculo");
-        const contenedor = document.getElementById("detalle-container");
-
-        if (idVehiculo) {
-            fetch(`content/vehiculos/${idVehiculo}.json`)
-                .then(response => {
-                    if (!response.ok) throw new Error("Vehículo no encontrado");
-                    return response.json();
-                })
-                .then(vehiculoEncontrado => {
-                    const mensajeWa = encodeURIComponent(`Hola, me interesa el ${vehiculoEncontrado.marca} ${vehiculoEncontrado.modelo} que vi en la web.`);
-
-                    // 1. Dibujamos la estructura principal y dejamos un div con id="galeria-fotos"
-                    contenedor.innerHTML = `
-                        <div class="col-lg-7">
-                            <img src="${vehiculoEncontrado.foto}" alt="${vehiculoEncontrado.modelo}" style="width: 100%; border-radius: 8px; object-fit: cover;">
-                            
-                            <!-- Acá se van a inyectar las fotos extra de la galería -->
-                            <div id="galeria-fotos" class="d-flex flex-wrap mt-3"></div>
-                        </div>
-                        <div class="col-lg-5">
-                            <span style="color: #e31b23; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">${vehiculoEncontrado.marca}</span>
-                            <h1 style="font-size: 32px; font-weight: 700; margin-top: 5px;">${vehiculoEncontrado.modelo}</h1>
-                            <hr style="border-color: rgba(255,255,255,0.2);">
-                            <p><strong>Año:</strong> ${vehiculoEncontrado.anio || 'A confirmar'}</p>
-                            <p><strong>Kilometraje:</strong> ${vehiculoEncontrado.km != null ? Number(vehiculoEncontrado.km).toLocaleString() + ' km' : 'A confirmar'}</p>
-                            <p><strong>Estado:</strong> <span style="text-transform: uppercase;">${vehiculoEncontrado.estado}</span></p>
-                            <p style="margin-top: 20px; color: #ccc;">${vehiculoEncontrado.descripcion}</p>
-
-                            <a href="https://wa.me/5493735610059?text=${mensajeWa}" target="_blank" class="btn btn-danger btn-lg mt-3" style="background-color: #e31b23; border: none; width: 100%;">
-                                Consultar por WhatsApp
-                            </a>
-                        </div>
-                    `;
-
-                    // 2. Rellenamos la galería de fotos extra si existen
-                    const contenedorGaleria = document.getElementById("galeria-fotos");
-                    if (vehiculoEncontrado.galeria && vehiculoEncontrado.galeria.length > 0) {
-                        vehiculoEncontrado.galeria.forEach(imgUrl => {
-                            contenedorGaleria.innerHTML += `<img src="${imgUrl}" alt="Foto detalle" class="img-thumbnail m-1" style="width: 120px; height: 90px; object-fit: cover; background: #222; border-color: #444;">`;
-                        });
-                    }
-                })
-                .catch(error => {
-                    contenedor.innerHTML = `
-                        <div class="col-12 text-center">
-                            <h2>Vehículo no encontrado</h2>
-                            <p>El vehículo que buscás no existe o el enlace es incorrecto.</p>
-                            <a href="catalogo.html" class="btn btn-primary mt-3">Volver al catálogo</a>
-                        </div>
-                    `;
-                });
-        } else {
-            contenedor.innerHTML = `
-                <div class="col-12 text-center">
-                    <h2>No se especificó ningún vehículo</h2>
-                    <a href="catalogo.html" class="btn btn-primary mt-3">Volver al catálogo</a>
+    <!-- CONTENIDO PRINCIPAL DE DETALLE -->
+    <div class="vehicle_detail_area">
+        <div class="container">
+            <div class="row">
+                <!-- Columna Izquierda: Galería -->
+                <div class="col-lg-7 mb-4 mb-lg-0">
+                    <div class="gallery_main">
+                        <img id="gallery_main_img" src="" alt="Vehículo Alma Motor">
+                        <button type="button" class="gallery_arrow gallery_prev" onclick="cambiarFotoFlecha(-1)">&#10094;</button>
+                        <button type="button" class="gallery_arrow gallery_next" onclick="cambiarFotoFlecha(1)">&#10095;</button>
+                    </div>
+                    <div id="gallery_thumbs" class="gallery_thumbs"></div>
                 </div>
-            `;
+
+                <!-- Columna Derecha: Especificaciones y Contacto -->
+                <div class="col-lg-5">
+                    <div class="vehicle_info_box">
+                        <span id="vehiculo-marca" class="brand_tag">--</span>
+                        <h1 id="vehiculo-modelo">--</h1>
+
+                        <ul class="spec_list">
+                            <li><span>Año</span><span id="spec-anio">--</span></li>
+                            <li><span>Kilometraje</span><span id="spec-km">--</span></li>
+                            <li><span>Combustible</span><span id="spec-combustible">--</span></li>
+                            <li><span>Transmisión</span><span id="spec-transmision">--</span></li>
+                        </ul>
+
+                        <p id="vehiculo-desc" class="vehicle_desc">Cargando descripción...</p>
+
+                        <a id="whatsapp-btn" href="#" target="_blank" rel="noopener noreferrer" class="whatsapp_btn_detail">
+                            <i class="fa fa-whatsapp"></i> Consultar por WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT DE CARGA DINÁMICA -->
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const params = new URLSearchParams(window.location.search);
+            const idVehiculo = params.get("id");
+
+            if (!idVehiculo) {
+                document.querySelector(".vehicle_detail_area").innerHTML = "<div class='container py-5 text-center'><h3>Vehículo no encontrado.</h3><a href='catalogo.html' class='btn btn-dark mt-3'>Volver al catálogo</a></div>";
+                return;
+            }
+
+            try {
+                const response = await fetch(`content/vehiculos/${idVehiculo}.json`);
+                if (!response.ok) throw new Error("No se pudo cargar la información.");
+                const auto = await response.json();
+
+                // Rellenar textos principales
+                document.getElementById("vehiculo-titulo").textContent = `${auto.marca} ${auto.modelo} (${auto.version || ''})`;
+                document.getElementById("vehiculo-anio").textContent = auto.anio;
+                document.getElementById("vehiculo-condicion").textContent = auto.condicion;
+                document.getElementById("vehiculo-marca").textContent = auto.marca;
+                document.getElementById("vehiculo-modelo").textContent = auto.modelo;
+                document.getElementById("spec-anio").textContent = auto.anio;
+                document.getElementById("spec-km").textContent = auto.kilometraje;
+                document.getElementById("spec-combustible").textContent = auto.combustible;
+                document.getElementById("spec-transmision").textContent = auto.transmision;
+                document.getElementById("vehiculo-desc").textContent = auto.descripcion;
+                document.title = `${auto.marca} ${auto.modelo} | Alma Motor, Sáenz Peña`;
+
+                // Botón WhatsApp personalizado
+                const mensajeWa = encodeURIComponent(`Hola, quiero consultar por el ${auto.marca} ${auto.modelo} (${auto.anio}) que vi en la web.`);
+                document.getElementById("whatsapp-btn").href = `https://wa.me/5493735610059?text=${mensajeWa}`;
+
+                // Galería de fotos dinámica
+                const mainImg = document.getElementById("gallery_main_img");
+                const thumbsContainer = document.getElementById("gallery_thumbs");
+                
+                if (auto.fotos && auto.fotos.length > 0) {
+                    mainImg.src = auto.fotos[0];
+                    thumbsContainer.innerHTML = "";
+                    
+                    auto.fotos.forEach((foto, index) => {
+                        const thumb = document.createElement("img");
+                        thumb.src = foto;
+                        thumb.alt = `${auto.modelo} foto ${index + 1}`;
+                        if (index === 0) thumb.classList.add("active");
+                        
+                        thumb.onclick = () => {
+                            mainImg.src = foto;
+                            document.querySelectorAll('.gallery_thumbs img').forEach(t => t.classList.remove('active'));
+                            thumb.classList.add('active');
+                        };
+                        thumbsContainer.appendChild(thumb);
+                    });
+                }
+            } catch (error) {
+                console.error(error);
+                document.querySelector(".vehicle_detail_area").innerHTML = "<div class='container py-5 text-center'><h3>Ocurrió un error al cargar los datos del vehículo.</h3><a href='catalogo.html' class='btn btn-dark mt-3'>Volver al catálogo</a></div>";
+            }
+        });
+
+        // Funciones globales para la galería por flechas
+        function cambiarFotoPrincipal(src, el) {
+            document.getElementById('gallery_main_img').src = src;
+            document.querySelectorAll('.gallery_thumbs img').forEach(t => t.classList.remove('active'));
+            if (el) el.classList.add('active');
+        }
+
+        function cambiarFotoFlecha(direccion) {
+            const thumbs = document.querySelectorAll('.gallery_thumbs img');
+            if (!thumbs.length) return;
+            let activeIndex = 0;
+            thumbs.forEach((t, i) => { if (t.classList.contains('active')) activeIndex = i; });
+            let nextIndex = (activeIndex + direccion + thumbs.length) % thumbs.length;
+            let nextThumb = thumbs[nextIndex];
+            cambiarFotoPrincipal(nextThumb.getAttribute('src'), nextThumb);
         }
     </script>
 </body>
