@@ -905,7 +905,7 @@
 
 <script>
 /* =========================================================
-   CATÁLOGO DE VEHÍCULOS DINÁMICO (Decap CMS)
+   CATÁLOGO DE VEHÍCULOS (Franja Horizontal)
    ========================================================= */
 
 const marcasInfo = {
@@ -925,8 +925,15 @@ const marcasInfo = {
     "Mini": "img/mini.png"
 };
 
-// Variable donde se almacenarán los vehículos cargados desde Decap CMS
-let vehiculos = [];
+// IMPORTANTE: cada vehículo tiene su propio campo "foto" con el nombre de archivo
+// sugerido. Subí la imagen real de CADA unidad a la carpeta img/vehiculos/ con
+// ese mismo nombre de archivo (podés cambiar la extensión .jpg si tu foto es
+// .webp o .png, solo mantené el nombre). Mientras el archivo no exista en el
+// hosting, la tarjeta va a mostrar el logo de la marca como respaldo temporal
+// (ver función tarjetaHTML: const imagen = v.foto || marcasInfo[v.marca]).
+const vehiculos = [
+    { marca: "Volkswagen", modelo: "Amarok V6 Highline", anio: 2018, km: 138000, estado: "usado", foto: "img/vehiculos/volkswagen-amarok-v6-highline-2018.jpg" },
+];
 
 // Estado de los filtros activos
 const filtros = {
@@ -938,13 +945,10 @@ const filtros = {
 
 function poblarMarcas() {
     const select = document.getElementById("marcaSelect");
-    select.innerHTML = '<option value="">Todas las marcas</option>';
     const marcasUnicas = Object.keys(marcasInfo);
     marcasUnicas.forEach(m => {
         const cant = vehiculos.filter(v => v.marca === m).length;
-        if (cant > 0) {
-            select.innerHTML += `<option value="${m}">${m} (${cant})</option>`;
-        }
+        select.innerHTML += `<option value="${m}">${m} (${cant})</option>`;
     });
 }
 
@@ -971,13 +975,15 @@ function ordenar(lista) {
 
 function tarjetaHTML(v) {
     const imagen = v.foto || marcasInfo[v.marca];
-    const kmTexto = v.km == null ? "CONFIRMAR" : (v.km === 0 ? "0 km" : Number(v.km).toLocaleString("es-AR") + " km");
+    const kmTexto = v.km == null ? "CONFIRMAR" : (v.km === 0 ? "0 km" : v.km.toLocaleString("es-AR") + " km");
     const anioTexto = v.anio == null ? "CONFIRMAR" : v.anio;
     const specs = [anioTexto, kmTexto].join(" · ");
     
+    // Generamos el nombre del archivo HTML basado en la marca, modelo y año (ej: volkswagen-amarok-v6-highline-2018.html)
+    // Si querés priorizar un campo "detalle" manual en el objeto, podés mantenerlo, pero esto lo automatiza:
     const slug = `${v.marca}-${v.modelo}-${v.anio || 's-n'}`
         .toLowerCase()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Limpia tildes
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/(^-|-$)/g, '');
     
@@ -1005,9 +1011,9 @@ function tarjetaHTML(v) {
                 <div class="vehiculo_titulo">${v.modelo}</div>
                 <div class="vehiculo_specs">${specs}</div>
                 <div class="vehiculo_footer">
-                    <a class="enlace_ver_mas btn_consultar" href="${enlaceHTML}">
+                    <a class="enlace_ver_mas" href="${enlaceHTML}">
                         Ver más
-                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-left: 4px;">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                             <polyline points="12 5 19 12 12 19"></polyline>
                         </svg>
@@ -1087,29 +1093,11 @@ function inicializarDesdeURL() {
     }
 }
 
-// Función para cargar los vehículos desde la carpeta que gestiona Decap CMS
-async function cargarVehiculosCMS() {
-    try {
-        // Opción recomendada para Decap CMS en sitios estáticos: 
-        // Configurar Decap para guardar en un archivo JSON unificado (ej: content/vehiculos.json)
-        // O leer directamente el directorio si usas un bundler. Lo más robusto para HTML plano 
-        // es apuntar a un archivo JSON centralizado que el CMS actualice al guardar.
-        const response = await fetch('content/vehiculos.json');
-        if (!response.ok) throw new Error('No se pudo cargar el archivo de vehículos');
-        vehiculos = await response.json();
-    } catch (error) {
-        console.warn("Carga desde JSON falló o no existe, usando respaldo vacío.", error);
-        vehiculos = [];
-    }
-
+// ---- Listeners ----
+document.addEventListener("DOMContentLoaded", () => {
     poblarMarcas();
     inicializarDesdeURL();
     render();
-}
-
-// ---- Listeners ----
-document.addEventListener("DOMContentLoaded", () => {
-    cargarVehiculosCMS();
 
     document.querySelectorAll(".estado_tab").forEach(tab => {
         tab.addEventListener("click", () => {
@@ -1133,10 +1121,7 @@ document.addEventListener("DOMContentLoaded", () => {
         render();
     });
 
-    document.getElementById("ordenSelect").addEventListener("change", (e) => { 
-        filtros.orden = e.target.value; 
-        render(); 
-    });
+    document.getElementById("ordenSelect").addEventListener("change", (e) => { filtros.orden = e.target.value; render(); });
 
     document.getElementById("btnLimpiar").addEventListener("click", limpiarFiltros);
     document.getElementById("btnLimpiar2").addEventListener("click", limpiarFiltros);
