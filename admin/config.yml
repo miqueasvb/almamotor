@@ -8,9 +8,11 @@ collections:
     label: "Vehículos"
     folder: "content/vehiculos"
     create: true
-    slug: "{{slug}}"
+    slug: "{{id}}"
+    extension: "json"
+    format: "json"
     fields:
-      - {label: "ID Único (ej: amarok-2018)", name: "id", widget: "string"}
+      - {label: "ID Único (ej: duster-2014)", name: "id", widget: "string"}
       - {label: "Marca", name: "marca", widget: "string"}
       - {label: "Modelo", name: "modelo", widget: "string"}
       - {label: "Año", name: "anio", widget: "string"}
