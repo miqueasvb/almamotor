@@ -21,38 +21,58 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.almamotor.com.ar/volkswagen-amarok-2018.html</loc>
+    <loc>https://www.almamotor.com.ar/ficha.html?id=volkswagen-amarok-v6-highline-2018</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.almamotor.com.ar/bmw-x6.html</loc>
+    <loc>https://www.almamotor.com.ar/ficha.html?id=ram-ram-1500-2022</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.almamotor.com.ar/fiat-cronos.html</loc>
+    <loc>https://www.almamotor.com.ar/ficha.html?id=renault-duster-tech-1-6-2014</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.almamotor.com.ar/renault-duster.html</loc>
+    <loc>https://www.almamotor.com.ar/ficha.html?id=mini-mini-cooper-s-2017</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.almamotor.com.ar/toyota-hilux-2014.html</loc>
+    <loc>https://www.almamotor.com.ar/ficha.html?id=fiat-cronos-precision-1-3-gse-cvt-bz-2023</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.almamotor.com.ar/mini-cooper.html</loc>
+    <loc>https://www.almamotor.com.ar/ficha.html?id=toyota-etios-x-2021</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.almamotor.com.ar/ram-1500.html</loc>
+    <loc>https://www.almamotor.com.ar/ficha.html?id=volkswagen-gol-trend-2021</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.almamotor.com.ar/ficha.html?id=toyota-corolla-xei-mt-2017</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.almamotor.com.ar/ficha.html?id=renault-clio-mio-dynamique-2015</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.almamotor.com.ar/ficha.html?id=volkswagen-gol-trend-2014</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.almamotor.com.ar/ficha.html?id=renault-clio-mio-confort-plus-2014</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>
