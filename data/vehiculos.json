@@ -206,5 +206,24 @@
       "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871144264-5.jpg",
       "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871145867-6.jpg"
     ]
+  },
+  {
+    "id": "ford-asdads-123123",
+    "marca": "Ford",
+    "modelo": "asdads",
+    "anio": 123123,
+    "km": 312312312,
+    "estado": "usado",
+    "combustible": "asd",
+    "transmision": "asd",
+    "descripcion": "asd",
+    "fotos": [
+      "img/vehiculos/ford-asdads-123123/foto-1787935873435-0.jpg",
+      "img/vehiculos/ford-asdads-123123/foto-1787935875434-1.jpg",
+      "img/vehiculos/ford-asdads-123123/foto-1787935876963-2.jpg",
+      "img/vehiculos/ford-asdads-123123/foto-1787935878332-3.jpg",
+      "img/vehiculos/ford-asdads-123123/foto-1787935879750-4.jpg",
+      "img/vehiculos/ford-asdads-123123/foto-1787935881216-5.jpg"
+    ]
   }
 ]
