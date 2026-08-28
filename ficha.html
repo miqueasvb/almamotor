@@ -58,22 +58,52 @@
         .gallery_arrow.gallery_prev { left: 15px; }
         .gallery_arrow.gallery_next { right: 15px; }
 
-        /* Carrusel de relacionados: Owl Carousel real (drag táctil + loop infinito nativos) */
-        #relacionadosTrack.owl-carousel { display: block; }
-        #relacionadosTrack .owl-stage-outer { overflow: hidden; }
-        #relacionadosTrack .owl-nav .owl-prev,
-        #relacionadosTrack .owl-nav .owl-next {
-            position: absolute; top: 40%; transform: translateY(-50%);
-            width: 44px; height: 44px; border-radius: 50%;
-            background: rgba(0,0,0,0.45); color: #fff; font-size: 20px;
-            display: flex; align-items: center; justify-content: center;
-            transition: 0.25s;
+        .vehicle_marquee { overflow: hidden; width: 100%; -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); }
+        .vehicle_track { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 25px; width: max-content; animation-name: recorrido_vehiculos; animation-timing-function: linear; animation-iteration-count: infinite; }
+        .vehicle_track:hover { animation-play-state: paused; }
+        @keyframes recorrido_vehiculos { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        /* Tarjetas del carrousel: ancho fijo propio para no depender de las clases
+           de grilla (col-lg-3, etc.) que usa style.css en otras secciones */
+        .vehicle_track .single_vehicle {
+            flex: 0 0 280px;
+            width: 280px;
+            max-width: 280px;
+            margin: 0;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        #relacionadosTrack .owl-nav .owl-prev:hover,
-        #relacionadosTrack .owl-nav .owl-next:hover { background: #e31b23; }
-        #relacionadosTrack .owl-nav .owl-prev { left: -10px; }
-        #relacionadosTrack .owl-nav .owl-next { right: -10px; }
-        .vehicle_marquee { position: relative; padding: 0 30px; }
+        .vehicle_track .single_vehicle:hover { transform: translateY(-6px); box-shadow: 0 12px 28px rgba(0,0,0,0.14); }
+        .vehicle_track .single_vehicle .vehicle_thumb { position: relative; width: 100%; height: 175px; overflow: hidden; }
+        .vehicle_track .single_vehicle .vehicle_thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .vehicle_track .single_vehicle .vehicle_thumb_overlay {
+            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.45); opacity: 0; transition: opacity 0.3s ease; text-decoration: none;
+        }
+        .vehicle_track .single_vehicle .vehicle_thumb:hover .vehicle_thumb_overlay { opacity: 1; }
+        .vehicle_track .single_vehicle .vehicle_overlay_badge {
+            display: flex; align-items: center; gap: 6px; color: #fff; font-size: 13px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.5px; border: 2px solid #fff; border-radius: 30px; padding: 8px 16px;
+        }
+        .vehicle_track .single_vehicle .vehicle_overlay_badge svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 2; }
+        .vehicle_track .single_vehicle .vehicle_content { padding: 18px 20px 22px 20px; }
+        .vehicle_track .single_vehicle .vehicle_brand { display: block; color: #e31b23; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        .vehicle_track .single_vehicle .vehicle_content h4 { margin: 0 0 12px 0; font-size: 18px; font-weight: 700; color: #111; }
+        .vehicle_track .single_vehicle .vehicle_meta { list-style: none; margin: 0 0 16px 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 14px; }
+        .vehicle_track .single_vehicle .vehicle_meta li { font-size: 12px; color: #777; font-weight: 600; }
+        .vehicle_track .single_vehicle .vehicle_btn {
+            display: inline-block; width: 100%; text-align: center; background: #111; color: #fff !important;
+            font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+            padding: 10px 0; border-radius: 6px; text-decoration: none; transition: background 0.3s ease;
+        }
+        .vehicle_track .single_vehicle .vehicle_btn:hover { background: #e31b23; }
+
+        @media (max-width: 576px) {
+            .vehicle_track .single_vehicle { flex-basis: 220px; width: 220px; max-width: 220px; }
+        }
 
         .vehicle_info_box { background: #fff; border-radius: 10px; padding: 35px; box-shadow: 0 5px 20px rgba(0,0,0,0.06); height: 100%; }
         .vehicle_info_box h1 { font-size: 28px; font-weight: 700; color: #111; margin-bottom: 4px; }
@@ -241,7 +271,7 @@
             </div>
         </div>
         <div class="vehicle_marquee">
-            <div class="owl-carousel owl-theme" id="relacionadosTrack"></div>
+            <div class="vehicle_track" id="relacionadosTrack"></div>
         </div>
     </div>
     <!-- related_vehicles_end -->
@@ -521,50 +551,21 @@ async function init() {
     const relacionados = [...mismaMarca, ...otrasMarcas].slice(0, 8);
 
     const relacionadosArea = document.getElementById("relacionadosArea");
-
-    // Mostramos el contenido ANTES de armar el carrusel: Owl necesita medir anchos
-    // reales, y con el contenedor todavía oculto (display:none) calcula todo mal
-    // (de ahí el espacio exagerado y que no se moviera).
-    estadoCarga.style.display = "none";
-    document.getElementById("contenidoFicha").style.display = "block";
-
     if (relacionados.length === 0) {
         relacionadosArea.style.display = "none";
     } else {
-        const $track = jQuery("#relacionadosTrack");
-
-        if ($track.hasClass("owl-loaded")) {
-            $track.trigger("destroy.owl.carousel");
-        }
-        // Cada tarjeta como item propio del carrusel (Owl las clona solo para el loop infinito)
-        $track.html(relacionados.map(v => `<div class="item">${tarjetaRelacionadaHTML(v)}</div>`).join(""));
-
-        $track.owlCarousel({
-            loop: relacionados.length > 3,
-            margin: 20,
-            nav: relacionados.length > 1,
-            dots: false,
-            autoplay: true,
-            autoplayTimeout: 3500,
-            autoplayHoverPause: true,
-            smartSpeed: 700,
-            touchDrag: true,
-            mouseDrag: true,
-            navText: [
-                '<i class="ti-angle-left"></i>',
-                '<i class="ti-angle-right"></i>'
-            ],
-            responsive: {
-                0:    { items: 1 },
-                576:  { items: 2 },
-                992:  { items: 3 },
-                1200: { items: 4 }
-            }
-        });
-
-        // Recalcula anchos una vez que el navegador terminó de pintar el layout visible
-        setTimeout(() => $track.trigger('refresh.owl.carousel'), 50);
+        const track = document.getElementById("relacionadosTrack");
+        const tarjetasHTML = relacionados.map(tarjetaRelacionadaHTML).join("");
+        // Duplicamos el contenido para que el desplazamiento sea un loop continuo sin cortes
+        // (al llegar a -50% del ancho, en realidad volvió a mostrar la primera tanda de tarjetas)
+        track.innerHTML = tarjetasHTML + tarjetasHTML;
+        // Velocidad proporcional a la cantidad de autos, para que siempre se vea a un ritmo parejo
+        const duracionSeg = Math.max(relacionados.length * 4, 12);
+        track.style.animationDuration = `${duracionSeg}s`;
     }
+
+    estadoCarga.style.display = "none";
+    document.getElementById("contenidoFicha").style.display = "block";
 }
 
 document.addEventListener("DOMContentLoaded", init);
