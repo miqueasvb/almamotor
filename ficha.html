@@ -59,6 +59,20 @@
         .gallery_arrow.gallery_next { right: 15px; }
 
         .vehicle_info_box { background: #fff; border-radius: 10px; padding: 35px; box-shadow: 0 5px 20px rgba(0,0,0,0.06); height: 100%; }
+        /* Evita que el navegador scrollee el carrousel nativamente en celulares
+           (eso es lo que hacía que se "corrompiera": el scroll nativo peleaba
+           contra el scrollLeft manual del JS). Ahora el gesto lo maneja solo el JS. */
+        .vehicle_marquee {
+            touch-action: pan-y;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .vehicle_marquee .single_vehicle,
+        .vehicle_marquee img,
+        .vehicle_marquee a {
+            -webkit-user-drag: none;
+            -webkit-touch-callout: none;
+        }
         .vehicle_info_box h1 { font-size: 28px; font-weight: 700; color: #111; margin-bottom: 4px; }
         .vehicle_info_box .brand_tag { color: #e31b23; font-weight: 600; text-transform: uppercase; font-size: 14px; letter-spacing: 1px; }
         .spec_list { list-style: none; padding: 0; margin: 25px 0; }
@@ -505,10 +519,18 @@ function initVehicleMarquee() {
     }, { passive: true });
     marquee.addEventListener("touchmove", function (e) {
         if (!arrastrando) return;
+        // Frenamos el scroll nativo del navegador acá: sin esto, en celulares
+        // el navegador scrollea el contenedor por su cuenta AL MISMO TIEMPO
+        // que este script mueve el scrollLeft, y eso es lo que se veía "roto".
+        e.preventDefault();
         marquee.scrollLeft = startScroll - (e.touches[0].pageX - startX);
         loopInfinito();
-    }, { passive: true });
+    }, { passive: false });
     marquee.addEventListener("touchend", function () {
+        arrastrando = false;
+        autoScroll = true;
+    });
+    marquee.addEventListener("touchcancel", function () {
         arrastrando = false;
         autoScroll = true;
     });
