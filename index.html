@@ -486,33 +486,12 @@
 }
 </style>
 <style>
-    /* Carrusel de vehículos del home: aseguramos el movimiento continuo sí o sí,
-       sin depender de que ya esté definido (o no) en css/style.css */
-    #homeVehicleMarquee { overflow: hidden; width: 100%; -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); }
-    #homeVehicleTrack {
-        display: flex;
-        flex-wrap: nowrap;
-        gap: 25px;
-        width: max-content;
-        will-change: transform;
-        animation-name: recorrido_home_vehiculos;
-        animation-duration: 30s;
-        animation-timing-function: linear;
-        animation-iteration-count: infinite;
-        animation-play-state: running;
-    }
-    #homeVehicleTrack .single_vehicle { flex: 0 0 auto; }
-    @keyframes recorrido_home_vehiculos { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-    /* Forzamos que el carrusel del home siga en movimiento siempre (incluso en hover),
-       igual que se corrigió antes en la ficha del vehículo, para que no se trabe ni se corte. */
-    #homeVehicleMarquee:hover #homeVehicleTrack,
-    #homeVehicleTrack:hover,
+    /* Carrusel de vehículos del home: usa la MISMA animación de .vehicle_track que
+       ya está definida en css/style.css (la que funciona bien en la ficha del vehículo).
+       No se pisa con animation-name/duration propios para que no compita ni se reinicie. */
     .vehicle_marquee:hover .vehicle_track,
     .vehicle_track:hover {
         animation-play-state: running !important;
-    }
-    @media (prefers-reduced-motion: reduce) {
-        #homeVehicleTrack { animation: none; }
     }
 </style>
 </head>
@@ -1522,12 +1501,10 @@
         // Mostramos los más recientes primero (los últimos agregados en el panel quedan al frente).
         // Si borrás uno del panel, automáticamente el que le sigue ocupa su lugar acá.
         const seleccionados = [...vehiculos].reverse().slice(0, MAX_VEHICULOS_HOME);
-        const tarjetasHTML = seleccionados.map(tarjetaHTML).join("");
 
-        // Duplicamos para que el desplazamiento sea un loop continuo sin cortes
-        track.innerHTML = tarjetasHTML + tarjetasHTML;
-        const duracionSeg = Math.max(seleccionados.length * 4, 12);
-        track.style.animationDuration = `${duracionSeg}s`;
+        // Sin duplicar tarjetas ni tocar la duración: el track queda igual que en la
+        // ficha del vehículo, así usa la misma animación de css/style.css tal cual.
+        track.innerHTML = seleccionados.map(tarjetaHTML).join("");
     }
 
     document.addEventListener("DOMContentLoaded", cargarCarruselHome);
