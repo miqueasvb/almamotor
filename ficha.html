@@ -58,7 +58,10 @@
         .gallery_arrow.gallery_prev { left: 15px; }
         .gallery_arrow.gallery_next { right: 15px; }
 
-        .vehicle_marquee:hover .vehicle_track, .vehicle_track:hover { animation-play-state: running !important; }
+        .vehicle_marquee { overflow: hidden; width: 100%; -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); }
+        .vehicle_track { display: flex; gap: 25px; width: max-content; animation-name: recorrido_vehiculos; animation-timing-function: linear; animation-iteration-count: infinite; }
+        .vehicle_marquee:hover .vehicle_track { animation-play-state: paused; }
+        @keyframes recorrido_vehiculos { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
         .vehicle_info_box { background: #fff; border-radius: 10px; padding: 35px; box-shadow: 0 5px 20px rgba(0,0,0,0.06); height: 100%; }
         .vehicle_info_box h1 { font-size: 28px; font-weight: 700; color: #111; margin-bottom: 4px; }
@@ -509,7 +512,14 @@ async function init() {
     if (relacionados.length === 0) {
         relacionadosArea.style.display = "none";
     } else {
-        document.getElementById("relacionadosTrack").innerHTML = relacionados.map(tarjetaRelacionadaHTML).join("");
+        const track = document.getElementById("relacionadosTrack");
+        const tarjetasHTML = relacionados.map(tarjetaRelacionadaHTML).join("");
+        // Duplicamos el contenido para que el desplazamiento sea un loop continuo sin cortes
+        // (al llegar a -50% del ancho, en realidad volvió a mostrar la primera tanda de tarjetas)
+        track.innerHTML = tarjetasHTML + tarjetasHTML;
+        // Velocidad proporcional a la cantidad de autos, para que siempre se vea a un ritmo parejo
+        const duracionSeg = Math.max(relacionados.length * 4, 12);
+        track.style.animationDuration = `${duracionSeg}s`;
     }
 
     estadoCarga.style.display = "none";
