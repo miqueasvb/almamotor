@@ -58,9 +58,23 @@
         .gallery_arrow.gallery_prev { left: 15px; }
         .gallery_arrow.gallery_next { right: 15px; }
 
-        .vehicle_marquee { overflow: hidden; width: 100%; -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); }
-        .vehicle_track { display: flex; gap: 25px; width: max-content; animation-name: recorrido_vehiculos; animation-timing-function: linear; animation-iteration-count: infinite; }
-        @keyframes recorrido_vehiculos { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        /* Carrusel de relacionados: Owl Carousel real (drag táctil + loop infinito nativos) */
+        #relacionadosTrack.owl-carousel { display: block; }
+        #relacionadosTrack .owl-stage-outer { overflow: hidden; }
+        #relacionadosTrack .single_vehicle { margin: 0 12px; }
+        #relacionadosTrack .owl-nav .owl-prev,
+        #relacionadosTrack .owl-nav .owl-next {
+            position: absolute; top: 40%; transform: translateY(-50%);
+            width: 44px; height: 44px; border-radius: 50%;
+            background: rgba(0,0,0,0.45); color: #fff; font-size: 20px;
+            display: flex; align-items: center; justify-content: center;
+            transition: 0.25s;
+        }
+        #relacionadosTrack .owl-nav .owl-prev:hover,
+        #relacionadosTrack .owl-nav .owl-next:hover { background: #e31b23; }
+        #relacionadosTrack .owl-nav .owl-prev { left: -10px; }
+        #relacionadosTrack .owl-nav .owl-next { right: -10px; }
+        .vehicle_marquee { position: relative; padding: 0 30px; }
 
         .vehicle_info_box { background: #fff; border-radius: 10px; padding: 35px; box-shadow: 0 5px 20px rgba(0,0,0,0.06); height: 100%; }
         .vehicle_info_box h1 { font-size: 28px; font-weight: 700; color: #111; margin-bottom: 4px; }
@@ -228,7 +242,7 @@
             </div>
         </div>
         <div class="vehicle_marquee">
-            <div class="vehicle_track" id="relacionadosTrack"></div>
+            <div class="owl-carousel owl-theme" id="relacionadosTrack"></div>
         </div>
     </div>
     <!-- related_vehicles_end -->
@@ -511,14 +525,38 @@ async function init() {
     if (relacionados.length === 0) {
         relacionadosArea.style.display = "none";
     } else {
-        const track = document.getElementById("relacionadosTrack");
-        const tarjetasHTML = relacionados.map(tarjetaRelacionadaHTML).join("");
-        // Duplicamos el contenido para que el desplazamiento sea un loop continuo sin cortes
-        // (al llegar a -50% del ancho, en realidad volvió a mostrar la primera tanda de tarjetas)
-        track.innerHTML = tarjetasHTML + tarjetasHTML;
-        // Velocidad proporcional a la cantidad de autos, para que siempre se vea a un ritmo parejo
-        const duracionSeg = Math.max(relacionados.length * 4, 12);
-        track.style.animationDuration = `${duracionSeg}s`;
+        const $track = jQuery("#relacionadosTrack");
+        // Cada tarjeta como item propio del carrusel (Owl las clona solo para el loop infinito)
+        $track.html(relacionados.map(v => `<div class="item">${tarjetaRelacionadaHTML(v)}</div>`).join(""));
+
+        // Si ya había un carrusel inicializado (ej. al navegar entre fichas sin recargar), lo reseteamos
+        if ($track.hasClass("owl-loaded")) {
+            $track.trigger("destroy.owl.carousel");
+            $track.html(relacionados.map(v => `<div class="item">${tarjetaRelacionadaHTML(v)}</div>`).join(""));
+        }
+
+        $track.owlCarousel({
+            loop: relacionados.length > 3,
+            margin: 0,
+            nav: relacionados.length > 1,
+            dots: false,
+            autoplay: true,
+            autoplayTimeout: 3500,
+            autoplayHoverPause: true,
+            smartSpeed: 700,
+            touchDrag: true,
+            mouseDrag: true,
+            navText: [
+                '<i class="ti-angle-left"></i>',
+                '<i class="ti-angle-right"></i>'
+            ],
+            responsive: {
+                0:    { items: 1 },
+                576:  { items: 2 },
+                992:  { items: 3 },
+                1200: { items: 4 }
+            }
+        });
     }
 
     estadoCarga.style.display = "none";
