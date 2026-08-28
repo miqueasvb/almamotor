@@ -60,7 +60,6 @@
 
         .vehicle_marquee { overflow: hidden; width: 100%; -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); }
         .vehicle_track { display: flex; gap: 25px; width: max-content; animation-name: recorrido_vehiculos; animation-timing-function: linear; animation-iteration-count: infinite; }
-        .vehicle_marquee:hover .vehicle_track { animation-play-state: paused; }
         @keyframes recorrido_vehiculos { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
         .vehicle_info_box { background: #fff; border-radius: 10px; padding: 35px; box-shadow: 0 5px 20px rgba(0,0,0,0.06); height: 100%; }
