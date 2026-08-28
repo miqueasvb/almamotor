@@ -599,7 +599,7 @@
         </div>
     </div>
     <div class="vehicle_marquee">
-        <div class="vehicle_track">
+        <div class="vehicle_track" id="vehicleTrack">
 
             <div class="single_vehicle">
                 <div class="vehicle_thumb">
@@ -1422,6 +1422,110 @@
                 if (icon) icon.style.transform = 'rotate(180deg)';
             }
         }
+    </script>
+
+    <script>
+    /* =========================================================
+       CARRUSEL DE VEHÍCULOS DESTACADOS (Home)
+       Se alimenta del mismo data/vehiculos.json que usa catalogo.html,
+       así que si agregás o borrás un auto desde el panel admin,
+       este carrusel se actualiza solo. Muestra hasta 7 autos; si el
+       catálogo tiene menos de 7, muestra los que haya.
+       Si por algún motivo no se puede cargar el JSON, se deja el
+       contenido estático original como respaldo (no se toca el DOM).
+       ========================================================= */
+    (function () {
+        var CANTIDAD_MAXIMA = 7;
+
+        var marcasInfoHome = {
+            "Ford": "img/7.webp",
+            "Volkswagen": "img/volkswagen.png",
+            "Ram": "img/ram.png",
+            "Toyota": "img/toyota.png",
+            "Jeep": "img/jeep.png",
+            "Fiat": "img/fiat.webp",
+            "Chevrolet": "img/chevrolet.webp",
+            "Peugeot": "img/peugeot.png",
+            "BMW": "img/bmw.svg",
+            "Mercedes-Benz": "img/mercedes.svg",
+            "Nissan": "img/nissan.svg",
+            "Citroen": "img/Citroen-Logo.png",
+            "Renault": "img/renault.png",
+            "Mini": "img/mini.png"
+        };
+
+        function slugifyHome(v) {
+            return (v.marca + "-" + v.modelo + "-" + (v.anio || "s-n"))
+                .toLowerCase()
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/(^-|-$)/g, "");
+        }
+
+        function idDeHome(v) {
+            return v.id || slugifyHome(v);
+        }
+
+        function tarjetaVehiculoHTML(v) {
+            var imagen = (v.fotos && v.fotos[0]) || marcasInfoHome[v.marca] || "";
+            var anioTexto = (v.anio === null || v.anio === undefined) ? "A confirmar" : v.anio;
+            var estadoTexto = v.estado === "0km" ? "0km" : "Usado";
+            var kmTexto = (v.km === null || v.km === undefined)
+                ? "A confirmar"
+                : (v.km === 0 ? "0 km" : v.km.toLocaleString("es-AR") + " km");
+            var enlace = "ficha.html?id=" + encodeURIComponent(idDeHome(v));
+
+            return (
+                '<div class="single_vehicle">' +
+                    '<div class="vehicle_thumb">' +
+                        '<img src="' + imagen + '" alt="' + v.marca + ' ' + v.modelo + '">' +
+                        '<a href="' + enlace + '" class="vehicle_thumb_overlay">' +
+                            '<span class="vehicle_overlay_badge">' +
+                                '<svg viewBox="0 0 24 24">' +
+                                    '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>' +
+                                    '<circle cx="12" cy="12" r="3"></circle>' +
+                                '</svg>' +
+                                'Ver más' +
+                            '</span>' +
+                        '</a>' +
+                    '</div>' +
+                    '<div class="vehicle_content">' +
+                        '<span class="vehicle_brand">' + v.marca + '</span>' +
+                        '<h4>' + v.modelo + '</h4>' +
+                        '<ul class="vehicle_meta">' +
+                            '<li>' + anioTexto + '</li>' +
+                            '<li>' + estadoTexto + '</li>' +
+                            '<li>' + kmTexto + '</li>' +
+                        '</ul>' +
+                        '<a href="' + enlace + '" class="vehicle_btn">Ver más</a>' +
+                    '</div>' +
+                '</div>'
+            );
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var track = document.getElementById("vehicleTrack");
+            if (!track) return;
+
+            fetch("data/vehiculos.json", { cache: "no-store" })
+                .then(function (resp) {
+                    if (!resp.ok) throw new Error("No se pudo leer data/vehiculos.json");
+                    return resp.json();
+                })
+                .then(function (vehiculos) {
+                    if (!Array.isArray(vehiculos)) return;
+                    // Si el catálogo está vacío, dejamos el respaldo estático tal cual.
+                    if (vehiculos.length === 0) return;
+
+                    var destacados = vehiculos.slice(0, CANTIDAD_MAXIMA);
+                    track.innerHTML = destacados.map(tarjetaVehiculoHTML).join("");
+                })
+                .catch(function (err) {
+                    // No se pudo cargar el JSON: se conserva el carrusel estático de respaldo.
+                    console.error("No se pudo cargar el carrusel dinámico de vehículos:", err);
+                });
+        });
+    })();
     </script>
 
  <a href="https://wa.me/5493735610059?text=Hola,%20me%20gustaría%20más%20información" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Abrir chat de WhatsApp">
