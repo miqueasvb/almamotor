@@ -510,30 +510,64 @@ function initVehicleMarquee() {
         loopInfinito();
     });
 
-    // Drag / swipe táctil
+    // Drag / swipe táctil.
+    // Clave: al tocar la pantalla todavía no sabemos si el usuario quiere
+    // scrollear la PÁGINA (vertical) o arrastrar el CARROUSEL (horizontal).
+    // Esperamos a que se mueva un poco y recién ahí decidimos: si el gesto
+    // es mayormente vertical, soltamos el control (dejamos que la página
+    // scrollee normal); si es mayormente horizontal, tomamos el drag.
+    // Sin esto, cualquier temblor natural de la mano al scrollear la página
+    // se traducía en saltos bruscos del carrousel.
+    const UMBRAL_DECISION = 8; // px de movimiento antes de decidir la dirección
+    let startY = 0;
+    let direccionDecidida = false;
+    let esArrastreHorizontal = false;
+
     marquee.addEventListener("touchstart", function (e) {
-        arrastrando = true;
         autoScroll = false;
         startX = e.touches[0].pageX;
+        startY = e.touches[0].pageY;
         startScroll = marquee.scrollLeft;
+        direccionDecidida = false;
+        esArrastreHorizontal = false;
     }, { passive: true });
+
     marquee.addEventListener("touchmove", function (e) {
-        if (!arrastrando) return;
-        // Frenamos el scroll nativo del navegador acá: sin esto, en celulares
-        // el navegador scrollea el contenedor por su cuenta AL MISMO TIEMPO
-        // que este script mueve el scrollLeft, y eso es lo que se veía "roto".
-        e.preventDefault();
-        marquee.scrollLeft = startScroll - (e.touches[0].pageX - startX);
+        const touch = e.touches[0];
+        const dx = touch.pageX - startX;
+        const dy = touch.pageY - startY;
+
+        if (!direccionDecidida) {
+            if (Math.abs(dx) < UMBRAL_DECISION && Math.abs(dy) < UMBRAL_DECISION) {
+                return; // todavía no hay movimiento suficiente para decidir
+            }
+            direccionDecidida = true;
+            esArrastreHorizontal = Math.abs(dx) > Math.abs(dy);
+            if (!esArrastreHorizontal) {
+                // Es un scroll de página: soltamos todo, no tocamos el carrousel
+                autoScroll = true;
+                return;
+            }
+            arrastrando = true;
+            marquee.classList.add("dragging");
+        }
+
+        if (!esArrastreHorizontal) return; // dejamos que la página scrollee normal
+
+        e.preventDefault(); // acá sí frenamos el scroll nativo: el gesto es del carrousel
+        marquee.scrollLeft = startScroll - dx;
         loopInfinito();
     }, { passive: false });
-    marquee.addEventListener("touchend", function () {
+
+    function soltarTouch() {
         arrastrando = false;
         autoScroll = true;
-    });
-    marquee.addEventListener("touchcancel", function () {
-        arrastrando = false;
-        autoScroll = true;
-    });
+        direccionDecidida = false;
+        esArrastreHorizontal = false;
+        marquee.classList.remove("dragging");
+    }
+    marquee.addEventListener("touchend", soltarTouch);
+    marquee.addEventListener("touchcancel", soltarTouch);
 }
 
 async function init() {
