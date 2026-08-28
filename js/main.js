@@ -25,16 +25,22 @@ if(menu.length){
 };
 
 // vehicle_marquee - carrusel de vehículos: loop infinito + auto-scroll continuo + arrastre (mouse y touch)
-var $vehicleMarquee = $('.vehicle_marquee');
-var $vehicleTrack = $('.vehicle_track');
-if ($vehicleMarquee.length && $vehicleTrack.length) {
-	var marquee = $vehicleMarquee.get(0);
-	var track = $vehicleTrack.get(0);
+// Se arma como una función reutilizable (window.initVehicleMarquee) porque hay
+// páginas (ficha.html, index.html) que insertan las tarjetas de forma dinámica
+// desde data/vehiculos.json DESPUÉS de que este archivo ya corrió. Esas páginas
+// llaman a window.initVehicleMarquee() ellas mismas apenas terminan de insertar
+// el HTML. Si ya había un motor corriendo sobre el mismo carrusel (por ejemplo,
+// contenido estático de respaldo reemplazado por el real), lo apaga prolijamente
+// antes de reconstruirlo, para que nunca queden dos motores compitiendo.
+function initVehicleMarquee() {
+	var marquee = document.querySelector('.vehicle_marquee');
+	var track = document.querySelector('.vehicle_track');
+	if (!marquee || !track || !track.children.length) return;
 
-	// ¿Es un dispositivo táctil (celular/tablet)? En esos, el auto-scroll se anima
-	// con "transform" en vez de "scrollLeft" (ver función autoScroll más abajo).
-	var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-	var autoOffset = 0; // desplazamiento visual acumulado del auto-scroll en celular (px)
+	if (typeof marquee._marqueeTeardown === 'function') {
+		marquee._marqueeTeardown();
+		marquee._marqueeTeardown = null;
+	}
 
 	// Duplicamos las tarjetas UNA sola vez para que el loop sea infinito y sin cortes
 	var originalCards = Array.prototype.slice.call(track.children);
@@ -44,14 +50,20 @@ if ($vehicleMarquee.length && $vehicleTrack.length) {
 
 	// Evita que el navegador arrastre las imágenes/links de forma nativa
 	// (esto era lo que impedía que funcionara el arrastre con mouse en PC)
-	track.addEventListener('dragstart', function (e) { e.preventDefault(); });
+	function onDragStart(e) { e.preventDefault(); }
+	track.addEventListener('dragstart', onDragStart);
+
+	// ¿Es un dispositivo táctil (celular/tablet)? En esos, el auto-scroll se anima
+	// con "transform" en vez de "scrollLeft" (ver función autoScroll más abajo).
+	var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+	var autoOffset = 0; // desplazamiento visual acumulado del auto-scroll en celular (px)
 
 	var halfWidth = 0;
 	function recalcHalfWidth() {
 		halfWidth = track.scrollWidth / 2;
 	}
 	recalcHalfWidth();
-	$(window).on('resize', recalcHalfWidth);
+	$(window).on('resize.vehicleMarquee', recalcHalfWidth);
 
 	var SPEED = 0.6; // velocidad del auto-scroll (px por frame)
 	var isDragging = false;
@@ -63,8 +75,11 @@ if ($vehicleMarquee.length && $vehicleTrack.length) {
 	var moveSamples = []; // últimas posiciones para calcular la velocidad al soltar
 	var inertiaVelocity = 0;
 	var inertiaRafId = null;
+	var autoScrollRafId = null;
+	var destroyed = false;
 
 	function autoScroll() {
+		if (destroyed) return;
 		// Sigue moviéndose solo aunque el mouse esté encima; sólo se detiene
 		// mientras se está arrastrando (mouse), tocando (celular) o deslizando por inercia.
 		if (!isDragging && !isTouching && !isInertia && halfWidth > 0) {
@@ -86,9 +101,9 @@ if ($vehicleMarquee.length && $vehicleTrack.length) {
 				}
 			}
 		}
-		requestAnimationFrame(autoScroll);
+		autoScrollRafId = requestAnimationFrame(autoScroll);
 	}
-	requestAnimationFrame(autoScroll);
+	autoScrollRafId = requestAnimationFrame(autoScroll);
 
 	function wrapScrollLeft(value) {
 		if (halfWidth <= 0) return value;
@@ -113,7 +128,7 @@ if ($vehicleMarquee.length && $vehicleTrack.length) {
 	var suppressNextClick = false;
 
 	// --- Arrastre con mouse (PC) ---
-	marquee.addEventListener('pointerdown', function (e) {
+	function onPointerDown(e) {
 		if (e.pointerType === 'touch') return;
 		if (inertiaRafId) cancelAnimationFrame(inertiaRafId);
 		isInertia = false;
@@ -131,9 +146,9 @@ if ($vehicleMarquee.length && $vehicleTrack.length) {
 		// "Ver más" dejaba de responder al simple click. Solo cancelamos el
 		// comportamiento por defecto más abajo, una vez que se confirma que
 		// hay arrastre real (pointermove).
-	});
+	}
 
-	marquee.addEventListener('pointermove', function (e) {
+	function onPointerMove(e) {
 		if (!isDragging || e.pointerType === 'touch') return;
 		var dx = e.pageX - startX;
 		if (Math.abs(dx) > 4) dragMoved = true;
@@ -154,7 +169,7 @@ if ($vehicleMarquee.length && $vehicleTrack.length) {
 
 		moveSamples.push({ x: e.pageX, t: performance.now() });
 		if (moveSamples.length > 6) moveSamples.shift();
-	});
+	}
 
 	function endDrag(e) {
 		if (e && e.pointerType === 'touch') return;
@@ -204,13 +219,15 @@ if ($vehicleMarquee.length && $vehicleTrack.length) {
 		}
 		moveSamples = [];
 	}
+	marquee.addEventListener('pointerdown', onPointerDown);
+	marquee.addEventListener('pointermove', onPointerMove);
 	marquee.addEventListener('pointerup', endDrag);
 	marquee.addEventListener('pointercancel', endDrag);
 	marquee.addEventListener('pointerleave', endDrag);
 
 	// Evita que un arrastre termine "clickeando" un link de vehículo por error,
 	// y evita una segunda navegación cuando ya redirigimos a mano en pointerup.
-	track.addEventListener('click', function (e) {
+	function onTrackClick(e) {
 		if (suppressNextClick) {
 			e.preventDefault();
 			e.stopPropagation();
@@ -222,12 +239,13 @@ if ($vehicleMarquee.length && $vehicleTrack.length) {
 			e.stopPropagation();
 			dragMoved = false;
 		}
-	}, true);
+	}
+	track.addEventListener('click', onTrackClick, true);
 
 	// --- Celular: dejamos el swipe nativo (más fluido que reimplementarlo a mano),
 	// sólo pausamos el auto-scroll mientras el dedo está tocando para que no compita
 	// contra el swipe del usuario ---
-	marquee.addEventListener('touchstart', function () {
+	function onTouchStart() {
 		// Traspasamos el desplazamiento visual (que hasta ahora vivía solo en el
 		// transform) al scroll real, así el dedo arranca a arrastrar exactamente
 		// desde donde se ve el carrusel, sin ningún salto.
@@ -237,14 +255,42 @@ if ($vehicleMarquee.length && $vehicleTrack.length) {
 			track.style.transform = 'translateX(0px)';
 		}
 		isTouching = true;
-	}, { passive: true });
-	marquee.addEventListener('touchend', function () {
+	}
+	function onTouchEnd() {
 		setTimeout(function () { isTouching = false; }, 300);
-	}, { passive: true });
-	marquee.addEventListener('touchcancel', function () {
-		setTimeout(function () { isTouching = false; }, 300);
-	}, { passive: true });
+	}
+	marquee.addEventListener('touchstart', onTouchStart, { passive: true });
+	marquee.addEventListener('touchend', onTouchEnd, { passive: true });
+	marquee.addEventListener('touchcancel', onTouchEnd, { passive: true });
+
+	// Permite volver a llamar a initVehicleMarquee() más adelante (por ejemplo,
+	// cuando se reemplaza el contenido estático de respaldo por el real) sin
+	// dejar dos motores corriendo en paralelo ni escuchando eventos duplicados.
+	marquee._marqueeTeardown = function () {
+		destroyed = true;
+		if (autoScrollRafId) cancelAnimationFrame(autoScrollRafId);
+		if (inertiaRafId) cancelAnimationFrame(inertiaRafId);
+		$(window).off('resize.vehicleMarquee', recalcHalfWidth);
+		track.removeEventListener('dragstart', onDragStart);
+		marquee.removeEventListener('pointerdown', onPointerDown);
+		marquee.removeEventListener('pointermove', onPointerMove);
+		marquee.removeEventListener('pointerup', endDrag);
+		marquee.removeEventListener('pointercancel', endDrag);
+		marquee.removeEventListener('pointerleave', endDrag);
+		track.removeEventListener('click', onTrackClick, true);
+		marquee.removeEventListener('touchstart', onTouchStart);
+		marquee.removeEventListener('touchend', onTouchEnd);
+		marquee.removeEventListener('touchcancel', onTouchEnd);
+		marquee.classList.remove('dragging');
+		track.style.transform = '';
+	};
 }
+// La corremos apenas carga la página por si el carrusel ya trae contenido
+// estático de entrada (sin esperar a ningún fetch).
+initVehicleMarquee();
+// Y la exponemos para que páginas con contenido dinámico (ficha.html,
+// index.html) la llamen ellas mismas apenas insertan las tarjetas reales.
+window.initVehicleMarquee = initVehicleMarquee;
 // blog-menu
   // $('ul#blog-menu').slicknav({
   //   prependTo: ".blog_menu"
