@@ -1,0 +1,7 @@
+# Redirecciones 301 para evitar contenido duplicado en Netlify
+# (Netlify sirve /catalogo.html y /catalogo como si fueran la misma página;
+# esto le dice a los buscadores cuál es la version "oficial")
+
+/catalogo.html   /catalogo   301
+/nosotros.html   /nosotros   301
+/clientes.html   /clientes   301
