@@ -53,10 +53,7 @@ function initVehicleMarquee() {
 	function onDragStart(e) { e.preventDefault(); }
 	track.addEventListener('dragstart', onDragStart);
 
-	// ¿Es un dispositivo táctil (celular/tablet)? En esos, el auto-scroll se anima
-	// con "transform" en vez de "scrollLeft" (ver función autoScroll más abajo).
-	var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-	var autoOffset = 0; // desplazamiento visual acumulado del auto-scroll en celular (px)
+	var autoOffset = 0; // desplazamiento visual acumulado del auto-scroll (px), tanto en PC como en celular
 
 	var halfWidth = 0;
 	function recalcHalfWidth() {
@@ -83,23 +80,20 @@ function initVehicleMarquee() {
 		// Sigue moviéndose solo aunque el mouse esté encima; sólo se detiene
 		// mientras se está arrastrando (mouse), tocando (celular) o deslizando por inercia.
 		if (!isDragging && !isTouching && !isInertia && halfWidth > 0) {
-			if (isTouchDevice) {
-				// En iPhone/Android, Safari (y en algunos casos Chrome mobile) IGNORA
-				// los cambios de scrollLeft hechos por JS mientras nadie está tocando
-				// la pantalla — es un bug conocido de WebKit. Por eso el auto-scroll no
-				// se movía en celular aunque el arrastre con el dedo sí funcionaba (ese
-				// lo maneja el propio sistema táctil, no JS). La solución es animar el
-				// movimiento con "transform", que siempre se pinta, y trasladarlo al
-				// scroll real recién cuando el usuario empieza a tocar (ver touchstart).
-				autoOffset += SPEED;
-				if (autoOffset >= halfWidth) autoOffset -= halfWidth;
-				track.style.transform = 'translateX(' + (-autoOffset) + 'px)';
-			} else {
-				marquee.scrollLeft += SPEED;
-				if (marquee.scrollLeft >= halfWidth) {
-					marquee.scrollLeft -= halfWidth;
-				}
-			}
+			// El auto-scroll SIEMPRE se anima con "transform" (no con scrollLeft),
+			// tanto en PC como en celular. En iPhone/Android es necesario porque
+			// Safari (y a veces Chrome mobile) IGNORA los cambios de scrollLeft
+			// hechos por JS mientras nadie toca la pantalla (bug conocido de
+			// WebKit). En PC, mover scrollLeft de a incrementos chicos y continuos
+			// también puede no pintarse de forma fluida en algunos navegadores —
+			// por eso ahora usamos el mismo método en todos los dispositivos.
+			// El desplazamiento se traspasa al scroll real recién cuando el
+			// usuario empieza a arrastrar (mouse, ver onPointerDown) o a tocar
+			// (celular, ver onTouchStart), para que el arrastre arranque
+			// exactamente desde donde se ve el carrusel, sin saltos.
+			autoOffset += SPEED;
+			if (autoOffset >= halfWidth) autoOffset -= halfWidth;
+			track.style.transform = 'translateX(' + (-autoOffset) + 'px)';
 		}
 		autoScrollRafId = requestAnimationFrame(autoScroll);
 	}
@@ -132,6 +126,14 @@ function initVehicleMarquee() {
 		if (e.pointerType === 'touch') return;
 		if (inertiaRafId) cancelAnimationFrame(inertiaRafId);
 		isInertia = false;
+		// Traspasamos el desplazamiento visual (que hasta ahora vivía en el
+		// transform del auto-scroll) al scroll real, para que el arrastre con
+		// mouse arranque exactamente desde donde se ve el carrusel, sin saltos.
+		if (autoOffset !== 0) {
+			marquee.scrollLeft = wrapScrollLeft(marquee.scrollLeft + autoOffset);
+			autoOffset = 0;
+			track.style.transform = 'translateX(0px)';
+		}
 		isDragging = true;
 		dragMoved = false;
 		pointerDownTarget = e.target;
