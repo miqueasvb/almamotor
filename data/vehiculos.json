@@ -206,5 +206,21 @@
       "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871144264-5.jpg",
       "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871145867-6.jpg"
     ]
+  },
+  {
+    "id": "chevrolet-cruze-premier-2017",
+    "marca": "Chevrolet",
+    "modelo": "CRUZE PREMIER",
+    "anio": 2017,
+    "km": 120000,
+    "estado": "usado",
+    "combustible": "NAFTA",
+    "transmision": "AUTOMATICA",
+    "fotos": [
+      "img/vehiculos/chevrolet-cruze-premier-2017/foto-1787954862188-0.jpg",
+      "img/vehiculos/chevrolet-cruze-premier-2017/foto-1787954866003-1.jpg",
+      "img/vehiculos/chevrolet-cruze-premier-2017/foto-1787954867476-2.jpg",
+      "img/vehiculos/chevrolet-cruze-premier-2017/foto-1787954869316-3.jpg"
+    ]
   }
 ]
