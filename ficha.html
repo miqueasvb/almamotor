@@ -61,7 +61,6 @@
         /* Carrusel de relacionados: Owl Carousel real (drag táctil + loop infinito nativos) */
         #relacionadosTrack.owl-carousel { display: block; }
         #relacionadosTrack .owl-stage-outer { overflow: hidden; }
-        #relacionadosTrack .single_vehicle { margin: 0 12px; }
         #relacionadosTrack .owl-nav .owl-prev,
         #relacionadosTrack .owl-nav .owl-next {
             position: absolute; top: 40%; transform: translateY(-50%);
@@ -522,22 +521,27 @@ async function init() {
     const relacionados = [...mismaMarca, ...otrasMarcas].slice(0, 8);
 
     const relacionadosArea = document.getElementById("relacionadosArea");
+
+    // Mostramos el contenido ANTES de armar el carrusel: Owl necesita medir anchos
+    // reales, y con el contenedor todavía oculto (display:none) calcula todo mal
+    // (de ahí el espacio exagerado y que no se moviera).
+    estadoCarga.style.display = "none";
+    document.getElementById("contenidoFicha").style.display = "block";
+
     if (relacionados.length === 0) {
         relacionadosArea.style.display = "none";
     } else {
         const $track = jQuery("#relacionadosTrack");
+
+        if ($track.hasClass("owl-loaded")) {
+            $track.trigger("destroy.owl.carousel");
+        }
         // Cada tarjeta como item propio del carrusel (Owl las clona solo para el loop infinito)
         $track.html(relacionados.map(v => `<div class="item">${tarjetaRelacionadaHTML(v)}</div>`).join(""));
 
-        // Si ya había un carrusel inicializado (ej. al navegar entre fichas sin recargar), lo reseteamos
-        if ($track.hasClass("owl-loaded")) {
-            $track.trigger("destroy.owl.carousel");
-            $track.html(relacionados.map(v => `<div class="item">${tarjetaRelacionadaHTML(v)}</div>`).join(""));
-        }
-
         $track.owlCarousel({
             loop: relacionados.length > 3,
-            margin: 0,
+            margin: 20,
             nav: relacionados.length > 1,
             dots: false,
             autoplay: true,
@@ -557,10 +561,10 @@ async function init() {
                 1200: { items: 4 }
             }
         });
-    }
 
-    estadoCarga.style.display = "none";
-    document.getElementById("contenidoFicha").style.display = "block";
+        // Recalcula anchos una vez que el navegador terminó de pintar el layout visible
+        setTimeout(() => $track.trigger('refresh.owl.carousel'), 50);
+    }
 }
 
 document.addEventListener("DOMContentLoaded", init);
