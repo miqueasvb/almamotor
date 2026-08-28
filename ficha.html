@@ -472,10 +472,8 @@ function initVehicleMarquee() {
     marquee.scrollLeft = 1;
     requestAnimationFrame(tick);
 
-    // Pausa el auto-scroll al pasar el mouse, como cualquier carrousel
-    marquee.addEventListener("mouseenter", function () { autoScroll = false; });
+    // Si el mouse se va del carrousel mientras se estaba arrastrando, soltamos el drag
     marquee.addEventListener("mouseleave", function () {
-        autoScroll = true;
         arrastrando = false;
         marquee.classList.remove("dragging");
     });
