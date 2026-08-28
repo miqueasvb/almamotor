@@ -148,17 +148,21 @@
         .client_card_img {
             position: relative;
             width: 100%;
-            height: 240px;
+            height: 420px;
             overflow: hidden;
             background: #111;
         }
-        .client_card_img img {
+        @media (max-width: 767px) {
+            .client_card_img { height: 320px; }
+        }
+        .client_card_img img, .client_card_img video {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            background: #000;
             transition: transform 0.5s ease;
         }
-        .client_card:hover .client_card_img img {
+        .client_card:hover .client_card_img img, .client_card:hover .client_card_img video {
             transform: scale(1.04);
         }
         .client_badge {
@@ -437,13 +441,14 @@
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="client_card">
                         <div class="client_card_img">
-                            <img src="img/negro.jfif" alt="Entrega de unidad">
-                            <span class="client_badge">Sáenz Peña</span>
+                            <video controls playsinline preload="metadata" poster="">
+                                <source src="img/videos testimonios/video1.mp4" type="video/mp4">
+                            </video>
                         </div>
                         <div class="client_content">
                             <div>
-                                <h4>Familia Gómez</h4>
-                                <p>Retiraron su 0km listas para rutear. ¡Gracias por elegirnos y confiar en nuestro asesoramiento!</p>
+                                <h4>Familia Piccoli</h4>
+                                <p>¡Gracias por elegirnos y confiar en nuestro asesoramiento!</p>
                             </div>
                             <a href="https://www.instagram.com/alma_motor_13/" target="_blank" class="boxed-btn3-red">Ver en Instagram</a>
                         </div>
@@ -453,13 +458,14 @@
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="client_card">
                         <div class="client_card_img">
-                            <img src="img/negro.jfif" alt="Entrega de unidad">
-                            <span class="client_badge">Plan Canje</span>
+                            <video controls playsinline preload="metadata" poster="">
+                                <source src="img/videos testimonios/video2.mp4" type="video/mp4">
+                            </video>
                         </div>
                         <div class="client_content">
                             <div>
-                                <h4>Martín R.</h4>
-                                <p>Entregó su usado como parte de pago y se llevó su camioneta en el día. Sin vueltas ni trámites complejos.</p>
+                                <h4>Ada y Juan.</h4>
+                                <p>¡Gracias por elegirnos y confiar en nuestro asesoramiento!</p>
                             </div>
                             <a href="https://www.instagram.com/alma_motor_13/" target="_blank" class="boxed-btn3-red">Ver en Instagram</a>
                         </div>
@@ -469,13 +475,14 @@
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="client_card">
                         <div class="client_card_img">
-                            <img src="img/negro.jfif" alt="Entrega de unidad">
-                            <span class="client_badge">Financiación</span>
+                            <video controls playsinline preload="metadata" poster="">
+                                <source src="img/videos testimonios/video3.mp4" type="video/mp4">
+                            </video>
                         </div>
                         <div class="client_content">
                             <div>
-                                <h4>Esteban y Laura</h4>
-                                <p>Armamos un plan a su medida para que puedan acceder a su nuevo vehículo familiar de forma cómoda.</p>
+                                <h4>Cristian.</h4>
+                                <p>¡Gracias por elegirnos y confiar en nuestro asesoramiento!</p>
                             </div>
                             <a href="https://www.instagram.com/alma_motor_13/" target="_blank" class="boxed-btn3-red">Ver en Instagram</a>
                         </div>
@@ -489,7 +496,6 @@
                     <div style="background: #ffffff; border-radius: 16px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.06);">
                         <i class="fa fa-instagram" style="font-size: 40px; color: #e31b23; margin-bottom: 15px; display: block;"></i>
                         <h3 style="font-family: 'Oswald', sans-serif; font-size: 24px; font-weight: 700; text-transform: uppercase; color: #1a1a1a; margin-bottom: 10px;">¡Seguinos para ver más entregas!</h3>
-                        <p style="font-family: 'Barlow', sans-serif; color: #777; font-size: 15px; margin-bottom: 25px;">Publicamos cada entrega diaria y todas las novedades del salón en nuestra cuenta de Instagram.</p>
                         <a href="https://www.instagram.com/alma_motor_13/" target="_blank" class="boxed-btn3-red">Ir a @alma_motor_13</a>
                     </div>
                 </div>
