@@ -59,10 +59,15 @@
         .gallery_arrow.gallery_next { right: 15px; }
 
         .vehicle_info_box { background: #fff; border-radius: 10px; padding: 35px; box-shadow: 0 5px 20px rgba(0,0,0,0.06); height: 100%; }
-        /* Evita que el navegador scrollee el carrousel nativamente en celulares
-           (eso es lo que hacía que se "corrompiera": el scroll nativo peleaba
-           contra el scrollLeft manual del JS). Ahora el gesto lo maneja solo el JS. */
+        /* El carrousel ya NO usa scroll nativo del navegador (scrollLeft):
+           eso es lo que se "peleaba" contra el JS en celulares (el motor de
+           scroll con inercia de iOS/Android se activaba solo y competía con
+           el script). Ahora .vehicle_marquee queda fijo (overflow:hidden) y
+           la tira de tarjetas (.vehicle_track) se mueve solo con
+           transform: translateX(), 100% controlado por JS, sin nada nativo
+           de por medio con quien pelear. */
         .vehicle_marquee {
+            overflow: hidden !important;
             touch-action: pan-y;
             -webkit-user-select: none;
             user-select: none;
@@ -456,34 +461,41 @@ function initVehicleMarquee() {
     const track = document.getElementById("relacionadosTrack");
     if (!marquee || !track) return;
 
+    // Posición horizontal de la tira de tarjetas, en píxeles (0 = arranque,
+    // negativo = corrida hacia la izquierda). Se aplica con transform, NUNCA
+    // con scrollLeft: así no queda nada "nativamente scrolleable" con lo que
+    // el navegador pueda competir en celulares.
     const VELOCIDAD = 0.6; // px por frame de auto-scroll
+    let posicion = 0;
     let autoScroll = true;
     let arrastrando = false;
     let startX = 0;
-    let startScroll = 0;
+    let startPos = 0;
+
+    function aplicar() {
+        track.style.transform = `translateX(${posicion}px)`;
+    }
 
     // Como el track tiene el contenido duplicado (tarjetasHTML + tarjetasHTML),
-    // al pasar la mitad del ancho reseteamos el scroll para que el loop sea infinito y sin cortes
+    // al pasar la mitad del ancho reseteamos la posición: loop infinito sin cortes
     function loopInfinito() {
         const mitad = track.scrollWidth / 2;
         if (mitad <= 0) return;
-        if (marquee.scrollLeft >= mitad) {
-            marquee.scrollLeft -= mitad;
-        } else if (marquee.scrollLeft <= 0) {
-            marquee.scrollLeft += mitad;
+        if (posicion <= -mitad) {
+            posicion += mitad;
+        } else if (posicion > 0) {
+            posicion -= mitad;
         }
     }
 
     function tick() {
         if (autoScroll && !arrastrando) {
-            marquee.scrollLeft += VELOCIDAD;
+            posicion -= VELOCIDAD;
             loopInfinito();
+            aplicar();
         }
         requestAnimationFrame(tick);
     }
-
-    // Arranca ligeramente corrido de 0 para poder loopear también hacia atrás
-    marquee.scrollLeft = 1;
     requestAnimationFrame(tick);
 
     // Si el mouse se va del carrousel mientras se estaba arrastrando, soltamos el drag
@@ -497,7 +509,7 @@ function initVehicleMarquee() {
         arrastrando = true;
         marquee.classList.add("dragging");
         startX = e.pageX;
-        startScroll = marquee.scrollLeft;
+        startPos = posicion;
     });
     window.addEventListener("mouseup", function () {
         arrastrando = false;
@@ -506,8 +518,9 @@ function initVehicleMarquee() {
     marquee.addEventListener("mousemove", function (e) {
         if (!arrastrando) return;
         e.preventDefault();
-        marquee.scrollLeft = startScroll - (e.pageX - startX);
+        posicion = startPos + (e.pageX - startX);
         loopInfinito();
+        aplicar();
     });
 
     // Drag / swipe táctil.
@@ -516,8 +529,6 @@ function initVehicleMarquee() {
     // Esperamos a que se mueva un poco y recién ahí decidimos: si el gesto
     // es mayormente vertical, soltamos el control (dejamos que la página
     // scrollee normal); si es mayormente horizontal, tomamos el drag.
-    // Sin esto, cualquier temblor natural de la mano al scrollear la página
-    // se traducía en saltos bruscos del carrousel.
     const UMBRAL_DECISION = 8; // px de movimiento antes de decidir la dirección
     let startY = 0;
     let direccionDecidida = false;
@@ -527,7 +538,7 @@ function initVehicleMarquee() {
         autoScroll = false;
         startX = e.touches[0].pageX;
         startY = e.touches[0].pageY;
-        startScroll = marquee.scrollLeft;
+        startPos = posicion;
         direccionDecidida = false;
         esArrastreHorizontal = false;
     }, { passive: true });
@@ -555,8 +566,9 @@ function initVehicleMarquee() {
         if (!esArrastreHorizontal) return; // dejamos que la página scrollee normal
 
         e.preventDefault(); // acá sí frenamos el scroll nativo: el gesto es del carrousel
-        marquee.scrollLeft = startScroll - dx;
+        posicion = startPos + dx;
         loopInfinito();
+        aplicar();
     }, { passive: false });
 
     function soltarTouch() {
