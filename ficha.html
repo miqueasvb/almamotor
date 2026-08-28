@@ -59,25 +59,6 @@
         .gallery_arrow.gallery_next { right: 15px; }
 
         .vehicle_info_box { background: #fff; border-radius: 10px; padding: 35px; box-shadow: 0 5px 20px rgba(0,0,0,0.06); height: 100%; }
-        /* El carrousel ya NO usa scroll nativo del navegador (scrollLeft):
-           eso es lo que se "peleaba" contra el JS en celulares (el motor de
-           scroll con inercia de iOS/Android se activaba solo y competía con
-           el script). Ahora .vehicle_marquee queda fijo (overflow:hidden) y
-           la tira de tarjetas (.vehicle_track) se mueve solo con
-           transform: translateX(), 100% controlado por JS, sin nada nativo
-           de por medio con quien pelear. */
-        .vehicle_marquee {
-            overflow: hidden !important;
-            touch-action: pan-y;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-        .vehicle_marquee .single_vehicle,
-        .vehicle_marquee img,
-        .vehicle_marquee a {
-            -webkit-user-drag: none;
-            -webkit-touch-callout: none;
-        }
         .vehicle_info_box h1 { font-size: 28px; font-weight: 700; color: #111; margin-bottom: 4px; }
         .vehicle_info_box .brand_tag { color: #e31b23; font-weight: 600; text-transform: uppercase; font-size: 14px; letter-spacing: 1px; }
         .spec_list { list-style: none; padding: 0; margin: 25px 0; }
@@ -456,132 +437,6 @@ function tarjetaRelacionadaHTML(v) {
         </div>`;
 }
 
-function initVehicleMarquee() {
-    const marquee = document.querySelector(".vehicle_marquee");
-    const track = document.getElementById("relacionadosTrack");
-    if (!marquee || !track) return;
-
-    // Posición horizontal de la tira de tarjetas, en píxeles (0 = arranque,
-    // negativo = corrida hacia la izquierda). Se aplica con transform, NUNCA
-    // con scrollLeft: así no queda nada "nativamente scrolleable" con lo que
-    // el navegador pueda competir en celulares.
-    const VELOCIDAD = 0.6; // px por frame de auto-scroll
-    let posicion = 0;
-    let autoScroll = true;
-    let arrastrando = false;
-    let startX = 0;
-    let startPos = 0;
-
-    function aplicar() {
-        track.style.transform = `translateX(${posicion}px)`;
-    }
-
-    // Como el track tiene el contenido duplicado (tarjetasHTML + tarjetasHTML),
-    // al pasar la mitad del ancho reseteamos la posición: loop infinito sin cortes
-    function loopInfinito() {
-        const mitad = track.scrollWidth / 2;
-        if (mitad <= 0) return;
-        if (posicion <= -mitad) {
-            posicion += mitad;
-        } else if (posicion > 0) {
-            posicion -= mitad;
-        }
-    }
-
-    function tick() {
-        if (autoScroll && !arrastrando) {
-            posicion -= VELOCIDAD;
-            loopInfinito();
-            aplicar();
-        }
-        requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-
-    // Si el mouse se va del carrousel mientras se estaba arrastrando, soltamos el drag
-    marquee.addEventListener("mouseleave", function () {
-        arrastrando = false;
-        marquee.classList.remove("dragging");
-    });
-
-    // Drag con mouse
-    marquee.addEventListener("mousedown", function (e) {
-        arrastrando = true;
-        marquee.classList.add("dragging");
-        startX = e.pageX;
-        startPos = posicion;
-    });
-    window.addEventListener("mouseup", function () {
-        arrastrando = false;
-        marquee.classList.remove("dragging");
-    });
-    marquee.addEventListener("mousemove", function (e) {
-        if (!arrastrando) return;
-        e.preventDefault();
-        posicion = startPos + (e.pageX - startX);
-        loopInfinito();
-        aplicar();
-    });
-
-    // Drag / swipe táctil.
-    // Clave: al tocar la pantalla todavía no sabemos si el usuario quiere
-    // scrollear la PÁGINA (vertical) o arrastrar el CARROUSEL (horizontal).
-    // Esperamos a que se mueva un poco y recién ahí decidimos: si el gesto
-    // es mayormente vertical, soltamos el control (dejamos que la página
-    // scrollee normal); si es mayormente horizontal, tomamos el drag.
-    const UMBRAL_DECISION = 8; // px de movimiento antes de decidir la dirección
-    let startY = 0;
-    let direccionDecidida = false;
-    let esArrastreHorizontal = false;
-
-    marquee.addEventListener("touchstart", function (e) {
-        autoScroll = false;
-        startX = e.touches[0].pageX;
-        startY = e.touches[0].pageY;
-        startPos = posicion;
-        direccionDecidida = false;
-        esArrastreHorizontal = false;
-    }, { passive: true });
-
-    marquee.addEventListener("touchmove", function (e) {
-        const touch = e.touches[0];
-        const dx = touch.pageX - startX;
-        const dy = touch.pageY - startY;
-
-        if (!direccionDecidida) {
-            if (Math.abs(dx) < UMBRAL_DECISION && Math.abs(dy) < UMBRAL_DECISION) {
-                return; // todavía no hay movimiento suficiente para decidir
-            }
-            direccionDecidida = true;
-            esArrastreHorizontal = Math.abs(dx) > Math.abs(dy);
-            if (!esArrastreHorizontal) {
-                // Es un scroll de página: soltamos todo, no tocamos el carrousel
-                autoScroll = true;
-                return;
-            }
-            arrastrando = true;
-            marquee.classList.add("dragging");
-        }
-
-        if (!esArrastreHorizontal) return; // dejamos que la página scrollee normal
-
-        e.preventDefault(); // acá sí frenamos el scroll nativo: el gesto es del carrousel
-        posicion = startPos + dx;
-        loopInfinito();
-        aplicar();
-    }, { passive: false });
-
-    function soltarTouch() {
-        arrastrando = false;
-        autoScroll = true;
-        direccionDecidida = false;
-        esArrastreHorizontal = false;
-        marquee.classList.remove("dragging");
-    }
-    marquee.addEventListener("touchend", soltarTouch);
-    marquee.addEventListener("touchcancel", soltarTouch);
-}
-
 async function init() {
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
@@ -653,11 +508,12 @@ async function init() {
         relacionadosArea.style.display = "none";
     } else {
         const track = document.getElementById("relacionadosTrack");
-        const tarjetasHTML = relacionados.map(tarjetaRelacionadaHTML).join("");
-        // Duplicamos el contenido para que el desplazamiento sea un loop continuo sin cortes
-        // (al llegar a la mitad del ancho, en realidad volvió a mostrar la primera tanda de tarjetas)
-        track.innerHTML = tarjetasHTML + tarjetasHTML;
-        initVehicleMarquee();
+        // Una sola tanda de tarjetas: el motor del carrousel (main.js) se
+        // encarga de duplicarla para que el loop sea infinito y sin cortes.
+        track.innerHTML = relacionados.map(tarjetaRelacionadaHTML).join("");
+        if (typeof window.initVehicleMarquee === "function") {
+            window.initVehicleMarquee();
+        }
     }
 
     estadoCarga.style.display = "none";
