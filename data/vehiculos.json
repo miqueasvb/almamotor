@@ -206,18 +206,5 @@
       "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871144264-5.jpg",
       "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871145867-6.jpg"
     ]
-  },
-  {
-    "id": "ford-asd-123",
-    "marca": "Ford",
-    "modelo": "asd",
-    "anio": 123,
-    "km": 123,
-    "estado": "usado",
-    "combustible": "asd",
-    "transmision": "asd",
-    "fotos": [
-      "img/vehiculos/ford-asd-123/foto-1787953666063-0.jpg"
-    ]
   }
 ]
