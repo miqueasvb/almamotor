@@ -121,50 +121,19 @@
 </head>
 <body>
 
-<!-- ============== VISTA DE LOGIN / CONFIGURACIÓN ============== -->
+<!-- ============== VISTA DE LOGIN ============== -->
 <div id="loginView">
-    <div class="card" style="margin-top: 60px;">
+    <div class="card" style="margin-top: 80px;">
         <h2>Acceso al panel</h2>
-        <div class="aviso">
-            Este panel publica cambios directamente en tu repositorio de GitHub. Necesitás un <strong>token de acceso personal</strong> con permiso de lectura/escritura sobre ese repositorio. Ver instrucciones abajo del formulario.
-        </div>
         <div id="loginError" class="aviso error oculto"></div>
 
         <div class="campo">
-            <label>Contraseña del panel</label>
-            <input type="password" id="passwordInput" placeholder="Contraseña">
-            <small>Es solo un filtro de conveniencia para que no cualquiera abra el formulario. La seguridad real la da el token de GitHub.</small>
-        </div>
-
-        <div class="campo">
-            <label>Usuario u organización de GitHub</label>
-            <input type="text" id="ghOwnerInput" placeholder="ej: alma-motor">
-        </div>
-        <div class="fila2">
-            <div class="campo">
-                <label>Nombre del repositorio</label>
-                <input type="text" id="ghRepoInput" placeholder="ej: sitio-web">
-            </div>
-            <div class="campo">
-                <label>Rama (branch)</label>
-                <input type="text" id="ghBranchInput" placeholder="main" value="main">
-            </div>
+            <label>Usuario</label>
+            <input type="text" id="usuarioInput" placeholder="Usuario" autocomplete="username">
         </div>
         <div class="campo">
-            <label>Token de acceso personal de GitHub</label>
-            <input type="password" id="ghTokenInput" placeholder="github_pat_...">
-            <small>
-                Creá uno en GitHub → Settings → Developer settings → <strong>Fine-grained tokens</strong> → "Generate new token".
-                Elegí "Only select repositories" y seleccioná este repo. En permisos, dale <strong>Contents: Read and write</strong> (nada más).
-                Ponele una fecha de expiración corta (ej. 90 días) y renovalo cuando venza.
-            </small>
-        </div>
-
-        <div class="campo">
-            <label style="display:flex; align-items:center; gap:8px; font-weight:400;">
-                <input type="checkbox" id="recordarInput" style="width:auto;">
-                Recordar estos datos en este navegador
-            </label>
+            <label>Contraseña</label>
+            <input type="password" id="passwordInput" placeholder="Contraseña" autocomplete="current-password">
         </div>
 
         <button class="btn btn-primary" id="btnEntrar" style="width:100%;">Entrar</button>
@@ -183,7 +152,6 @@
             <button id="logoutBtn" class="btn">Cerrar sesión</button>
         </div>
     </header>
-
     <div class="contenedor">
 
         <div id="mensajeGlobal" class="oculto"></div>
@@ -272,16 +240,15 @@
 /* =========================================================
    CONFIG / CONSTANTES
    ========================================================= */
-const MARCAS = ["Ford","Volkswagen","Ram","Toyota","Fiat","Chevrolet","Peugeot","BMW","Renault","Mini"];
-const RUTA_JSON = "data/vehiculos.json";
-const PASSWORD_PANEL = "almamotor2026"; //
+const MARCAS = ["Ford","Volkswagen","Ram","Toyota","Jeep","Fiat","Chevrolet","Peugeot","BMW","Mercedes-Benz","Nissan","Citroen","Renault","Mini"];
+const RUTA_API = "/.netlify/functions/admin-api";
 
 // Ajustes de optimización automática de fotos
 const FOTO_MAX_DIM = 1600;   // ancho/alto máximo en píxeles (las fotos de auto no necesitan más para verse bien)
 const FOTO_CALIDAD = 0.82;   // calidad JPEG (0 a 1). 0.82 es un buen equilibrio nitidez/peso
 
 let estado = {
-    owner: "", repo: "", branch: "main", token: "",
+    usuario: "", password: "",
     vehiculos: [], jsonSha: null,
     editandoId: null,
     // Lista única y ordenada de fotos. La posición 0 es la portada.
@@ -308,16 +275,18 @@ function mostrarMensaje(texto, tipo) {
     if (tipo === "ok") setTimeout(() => { el.classList.add("oculto"); }, 6000);
 }
 
-function ghHeaders() {
-    return {
-        "Authorization": `Bearer ${estado.token}`,
-        "Accept": "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28"
-    };
-}
-
-function ghUrl(path) {
-    return `https://api.github.com/repos/${estado.owner}/${estado.repo}/contents/${path}`;
+// Única puerta de entrada a todas las operaciones: le habla a la función de Netlify,
+// que es quien realmente tiene el token de GitHub guardado (nunca viaja al navegador).
+async function llamarApi(accion, extra = {}) {
+    const resp = await fetch(RUTA_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ usuario: estado.usuario, password: estado.password, accion, ...extra })
+    });
+    let data = {};
+    try { data = await resp.json(); } catch (e) {}
+    if (!resp.ok) throw new Error(data.error || `Error del servidor (${resp.status})`);
+    return data;
 }
 
 function fileToBase64(file) {
@@ -393,93 +362,84 @@ async function optimizarImagen(file) {
 }
 
 /* =========================================================
-   LOGIN / CONFIGURACIÓN
+   LOGIN — se guarda de verdad en este dispositivo (localStorage)
    ========================================================= */
-function cargarConfigGuardada() {
+async function iniciarSesion(usuario, password, mostrarErrorEnLogin) {
+    estado.usuario = usuario;
+    estado.password = password;
     try {
-        const guardado = JSON.parse(localStorage.getItem("almamotor_admin_config") || "null");
-        if (guardado) {
-            document.getElementById("ghOwnerInput").value = guardado.owner || "";
-            document.getElementById("ghRepoInput").value = guardado.repo || "";
-            document.getElementById("ghBranchInput").value = guardado.branch || "main";
-            document.getElementById("ghTokenInput").value = guardado.token || "";
-            document.getElementById("recordarInput").checked = true;
-        }
-    } catch (e) {}
-}
-
-document.getElementById("btnEntrar").addEventListener("click", async () => {
-    const pass = document.getElementById("passwordInput").value;
-    const owner = document.getElementById("ghOwnerInput").value.trim();
-    const repo = document.getElementById("ghRepoInput").value.trim();
-    const branch = document.getElementById("ghBranchInput").value.trim() || "main";
-    const token = document.getElementById("ghTokenInput").value.trim();
-    const errorEl = document.getElementById("loginError");
-    errorEl.classList.add("oculto");
-
-    if (pass !== PASSWORD_PANEL) {
-        errorEl.textContent = "Contraseña incorrecta.";
-        errorEl.classList.remove("oculto");
-        return;
-    }
-    if (!owner || !repo || !token) {
-        errorEl.textContent = "Completá usuario, repositorio y token.";
-        errorEl.classList.remove("oculto");
-        return;
-    }
-
-    estado.owner = owner; estado.repo = repo; estado.branch = branch; estado.token = token;
-
-    // Validamos el token/repo antes de entrar
-    try {
-        const resp = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers: ghHeaders() });
-        if (!resp.ok) throw new Error("No se pudo acceder al repositorio con ese token.");
+        const data = await llamarApi("listar");
+        estado.vehiculos = data.vehiculos;
+        estado.jsonSha = data.sha;
     } catch (e) {
-        errorEl.textContent = "No se pudo conectar con GitHub: " + e.message + " Revisá usuario/repo/token.";
-        errorEl.classList.remove("oculto");
-        return;
+        if (mostrarErrorEnLogin) {
+            const errorEl = document.getElementById("loginError");
+            errorEl.textContent = e.message || "Usuario o contraseña incorrectos.";
+            errorEl.classList.remove("oculto");
+        }
+        // Si las credenciales guardadas ya no sirven, las borramos para no reintentar en loop
+        localStorage.removeItem("almamotor_admin_session");
+        return false;
     }
 
-    if (document.getElementById("recordarInput").checked) {
-        localStorage.setItem("almamotor_admin_config", JSON.stringify({ owner, repo, branch, token }));
-    } else {
-        localStorage.removeItem("almamotor_admin_config");
-    }
+    // Se guarda de verdad en este dispositivo: la próxima vez que entre a admin.html
+    // en este mismo navegador, va a entrar directo, sin pedir usuario/contraseña de nuevo.
+    localStorage.setItem("almamotor_admin_session", JSON.stringify({ usuario, password }));
 
     document.getElementById("loginView").classList.add("oculto");
     document.getElementById("panelView").classList.remove("oculto");
-    document.getElementById("repoInfoTxt").textContent = `${owner}/${repo} (${branch})`;
+    document.getElementById("repoInfoTxt").textContent = `Conectado como ${usuario}`;
 
     poblarSelectMarcas();
-    await cargarListado();
+    renderListado();
+    return true;
+}
+
+document.getElementById("btnEntrar").addEventListener("click", async () => {
+    const usuario = document.getElementById("usuarioInput").value.trim();
+    const password = document.getElementById("passwordInput").value;
+    const errorEl = document.getElementById("loginError");
+    errorEl.classList.add("oculto");
+
+    if (!usuario || !password) {
+        errorEl.textContent = "Completá usuario y contraseña.";
+        errorEl.classList.remove("oculto");
+        return;
+    }
+
+    const btn = document.getElementById("btnEntrar");
+    btn.disabled = true; btn.textContent = "Entrando…";
+    await iniciarSesion(usuario, password, true);
+    btn.disabled = false; btn.textContent = "Entrar";
 });
 
 document.getElementById("logoutBtn").addEventListener("click", () => {
-    if (!confirm("¿Cerrar sesión? Vas a tener que ingresar el token de nuevo.")) return;
+    if (!confirm("¿Cerrar sesión en este dispositivo?")) return;
+    localStorage.removeItem("almamotor_admin_session");
     location.reload();
 });
 
-cargarConfigGuardada();
+// Al abrir la página, si este dispositivo ya tiene una sesión guardada, entra directo
+(async function entradaAutomatica() {
+    try {
+        const guardado = JSON.parse(localStorage.getItem("almamotor_admin_session") || "null");
+        if (guardado && guardado.usuario && guardado.password) {
+            document.getElementById("usuarioInput").value = guardado.usuario;
+            await iniciarSesion(guardado.usuario, guardado.password, false);
+        }
+    } catch (e) {}
+})();
 
 /* =========================================================
-   CARGA DEL LISTADO DESDE GITHUB
+   CARGA DEL LISTADO
    ========================================================= */
 async function cargarListado() {
     const wrap = document.getElementById("listadoWrap");
     wrap.textContent = "Cargando…";
     try {
-        const resp = await fetch(ghUrl(RUTA_JSON) + `?ref=${estado.branch}`, { headers: ghHeaders() });
-        if (resp.status === 404) {
-            estado.vehiculos = [];
-            estado.jsonSha = null;
-        } else if (resp.ok) {
-            const data = await resp.json();
-            estado.jsonSha = data.sha;
-            const contenido = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ""))));
-            estado.vehiculos = JSON.parse(contenido);
-        } else {
-            throw new Error(`GitHub respondió ${resp.status}`);
-        }
+        const data = await llamarApi("listar");
+        estado.vehiculos = data.vehiculos;
+        estado.jsonSha = data.sha;
         renderListado();
     } catch (e) {
         wrap.innerHTML = `<div class="aviso error">No se pudo cargar el listado: ${e.message}</div>`;
@@ -676,23 +636,11 @@ document.getElementById("btnGuardar").addEventListener("click", async () => {
             barra.style.width = `${Math.round(((subidas - 1) / Math.max(totalNuevas, 1)) * 100)}%`;
 
             const ext = (f.file.name.split(".").pop() || "jpg").toLowerCase();
-            const nombreArchivo = `img/vehiculos/${id}/foto-${Date.now()}-${i}.${ext}`;
+            const nombreArchivo = `foto-${Date.now()}-${i}.${ext}`;
             const base64 = await fileToBase64(f.file);
 
-            const resp = await fetch(ghUrl(nombreArchivo), {
-                method: "PUT",
-                headers: ghHeaders(),
-                body: JSON.stringify({
-                    message: `Agregar foto de ${marca} ${modelo}`,
-                    content: base64,
-                    branch: estado.branch
-                })
-            });
-            if (!resp.ok) {
-                const errData = await resp.json().catch(() => ({}));
-                throw new Error(`Error subiendo foto ${subidas}: ${errData.message || resp.status}`);
-            }
-            fotosFinal.push(nombreArchivo);
+            const data = await llamarApi("subirFoto", { id, nombreArchivo, base64, marca, modelo });
+            fotosFinal.push(data.path);
         }
         barra.style.width = "100%";
         progresoTexto.textContent = "Fotos subidas. Actualizando catálogo…";
@@ -730,27 +678,8 @@ document.getElementById("btnGuardar").addEventListener("click", async () => {
 });
 
 async function guardarJsonEnGithub(lista, mensajeCommit) {
-    const contenido = JSON.stringify(lista, null, 2);
-    const base64 = btoa(unescape(encodeURIComponent(contenido)));
-
-    const body = {
-        message: mensajeCommit,
-        content: base64,
-        branch: estado.branch
-    };
-    if (estado.jsonSha) body.sha = estado.jsonSha;
-
-    const resp = await fetch(ghUrl(RUTA_JSON), {
-        method: "PUT",
-        headers: ghHeaders(),
-        body: JSON.stringify(body)
-    });
-    if (!resp.ok) {
-        const errData = await resp.json().catch(() => ({}));
-        throw new Error(`No se pudo guardar el catálogo: ${errData.message || resp.status}`);
-    }
-    const data = await resp.json();
-    estado.jsonSha = data.content.sha;
+    const data = await llamarApi("guardarJson", { vehiculos: lista, sha: estado.jsonSha, mensaje: mensajeCommit });
+    estado.jsonSha = data.sha;
 }
 </script>
 </body>
