@@ -58,53 +58,6 @@
         .gallery_arrow.gallery_prev { left: 15px; }
         .gallery_arrow.gallery_next { right: 15px; }
 
-        .vehicle_marquee { overflow: hidden; width: 100%; -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); }
-        .vehicle_track { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 25px; width: max-content; animation-name: recorrido_vehiculos; animation-timing-function: linear; animation-iteration-count: infinite; }
-        .vehicle_track:hover { animation-play-state: paused; }
-        @keyframes recorrido_vehiculos { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-        /* Tarjetas del carrousel: ancho fijo propio para no depender de las clases
-           de grilla (col-lg-3, etc.) que usa style.css en otras secciones */
-        .vehicle_track .single_vehicle {
-            flex: 0 0 280px;
-            width: 280px;
-            max-width: 280px;
-            margin: 0;
-            background: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .vehicle_track .single_vehicle:hover { transform: translateY(-6px); box-shadow: 0 12px 28px rgba(0,0,0,0.14); }
-        .vehicle_track .single_vehicle .vehicle_thumb { position: relative; width: 100%; height: 175px; overflow: hidden; }
-        .vehicle_track .single_vehicle .vehicle_thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .vehicle_track .single_vehicle .vehicle_thumb_overlay {
-            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-            background: rgba(0,0,0,0.45); opacity: 0; transition: opacity 0.3s ease; text-decoration: none;
-        }
-        .vehicle_track .single_vehicle .vehicle_thumb:hover .vehicle_thumb_overlay { opacity: 1; }
-        .vehicle_track .single_vehicle .vehicle_overlay_badge {
-            display: flex; align-items: center; gap: 6px; color: #fff; font-size: 13px; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.5px; border: 2px solid #fff; border-radius: 30px; padding: 8px 16px;
-        }
-        .vehicle_track .single_vehicle .vehicle_overlay_badge svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 2; }
-        .vehicle_track .single_vehicle .vehicle_content { padding: 18px 20px 22px 20px; }
-        .vehicle_track .single_vehicle .vehicle_brand { display: block; color: #e31b23; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-        .vehicle_track .single_vehicle .vehicle_content h4 { margin: 0 0 12px 0; font-size: 18px; font-weight: 700; color: #111; }
-        .vehicle_track .single_vehicle .vehicle_meta { list-style: none; margin: 0 0 16px 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 14px; }
-        .vehicle_track .single_vehicle .vehicle_meta li { font-size: 12px; color: #777; font-weight: 600; }
-        .vehicle_track .single_vehicle .vehicle_btn {
-            display: inline-block; width: 100%; text-align: center; background: #111; color: #fff !important;
-            font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
-            padding: 10px 0; border-radius: 6px; text-decoration: none; transition: background 0.3s ease;
-        }
-        .vehicle_track .single_vehicle .vehicle_btn:hover { background: #e31b23; }
-
-        @media (max-width: 576px) {
-            .vehicle_track .single_vehicle { flex-basis: 220px; width: 220px; max-width: 220px; }
-        }
-
         .vehicle_info_box { background: #fff; border-radius: 10px; padding: 35px; box-shadow: 0 5px 20px rgba(0,0,0,0.06); height: 100%; }
         .vehicle_info_box h1 { font-size: 28px; font-weight: 700; color: #111; margin-bottom: 4px; }
         .vehicle_info_box .brand_tag { color: #e31b23; font-weight: 600; text-transform: uppercase; font-size: 14px; letter-spacing: 1px; }
@@ -484,6 +437,85 @@ function tarjetaRelacionadaHTML(v) {
         </div>`;
 }
 
+function initVehicleMarquee() {
+    const marquee = document.querySelector(".vehicle_marquee");
+    const track = document.getElementById("relacionadosTrack");
+    if (!marquee || !track) return;
+
+    const VELOCIDAD = 0.6; // px por frame de auto-scroll
+    let autoScroll = true;
+    let arrastrando = false;
+    let startX = 0;
+    let startScroll = 0;
+
+    // Como el track tiene el contenido duplicado (tarjetasHTML + tarjetasHTML),
+    // al pasar la mitad del ancho reseteamos el scroll para que el loop sea infinito y sin cortes
+    function loopInfinito() {
+        const mitad = track.scrollWidth / 2;
+        if (mitad <= 0) return;
+        if (marquee.scrollLeft >= mitad) {
+            marquee.scrollLeft -= mitad;
+        } else if (marquee.scrollLeft <= 0) {
+            marquee.scrollLeft += mitad;
+        }
+    }
+
+    function tick() {
+        if (autoScroll && !arrastrando) {
+            marquee.scrollLeft += VELOCIDAD;
+            loopInfinito();
+        }
+        requestAnimationFrame(tick);
+    }
+
+    // Arranca ligeramente corrido de 0 para poder loopear también hacia atrás
+    marquee.scrollLeft = 1;
+    requestAnimationFrame(tick);
+
+    // Pausa el auto-scroll al pasar el mouse, como cualquier carrousel
+    marquee.addEventListener("mouseenter", function () { autoScroll = false; });
+    marquee.addEventListener("mouseleave", function () {
+        autoScroll = true;
+        arrastrando = false;
+        marquee.classList.remove("dragging");
+    });
+
+    // Drag con mouse
+    marquee.addEventListener("mousedown", function (e) {
+        arrastrando = true;
+        marquee.classList.add("dragging");
+        startX = e.pageX;
+        startScroll = marquee.scrollLeft;
+    });
+    window.addEventListener("mouseup", function () {
+        arrastrando = false;
+        marquee.classList.remove("dragging");
+    });
+    marquee.addEventListener("mousemove", function (e) {
+        if (!arrastrando) return;
+        e.preventDefault();
+        marquee.scrollLeft = startScroll - (e.pageX - startX);
+        loopInfinito();
+    });
+
+    // Drag / swipe táctil
+    marquee.addEventListener("touchstart", function (e) {
+        arrastrando = true;
+        autoScroll = false;
+        startX = e.touches[0].pageX;
+        startScroll = marquee.scrollLeft;
+    }, { passive: true });
+    marquee.addEventListener("touchmove", function (e) {
+        if (!arrastrando) return;
+        marquee.scrollLeft = startScroll - (e.touches[0].pageX - startX);
+        loopInfinito();
+    }, { passive: true });
+    marquee.addEventListener("touchend", function () {
+        arrastrando = false;
+        autoScroll = true;
+    });
+}
+
 async function init() {
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
@@ -557,11 +589,9 @@ async function init() {
         const track = document.getElementById("relacionadosTrack");
         const tarjetasHTML = relacionados.map(tarjetaRelacionadaHTML).join("");
         // Duplicamos el contenido para que el desplazamiento sea un loop continuo sin cortes
-        // (al llegar a -50% del ancho, en realidad volvió a mostrar la primera tanda de tarjetas)
+        // (al llegar a la mitad del ancho, en realidad volvió a mostrar la primera tanda de tarjetas)
         track.innerHTML = tarjetasHTML + tarjetasHTML;
-        // Velocidad proporcional a la cantidad de autos, para que siempre se vea a un ritmo parejo
-        const duracionSeg = Math.max(relacionados.length * 4, 12);
-        track.style.animationDuration = `${duracionSeg}s`;
+        initVehicleMarquee();
     }
 
     estadoCarga.style.display = "none";
