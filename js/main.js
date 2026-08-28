@@ -48,6 +48,14 @@ function initVehicleMarquee() {
 		track.appendChild(card.cloneNode(true));
 	});
 
+	// Algunos estilos del template aplican una transición CSS al "transform"
+	// (típicamente solo visible en resoluciones de escritorio). Eso hacía que el
+	// auto-scroll, que cambia el transform cuadro a cuadro, se viera trabado en
+	// PC (cada cambio se "peleaba" con la transición anterior sin completarla).
+	// Lo forzamos sin transición para que el auto-scroll se vea fluido. El
+	// arrastre manual no se ve afectado porque usa scrollLeft, no transform.
+	track.style.setProperty('transition', 'none', 'important');
+
 	// Evita que el navegador arrastre las imágenes/links de forma nativa
 	// (esto era lo que impedía que funcionara el arrastre con mouse en PC)
 	function onDragStart(e) { e.preventDefault(); }
