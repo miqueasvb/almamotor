@@ -206,5 +206,23 @@
       "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871144264-5.jpg",
       "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871145867-6.jpg"
     ]
+  },
+  {
+    "id": "ram-ram-1500-2020",
+    "marca": "Ram",
+    "modelo": "Ram 1500",
+    "anio": 2020,
+    "km": 15000,
+    "estado": "usado",
+    "combustible": "Diesel",
+    "transmision": "AT",
+    "fotos": [
+      "img/vehiculos/ram-ram-1500-2020/foto-1787884599364-0.jpg",
+      "img/vehiculos/ram-ram-1500-2020/foto-1787884601196-1.jpg",
+      "img/vehiculos/ram-ram-1500-2020/foto-1787884602940-2.jpg",
+      "img/vehiculos/ram-ram-1500-2020/foto-1787884604295-3.jpg",
+      "img/vehiculos/ram-ram-1500-2020/foto-1787884605753-4.jpg",
+      "img/vehiculos/ram-ram-1500-2020/foto-1787884607124-5.jpg"
+    ]
   }
 ]
