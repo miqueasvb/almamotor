@@ -485,15 +485,6 @@
     }
 }
 </style>
-<style>
-    /* Carrusel de vehículos del home: mismo mecanismo que ya funciona bien en la
-       ficha del vehículo (.vehicle_marquee > .vehicle_track de css/style.css),
-       sin ningún CSS ni JS propio pisándolo. */
-    .vehicle_marquee:hover .vehicle_track,
-    .vehicle_track:hover {
-        animation-play-state: running !important;
-    }
-</style>
 </head>
 
 <body>
@@ -607,9 +598,184 @@
             </div>
         </div>
     </div>
-    <div class="vehicle_marquee" id="homeVehicleMarquee">
-        <div class="vehicle_track" id="homeVehicleTrack">
-            <p style="text-align:center; width:100%; color:#999; padding: 40px 0;">Cargando vehículos…</p>
+    <div class="vehicle_marquee">
+        <div class="vehicle_track">
+
+            <div class="single_vehicle">
+                <div class="vehicle_thumb">
+                    <img src="img/1.webp" alt="Volkswagen Amarok">
+                    <a href="volkswagen-amarok-2018.html" class="vehicle_thumb_overlay">
+                        <span class="vehicle_overlay_badge">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            Ver más
+                        </span>
+                    </a>
+                </div>
+                <div class="vehicle_content">
+                    <span class="vehicle_brand">Volkswagen</span>
+                    <h4>Amarok</h4>
+                    <ul class="vehicle_meta">
+                        <li>2018</li>
+                        <li>Usado</li>
+                        <li>A confirmar</li>
+                    </ul>
+                    <a href="volkswagen-amarok-2018.html" class="vehicle_btn">Ver más</a>
+                </div>
+            </div>
+
+            <div class="single_vehicle">
+                <div class="vehicle_thumb">
+                    <img src="img/2.webp" alt="BMW X6">
+                    <a href="bmw-x6.html" class="vehicle_thumb_overlay">
+                        <span class="vehicle_overlay_badge">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            Ver más
+                        </span>
+                    </a>
+                </div>
+                <div class="vehicle_content">
+                    <span class="vehicle_brand">BMW</span>
+                    <h4>X6</h4>
+                    <ul class="vehicle_meta">
+                        <li>A confirmar</li>
+                        <li>Usado</li>
+                        <li>A confirmar</li>
+                    </ul>
+                    <a href="bmw-x6.html" class="vehicle_btn">Ver más</a>
+                </div>
+            </div>
+
+            <div class="single_vehicle">
+                <div class="vehicle_thumb">
+                    <img src="img/3.webp" alt="Fiat Cronos">
+                    <a href="fiat-cronos.html" class="vehicle_thumb_overlay">
+                        <span class="vehicle_overlay_badge">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            Ver más
+                        </span>
+                    </a>
+                </div>
+                <div class="vehicle_content">
+                    <span class="vehicle_brand">Fiat</span>
+                    <h4>Cronos</h4>
+                    <ul class="vehicle_meta">
+                        <li>A confirmar</li>
+                        <li>Usado</li>
+                        <li>A confirmar</li>
+                    </ul>
+                    <a href="fiat-cronos.html" class="vehicle_btn">Ver más</a>
+                </div>
+            </div>
+
+            <div class="single_vehicle">
+                <div class="vehicle_thumb">
+                    <img src="img/4.webp" alt="Renault Duster">
+                    <a href="renault-duster.html" class="vehicle_thumb_overlay">
+                        <span class="vehicle_overlay_badge">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            Ver más
+                        </span>
+                    </a>
+                </div>
+                <div class="vehicle_content">
+                    <span class="vehicle_brand">Renault</span>
+                    <h4>Duster</h4>
+                    <ul class="vehicle_meta">
+                        <li>A confirmar</li>
+                        <li>Usado</li>
+                        <li>A confirmar</li>
+                    </ul>
+                    <a href="renault-duster.html" class="vehicle_btn">Ver más</a>
+                </div>
+            </div>
+
+            <div class="single_vehicle">
+                <div class="vehicle_thumb">
+                    <img src="img/5.webp" alt="Toyota Hilux">
+                    <a href="toyota-hilux-2014.html" class="vehicle_thumb_overlay">
+                        <span class="vehicle_overlay_badge">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            Ver más
+                        </span>
+                    </a>
+                </div>
+                <div class="vehicle_content">
+                    <span class="vehicle_brand">Toyota</span>
+                    <h4>Hilux</h4>
+                    <ul class="vehicle_meta">
+                        <li>2014</li>
+                        <li>Usado</li>
+                        <li>A confirmar</li>
+                    </ul>
+                    <a href="toyota-hilux-2014.html" class="vehicle_btn">Ver más</a>
+                </div>
+            </div>
+
+            <div class="single_vehicle">
+                <div class="vehicle_thumb">
+                    <img src="img/6.webp" alt="Mini Cooper">
+                    <a href="mini-cooper.html" class="vehicle_thumb_overlay">
+                        <span class="vehicle_overlay_badge">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            Ver más
+                        </span>
+                    </a>
+                </div>
+                <div class="vehicle_content">
+                    <span class="vehicle_brand">Mini</span>
+                    <h4>Cooper</h4>
+                    <ul class="vehicle_meta">
+                        <li>A confirmar</li>
+                        <li>Usado</li>
+                        <li>A confirmar</li>
+                    </ul>
+                    <a href="mini-cooper.html" class="vehicle_btn">Ver más</a>
+                </div>
+            </div>
+
+            <div class="single_vehicle">
+                <div class="vehicle_thumb">
+                    <img src="img/7.webp" alt="RAM 1500">
+                    <a href="ram-1500.html" class="vehicle_thumb_overlay">
+                        <span class="vehicle_overlay_badge">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            Ver más
+                        </span>
+                    </a>
+                </div>
+                <div class="vehicle_content">
+                    <span class="vehicle_brand">RAM</span>
+                    <h4>1500</h4>
+                    <ul class="vehicle_meta">
+                        <li>A confirmar</li>
+                        <li>Usado</li>
+                        <li>A confirmar</li>
+                    </ul>
+                    <a href="ram-1500.html" class="vehicle_btn">Ver más</a>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -1424,98 +1590,6 @@
         });
     });
 </script>
-
-<!-- Carrusel de vehículos del home: se arma solo con lo que haya cargado en el panel -->
-<script>
-(function () {
-    const MARCAS_LOGO = {
-        "Ford": "img/7.webp", "Volkswagen": "img/volkswagen.png", "Ram": "img/ram.png",
-        "Toyota": "img/toyota.png", "Jeep": "img/jeep.png", "Fiat": "img/fiat.webp",
-        "Chevrolet": "img/chevrolet.webp", "Peugeot": "img/peugeot.png", "BMW": "img/bmw.svg",
-        "Mercedes-Benz": "img/mercedes.svg", "Nissan": "img/nissan.svg", "Citroen": "img/Citroen-Logo.png",
-        "Renault": "img/renault.png", "Mini": "img/mini.png"
-    };
-    const MAX_VEHICULOS_HOME = 7;
-
-    function slugify(v) {
-        return `${v.marca}-${v.modelo}-${v.anio || 's-n'}`
-            .toLowerCase()
-            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/(^-|-$)/g, '');
-    }
-    function idDe(v) { return v.id || slugify(v); }
-
-    function tarjetaHTML(v) {
-        const imagen = (v.fotos && v.fotos[0]) || MARCAS_LOGO[v.marca] || "img/placeholder-vehicle.webp";
-        const kmTexto = v.km == null ? "A confirmar" : (v.km === 0 ? "0 km" : v.km.toLocaleString("es-AR") + " km");
-        const anioTexto = v.anio == null ? "A confirmar" : v.anio;
-        const estadoTexto = v.estado === "0km" ? "0KM" : "Usado";
-        const link = `ficha.html?id=${encodeURIComponent(idDe(v))}`;
-        return `
-            <div class="single_vehicle">
-                <div class="vehicle_thumb">
-                    <img src="${imagen}" alt="${v.marca} ${v.modelo}" onerror="this.onerror=null;this.src='${MARCAS_LOGO[v.marca] || 'img/placeholder-vehicle.webp'}';">
-                    <a href="${link}" class="vehicle_thumb_overlay">
-                        <span class="vehicle_overlay_badge">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                            Ver más
-                        </span>
-                    </a>
-                </div>
-                <div class="vehicle_content">
-                    <span class="vehicle_brand">${v.marca}</span>
-                    <h4>${v.modelo}</h4>
-                    <ul class="vehicle_meta">
-                        <li>${anioTexto}</li>
-                        <li>${estadoTexto}</li>
-                        <li>${kmTexto}</li>
-                    </ul>
-                    <a href="${link}" class="vehicle_btn">Ver más</a>
-                </div>
-            </div>`;
-    }
-
-    async function cargarCarruselHome() {
-        const marquee = document.getElementById("homeVehicleMarquee");
-        const track = document.getElementById("homeVehicleTrack");
-        if (!track) return;
-
-        let vehiculos;
-        try {
-            const resp = await fetch("data/vehiculos.json", { cache: "no-store" });
-            vehiculos = await resp.json();
-        } catch (e) {
-            marquee.style.display = "none";
-            return;
-        }
-
-        if (!Array.isArray(vehiculos) || vehiculos.length === 0) {
-            marquee.style.display = "none";
-            return;
-        }
-
-        // Mostramos los más recientes primero (los últimos agregados en el panel quedan al frente).
-        // Si borrás uno del panel, automáticamente el que le sigue ocupa su lugar acá.
-        const seleccionados = [...vehiculos].reverse().slice(0, MAX_VEHICULOS_HOME);
-        if (seleccionados.length === 0) {
-            marquee.style.display = "none";
-            return;
-        }
-
-        // Mismo armado que en la ficha del vehículo: un solo set de tarjetas, sin
-        // duplicar, sin animation-duration ni transform por JS. El movimiento lo
-        // da .vehicle_track de css/style.css tal cual como ya funciona ahí.
-        track.innerHTML = seleccionados.map(tarjetaHTML).join("");
-    }
-
-    document.addEventListener("DOMContentLoaded", cargarCarruselHome);
-})();
-</script>
 </body>
-
 
 </html>
