@@ -486,13 +486,21 @@
 }
 </style>
 <style>
-    /* Carrusel de vehículos del home: usa la MISMA animación de .vehicle_track que
-       ya está definida en css/style.css (la que funciona bien en la ficha del vehículo).
-       No se pisa con animation-name/duration propios para que no compita ni se reinicie. */
-    .vehicle_marquee:hover .vehicle_track,
-    .vehicle_track:hover {
-        animation-play-state: running !important;
+    /* Carrusel de vehículos del home: el movimiento lo maneja JS a mano (requestAnimationFrame),
+       no un @keyframes de CSS. Así no compite con ninguna animación/transición que ya
+       traiga css/style.css para .vehicle_track y nunca se corta ni se reinicia de golpe. */
+    #homeVehicleMarquee { overflow: hidden; width: 100%; }
+    #homeVehicleTrack.home_js_track {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 25px;
+        width: max-content;
+        animation: none !important;
+        transition: none !important;
+        will-change: transform;
+        transform: translate3d(0, 0, 0);
     }
+    #homeVehicleTrack.home_js_track .single_vehicle { flex: 0 0 auto; }
 </style>
 </head>
 
@@ -608,7 +616,7 @@
         </div>
     </div>
     <div class="vehicle_marquee" id="homeVehicleMarquee">
-        <div class="vehicle_track" id="homeVehicleTrack">
+        <div class="vehicle_track home_js_track" id="homeVehicleTrack">
             <p style="text-align:center; width:100%; color:#999; padding: 40px 0;">Cargando vehículos…</p>
         </div>
     </div>
@@ -1501,10 +1509,77 @@
         // Mostramos los más recientes primero (los últimos agregados en el panel quedan al frente).
         // Si borrás uno del panel, automáticamente el que le sigue ocupa su lugar acá.
         const seleccionados = [...vehiculos].reverse().slice(0, MAX_VEHICULOS_HOME);
+        if (seleccionados.length === 0) {
+            marquee.style.display = "none";
+            return;
+        }
 
-        // Sin duplicar tarjetas ni tocar la duración: el track queda igual que en la
-        // ficha del vehículo, así usa la misma animación de css/style.css tal cual.
-        track.innerHTML = seleccionados.map(tarjetaHTML).join("");
+        // Duplicamos UNA vez el set para poder hacer un loop perfecto: cuando el
+        // scroll llega al ancho exacto de un set completo, restamos ese ancho y
+        // seguimos — como el segundo set es idéntico al primero, no se nota el corte.
+        const html = seleccionados.map(tarjetaHTML).join("");
+        track.innerHTML = html + html;
+
+        iniciarScrollInfinito(marquee, track, seleccionados.length);
+    }
+
+    function iniciarScrollInfinito(marquee, track, cantidadOriginal) {
+        const PIXELES_POR_SEGUNDO = 45; // velocidad del recorrido
+
+        let anchoSet = 0;
+        let posicion = 0;
+        let ultimoFrame = null;
+        let pausado = false;
+
+        function medirAnchoSet() {
+            // Ancho real de un solo set de tarjetas (la mitad del track, que tiene 2 sets).
+            anchoSet = track.scrollWidth / 2;
+        }
+
+        function paso(timestamp) {
+            if (ultimoFrame === null) ultimoFrame = timestamp;
+            const delta = (timestamp - ultimoFrame) / 1000;
+            ultimoFrame = timestamp;
+
+            if (!pausado && anchoSet > 0) {
+                posicion += PIXELES_POR_SEGUNDO * delta;
+                if (posicion >= anchoSet) posicion -= anchoSet;
+                track.style.transform = `translate3d(${-posicion}px, 0, 0)`;
+            }
+            requestAnimationFrame(paso);
+        }
+
+        // Medimos una vez que las imágenes ya tienen su tamaño real (evita saltos).
+        const imgs = track.querySelectorAll("img");
+        let pendientes = imgs.length;
+        if (pendientes === 0) {
+            medirAnchoSet();
+        } else {
+            imgs.forEach(function (img) {
+                if (img.complete) {
+                    pendientes--;
+                    if (pendientes === 0) medirAnchoSet();
+                } else {
+                    img.addEventListener("load", function () {
+                        pendientes--;
+                        if (pendientes === 0) medirAnchoSet();
+                    });
+                    img.addEventListener("error", function () {
+                        pendientes--;
+                        if (pendientes === 0) medirAnchoSet();
+                    });
+                }
+            });
+        }
+        medirAnchoSet(); // valor inicial (se recalcula arriba al terminar de cargar imágenes)
+
+        window.addEventListener("resize", medirAnchoSet);
+
+        // El mouse encima NO frena el recorrido — sigue siempre fluido.
+        // (si en algún momento se prefiere pausar en hover, alcanza con
+        // poner pausado = true / false en mouseenter / mouseleave acá)
+
+        requestAnimationFrame(paso);
     }
 
     document.addEventListener("DOMContentLoaded", cargarCarruselHome);
