@@ -206,19 +206,5 @@
       "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871144264-5.jpg",
       "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871145867-6.jpg"
     ]
-  },
-  {
-    "id": "ford-prueba-1111",
-    "marca": "Ford",
-    "modelo": "PRUEBA",
-    "anio": 1111,
-    "km": 1111,
-    "estado": "usado",
-    "combustible": "PRUEBA",
-    "transmision": "PRUEBA",
-    "descripcion": "PRUEBA",
-    "fotos": [
-      "img/vehiculos/ford-prueba-1111/foto-1788045007596-0.jpg"
-    ]
   }
 ]
