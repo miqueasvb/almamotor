@@ -92,6 +92,24 @@ function initVehicleMarquee() {
 	recalcHalfWidth();
 	$(window).on('resize.vehicleMarquee', recalcHalfWidth);
 
+	// --- Red de seguridad para el arrastre NATIVO en celular ---
+	// En celular dejamos que el dedo controle el scroll nativo del navegador
+	// (marquee.scrollLeft) porque se siente más fluido que reimplementarlo a
+	// mano. El problema: ese scroll nativo no tenía ningún límite ni loop, así
+	// que si alguien arrastraba bastante (o el auto-scroll seguía sumando
+	// después de soltar), el scroll terminaba corriéndose fuera del rango de
+	// las tarjetas duplicadas y la pantalla quedaba en blanco. Esto escucha
+	// CUALQUIER scroll real del carrusel (nativo por dedo, inercia, o el que
+	// hacemos nosotros) y lo "teletransporta" de vuelta al rango válido en
+	// cuanto se pasa de una tanda completa. Como el contenido está duplicado
+	// exactamente igual, ese salto es 100% invisible para el ojo.
+	function wrapNativeScroll() {
+		if (halfWidth <= 0) return;
+		while (marquee.scrollLeft >= halfWidth) marquee.scrollLeft -= halfWidth;
+		while (marquee.scrollLeft < 0) marquee.scrollLeft += halfWidth;
+	}
+	marquee.addEventListener('scroll', wrapNativeScroll, { passive: true });
+
 	var SPEED = 0.6; // velocidad del auto-scroll (px por frame)
 	var isDragging = false;
 	var isTouching = false;
@@ -105,11 +123,13 @@ function initVehicleMarquee() {
 	var autoScrollRafId = null;
 	var destroyed = false;
 
+	var controlUsuarioAnterior = false; // true mientras el dedo, el mouse o la inercia manejan el scroll real
 	function autoScroll() {
 		if (destroyed) return;
 		// Sigue moviéndose solo aunque el mouse esté encima; sólo se detiene
 		// mientras se está arrastrando (mouse), tocando (celular) o deslizando por inercia.
-		if (!isDragging && !isTouching && !isInertia && halfWidth > 0) {
+		var controlUsuario = isDragging || isTouching || isInertia;
+		if (!controlUsuario && halfWidth > 0) {
 			// El auto-scroll SIEMPRE se anima con "transform" (no con scrollLeft),
 			// tanto en PC como en celular. En iPhone/Android es necesario porque
 			// Safari (y a veces Chrome mobile) IGNORA los cambios de scrollLeft
@@ -121,10 +141,26 @@ function initVehicleMarquee() {
 			// usuario empieza a arrastrar (mouse, ver onPointerDown) o a tocar
 			// (celular, ver onTouchStart), para que el arrastre arranque
 			// exactamente desde donde se ve el carrusel, sin saltos.
+			//
+			// Y al revés, justo acá: si en el frame anterior el dedo, el mouse
+			// o la inercia tenían el control del scroll real (scrollLeft) y en
+			// este frame el auto-scroll (transform) lo retoma, primero
+			// absorbemos lo que haya quedado en el scroll real hacia el offset
+			// del transform y lo dejamos en 0. Sin este traspaso, cada vez que
+			// se toca/arrastra y se suelta, el scroll real y el transform se
+			// van sumando entre sí en lugar de reemplazarse — y esa suma
+			// termina pasándose del contenido duplicado, dejando un hueco en
+			// blanco (justo lo que se veía después de algunas vueltas en
+			// celular).
+			if (controlUsuarioAnterior && marquee.scrollLeft !== 0) {
+				autoOffset = wrapScrollLeft(autoOffset + marquee.scrollLeft);
+				marquee.scrollLeft = 0;
+			}
 			autoOffset += SPEED;
 			if (autoOffset >= halfWidth) autoOffset -= halfWidth;
 			track.style.transform = 'translateX(' + (-autoOffset) + 'px)';
 		}
+		controlUsuarioAnterior = controlUsuario;
 		autoScrollRafId = requestAnimationFrame(autoScroll);
 	}
 	autoScrollRafId = requestAnimationFrame(autoScroll);
@@ -303,6 +339,7 @@ function initVehicleMarquee() {
 		if (autoScrollRafId) cancelAnimationFrame(autoScrollRafId);
 		if (inertiaRafId) cancelAnimationFrame(inertiaRafId);
 		$(window).off('resize.vehicleMarquee', recalcHalfWidth);
+		marquee.removeEventListener('scroll', wrapNativeScroll);
 		track.removeEventListener('dragstart', onDragStart);
 		marquee.removeEventListener('pointerdown', onPointerDown);
 		marquee.removeEventListener('pointermove', onPointerMove);
