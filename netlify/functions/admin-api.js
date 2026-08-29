@@ -150,6 +150,36 @@ exports.handler = async (event) => {
                 return respuesta(200, { borradas, errores });
             }
 
+            case "eliminarFoto": {
+                // Borra UNA foto puntual por su ruta exacta. Se usa cuando se
+                // edita un vehículo y se saca o reemplaza alguna foto suelta
+                // (no todo el vehículo) — para que esa foto vieja no quede
+                // huérfana en GitHub.
+                const { path } = body;
+                if (!path) return respuesta(400, { error: "Falta el path de la foto." });
+
+                const getR = await fetch(`${ghBase}/${path}?ref=${branch}`, { headers: ghHeaders });
+                if (getR.status === 404) {
+                    return respuesta(200, { borrada: false }); // ya no existía, no es error
+                }
+                if (!getR.ok) {
+                    const e = await getR.json().catch(() => ({}));
+                    return respuesta(getR.status, { error: e.message || "No se pudo leer la foto" });
+                }
+                const info = await getR.json();
+
+                const delR = await fetch(`${ghBase}/${path}`, {
+                    method: "DELETE",
+                    headers: ghHeaders,
+                    body: JSON.stringify({ message: `Eliminar foto: ${path}`, sha: info.sha, branch })
+                });
+                if (!delR.ok) {
+                    const e = await delR.json().catch(() => ({}));
+                    return respuesta(delR.status, { error: e.message || "No se pudo borrar la foto" });
+                }
+                return respuesta(200, { borrada: true });
+            }
+
             default:
                 return respuesta(400, { error: "Acción desconocida." });
         }
