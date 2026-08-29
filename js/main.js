@@ -42,6 +42,15 @@ function initVehicleMarquee() {
 		marquee._marqueeTeardown = null;
 	}
 
+	// Arrancamos siempre desde un scroll conocido (0). Esto importa cuando esta
+	// función se llama una segunda vez sobre un carrusel que ya venía corriendo
+	// (por ejemplo: index.html lo inicializa primero con la maqueta estática y
+	// después de nuevo con los vehículos reales de data/vehiculos.json). Si el
+	// usuario llegó a arrastrar el carrusel justo en esos milisegundos antes de
+	// que lleguen los datos reales, sin este reset quedaría un scrollLeft viejo
+	// aplicado sobre el contenido nuevo.
+	marquee.scrollLeft = 0;
+
 	// Duplicamos las tarjetas UNA sola vez para que el loop sea infinito y sin cortes
 	var originalCards = Array.prototype.slice.call(track.children);
 	originalCards.forEach(function (card) {
