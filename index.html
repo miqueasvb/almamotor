@@ -1811,7 +1811,21 @@
                     if (vehiculos.length === 0) return;
 
                     var destacados = vehiculos.slice(0, CANTIDAD_MAXIMA);
+                    // Una sola tanda de tarjetas: el motor del carrusel (main.js) se
+                    // encarga de duplicarla para que el loop sea infinito y sin cortes.
                     track.innerHTML = destacados.map(tarjetaVehiculoHTML).join("");
+                    // IMPORTANTE: hay que volver a inicializar el carrusel acá. El
+                    // carrusel ya había arrancado una vez (main.js, con la maqueta
+                    // estática de respaldo) y ese motor había duplicado esas tarjetas
+                    // de respaldo. Al reemplazar el innerHTML con los vehículos reales,
+                    // esa duplicación se pierde (quedan sin duplicar), lo que rompía el
+                    // loop infinito y dejaba ver espacios en blanco al llegar al final.
+                    // Volviendo a llamar a initVehicleMarquee() acá, se apaga prolijamente
+                    // el motor anterior y se arma uno nuevo sobre los vehículos reales,
+                    // ya duplicados, infinito y sin cortes.
+                    if (typeof window.initVehicleMarquee === "function") {
+                        window.initVehicleMarquee();
+                    }
                 })
                 .catch(function (err) {
                     // No se pudo cargar el JSON: se conserva el carrusel estático de respaldo.
