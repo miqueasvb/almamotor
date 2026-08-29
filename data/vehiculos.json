@@ -206,22 +206,5 @@
       "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871144264-5.jpg",
       "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871145867-6.jpg"
     ]
-  },
-  {
-    "id": "ford-pruebav2-2222",
-    "marca": "Ford",
-    "modelo": "pruebaV2",
-    "anio": 2222,
-    "km": 2222,
-    "estado": "usado",
-    "combustible": "V2",
-    "transmision": "V2",
-    "descripcion": "V2",
-    "fotos": [
-      "img/vehiculos/ford-pruebav2-2222/foto-1788046652827-0.jpg",
-      "img/vehiculos/ford-pruebav2-2222/foto-1788046654001-1.jpg",
-      "img/vehiculos/ford-pruebav2-2222/foto-1788046655082-2.jpg",
-      "img/vehiculos/ford-pruebav2-2222/foto-1788046656131-3.jpg"
-    ]
   }
 ]
