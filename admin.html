@@ -253,7 +253,12 @@ let estado = {
     editandoId: null,
     // Lista única y ordenada de fotos. La posición 0 es la portada.
     // Cada item: { tipo: "existing", url } o { tipo: "new", file, dataUrl }
-    fotos: []
+    fotos: [],
+    // Fotos que tenía el vehículo AL EMPEZAR a editarlo (solo se usa durante
+    // una edición). Al guardar, comparamos esta lista contra las fotos que
+    // quedaron, y las que ya no están las borramos de GitHub para que no
+    // queden huérfanas.
+    fotosOriginales: []
 };
 
 /* =========================================================
@@ -553,6 +558,7 @@ function limpiarFormulario() {
     document.getElementById("fId").value = "";
     document.getElementById("fDescripcion").value = "";
     estado.fotos = [];
+    estado.fotosOriginales = [];
     estado.editandoId = null;
     renderPreviewFotos();
     document.getElementById("formTituloCard").textContent = "Agregar vehículo";
@@ -574,6 +580,7 @@ function editarVehiculo(indice) {
     document.getElementById("fId").value = estado.editandoId;
     document.getElementById("fDescripcion").value = v.descripcion || "";
     estado.fotos = (v.fotos || []).map(url => ({ tipo: "existing", url }));
+    estado.fotosOriginales = (v.fotos || []).slice();
     renderPreviewFotos();
     document.getElementById("formTituloCard").textContent = `Editando: ${v.marca} ${v.modelo}`;
     document.getElementById("btnCancelarEdicion").classList.remove("oculto");
@@ -676,6 +683,19 @@ document.getElementById("btnGuardar").addEventListener("click", async () => {
         }
 
         await guardarJsonEnGithub(nuevaLista, estado.editandoId ? `Editar vehículo: ${marca} ${modelo}` : `Agregar vehículo: ${marca} ${modelo}`);
+
+        // El catálogo ya quedó guardado (lo importante). Ahora, de yapa, si
+        // esto fue una edición y se sacaron o reemplazaron fotos, borramos
+        // esas fotos viejas de GitHub para que no queden huérfanas. Esto NO
+        // bloquea el guardado: si alguna falla, el vehículo ya se publicó bien.
+        const fotosBorradas = estado.fotosOriginales.filter(url => !fotosFinal.includes(url));
+        for (const path of fotosBorradas) {
+            try {
+                await llamarApi("eliminarFoto", { path });
+            } catch (e) {
+                console.warn("No se pudo borrar una foto vieja:", path, e.message);
+            }
+        }
 
         estado.vehiculos = nuevaLista;
         renderListado();
