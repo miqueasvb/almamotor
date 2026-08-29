@@ -42,18 +42,31 @@ function initVehicleMarquee() {
 		marquee._marqueeTeardown = null;
 	}
 
-	// Arrancamos siempre desde un scroll conocido (0). Esto importa cuando esta
-	// función se llama una segunda vez sobre un carrusel que ya venía corriendo
-	// (por ejemplo: index.html lo inicializa primero con la maqueta estática y
-	// después de nuevo con los vehículos reales de data/vehiculos.json). Si el
-	// usuario llegó a arrastrar el carrusel justo en esos milisegundos antes de
-	// que lleguen los datos reales, sin este reset quedaría un scrollLeft viejo
-	// aplicado sobre el contenido nuevo.
-	marquee.scrollLeft = 0;
-
-	// Duplicamos las tarjetas UNA sola vez para que el loop sea infinito y sin cortes
+	// Duplicamos las tarjetas para que el loop sea infinito y sin cortes.
+	// Si el catálogo tiene pocos vehículos (por ejemplo, pocos relacionados en
+	// la ficha, o un catálogo chico en el home), una sola tanda puede ser más
+	// angosta que la pantalla: en ese caso NO alcanza con duplicar una vez,
+	// porque al llegar al final del recorrido se vería un hueco en blanco
+	// antes de que entre la copia siguiente. Por eso repetimos la tanda
+	// original las veces que haga falta hasta que cubra de sobra el ancho
+	// visible del carrusel, y recién ahí la duplicamos una vez más para el
+	// loop infinito (así siempre hay tarjetas reales cubriendo la pantalla).
 	var originalCards = Array.prototype.slice.call(track.children);
-	originalCards.forEach(function (card) {
+	var anchoVisible = marquee.clientWidth || window.innerWidth || 0;
+	var anchoUnaTanda = track.scrollWidth;
+	var repeticiones = 1;
+	if (anchoUnaTanda > 0) {
+		while (anchoUnaTanda * repeticiones < anchoVisible + 100 && repeticiones < 20) {
+			repeticiones++;
+		}
+	}
+	for (var rep = 1; rep < repeticiones; rep++) {
+		originalCards.forEach(function (card) {
+			track.appendChild(card.cloneNode(true));
+		});
+	}
+	var tandaAmpliada = Array.prototype.slice.call(track.children);
+	tandaAmpliada.forEach(function (card) {
 		track.appendChild(card.cloneNode(true));
 	});
 
