@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title id="pageTitle">Vehículo | Alma Motor</title>
-    <meta name="description" content="Autos 0km y Usados seleccionados. Financiación y tasaciones.">
+    <meta id="pageDescription" name="description" content="Autos 0km y Usados seleccionados. Financiación y tasaciones.">
+    <link id="pageCanonical" rel="canonical" href="https://www.almamotor.com.ar/ficha.html">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
@@ -483,6 +484,21 @@ async function init() {
 
     // Título de la pestaña
     document.getElementById("pageTitle").textContent = `${v.marca} ${v.modelo} ${v.anio || ''} | Alma Motor, Saénz Peña Chaco`;
+
+    // Meta-descripción y URL canónica: antes eran genéricas e iguales en las
+    // 14 fichas de vehículo, lo cual no le sirve a Google para diferenciar
+    // cada página. Ahora cada ficha tiene su propia descripción (con marca,
+    // modelo, año, estado y km) y su propia URL canónica.
+    const kmTextoSEO = v.km == null ? "" : (v.km === 0 ? " 0 km." : ` ${v.km.toLocaleString("es-AR")} km.`);
+    const estadoTextoSEO = v.estado === "0km" ? "0km" : "Usado";
+    document.getElementById("pageDescription").setAttribute(
+        "content",
+        `${v.marca} ${v.modelo} ${v.anio || ''} ${estadoTextoSEO}.${kmTextoSEO} Venta en Alma Motor, Sáenz Peña, Chaco. Financiación, plan canje y gestión de transferencia incluida.`
+    );
+    document.getElementById("pageCanonical").setAttribute(
+        "href",
+        `https://www.almamotor.com.ar/ficha.html?id=${encodeURIComponent(id)}`
+    );
 
     // Breadcrumb
     document.getElementById("fBreadcrumbTitulo").textContent = `${v.marca} ${v.modelo}`;
