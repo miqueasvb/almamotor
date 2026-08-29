@@ -582,12 +582,24 @@ function editarVehiculo(indice) {
 
 async function eliminarVehiculo(indice) {
     const v = estado.vehiculos[indice];
-    if (!confirm(`¿Eliminar "${v.marca} ${v.modelo}" del catálogo? Esta acción no borra las fotos ya subidas, solo la ficha.`)) return;
+    if (!confirm(`¿Eliminar "${v.marca} ${v.modelo}" del catálogo? Esta acción también borra sus fotos. No se puede deshacer.`)) return;
 
+    const id = v.id || slugify(v);
     const nuevaLista = estado.vehiculos.filter((_, i) => i !== indice);
     await guardarJsonEnGithub(nuevaLista, `Eliminar vehículo: ${v.marca} ${v.modelo}`);
     estado.vehiculos = nuevaLista;
     renderListado();
+
+    // El catálogo ya quedó guardado (lo importante). Ahora, de yapa, borramos
+    // también las fotos de este vehículo en GitHub. Si esto llegara a fallar,
+    // no lo tratamos como error grave ni se lo mostramos como fallo al
+    // usuario: el vehículo YA desapareció del sitio, que es lo que le importa.
+    try {
+        await llamarApi("eliminarFotos", { id });
+    } catch (e) {
+        console.warn("No se pudieron borrar las fotos del vehículo eliminado:", e.message);
+    }
+
     mostrarMensaje("Vehículo eliminado y publicado.", "ok");
 }
 
