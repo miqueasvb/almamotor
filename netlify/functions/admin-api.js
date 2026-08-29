@@ -1,4 +1,3 @@
-
 const RUTA_JSON = "data/vehiculos.json";
 
 exports.handler = async (event) => {
@@ -89,8 +88,23 @@ exports.handler = async (event) => {
                     return respuesta(r.status, { error: e.message || "No se pudo guardar el catálogo" });
                 }
                 const data = await r.json();
+
+                // El catálogo (vehiculos.json) ya quedó guardado, que es lo más
+                // importante. Ahora, de yapa, regeneramos sitemap.xml con la
+                // lista actual de vehículos, para que cada alta/baja del panel
+                // también se refleje ahí automáticamente y no haya que tocarlo
+                // a mano nunca más. Si esto llegara a fallar por algún motivo,
+                // no lo tratamos como error grave: el catálogo ya se guardó bien,
+                // el sitemap es una mejora aparte.
+                try {
+                    await actualizarSitemap(vehiculos, ghHeaders, ghBase, branch);
+                } catch (e) {
+                    console.error("No se pudo actualizar el sitemap:", e.message);
+                }
+
                 return respuesta(200, { sha: data.content.sha });
             }
+
 
             default:
                 return respuesta(400, { error: "Acción desconocida." });
@@ -106,4 +120,57 @@ function respuesta(statusCode, objeto) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(objeto)
     };
+}
+
+const SITIO = "https://www.almamotor.com.ar";
+
+// Reconstruye sitemap.xml completo: las páginas fijas del sitio + una entrada
+// por cada vehículo que exista HOY en el catálogo. Así, cuando se agrega un
+// vehículo aparece automáticamente, y cuando se elimina, desaparece del
+// sitemap en el mismo commit — sin tocar nada a mano.
+async function actualizarSitemap(vehiculos, ghHeaders, ghBase, branch) {
+    const paginasFijas = [
+        { loc: `${SITIO}/`, changefreq: "daily", priority: "1.0" },
+        { loc: `${SITIO}/catalogo`, changefreq: "daily", priority: "0.9" },
+        { loc: `${SITIO}/nosotros`, changefreq: "monthly", priority: "0.6" },
+        { loc: `${SITIO}/clientes`, changefreq: "monthly", priority: "0.6" }
+    ];
+    const paginasVehiculos = vehiculos
+        .filter(v => v && v.id)
+        .map(v => ({
+            loc: `${SITIO}/ficha.html?id=${encodeURIComponent(v.id)}`,
+            changefreq: "weekly",
+            priority: "0.8"
+        }));
+
+    const todas = paginasFijas.concat(paginasVehiculos);
+    const xml =
+        '<?xml version="1.0" encoding="UTF-8"?>\n' +
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+        todas.map(u =>
+            `  <url>\n    <loc>${u.loc}</loc>\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority}</priority>\n  </url>`
+        ).join("\n") +
+        '\n</urlset>\n';
+
+    // Necesitamos el sha actual de sitemap.xml para poder sobreescribirlo
+    // (así funciona la API de contenidos de GitHub).
+    const getR = await fetch(`${ghBase}/sitemap.xml?ref=${branch}`, { headers: ghHeaders });
+    const shaActual = getR.ok ? (await getR.json()).sha : undefined;
+
+    const put = {
+        message: "Actualizar sitemap.xml (automático desde el panel)",
+        content: Buffer.from(xml, "utf-8").toString("base64"),
+        branch
+    };
+    if (shaActual) put.sha = shaActual;
+
+    const putR = await fetch(`${ghBase}/sitemap.xml`, {
+        method: "PUT",
+        headers: ghHeaders,
+        body: JSON.stringify(put)
+    });
+    if (!putR.ok) {
+        const e = await putR.json().catch(() => ({}));
+        throw new Error(e.message || "No se pudo actualizar sitemap.xml");
+    }
 }
