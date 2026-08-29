@@ -557,7 +557,7 @@ async function init() {
     const otros = vehiculos.filter(x => idDe(x) !== id);
     const mismaMarca = otros.filter(x => x.marca === v.marca);
     const otrasMarcas = otros.filter(x => x.marca !== v.marca);
-    const relacionados = [...mismaMarca, ...otrasMarcas].slice(0, 12);
+    const relacionados = [...mismaMarca, ...otrasMarcas].slice(0, 8);
 
     const relacionadosArea = document.getElementById("relacionadosArea");
     if (relacionados.length === 0) {
