@@ -5,3 +5,15 @@
 /catalogo.html   /catalogo   301
 /nosotros.html   /nosotros   301
 /clientes.html   /clientes   301
+
+# Fichas de vehículo: si alguien ya tiene guardado o compartido un link
+# viejo tipo /ficha.html?id=algo, lo mandamos derecho a la URL linda nueva
+# (/algo), para no tener dos formatos distintos apuntando a lo mismo.
+/ficha.html   id=:id   /:id   301
+
+# URL linda de vehículo (ej: /fiat-cronos-precision-1-3-gse-cvt-bz-2023).
+# Por detrás sigue sirviendo ficha.html con ese id — el visitante nunca ve
+# ".html" ni "?id=". Va al FINAL a propósito: si el path coincide con un
+# archivo o carpeta real del sitio (catalogo, admin.html, img/, etc.),
+# Netlify sirve ESE archivo primero y ni pasa por esta regla.
+/:id   /ficha.html?id=:id   200
