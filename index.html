@@ -1766,7 +1766,7 @@
             var kmTexto = (v.km === null || v.km === undefined)
                 ? "A confirmar"
                 : (v.km === 0 ? "0 km" : v.km.toLocaleString("es-AR") + " km");
-            var enlace = "ficha.html?id=" + encodeURIComponent(idDeHome(v));
+            var enlace = "/" + encodeURIComponent(idDeHome(v));
 
             return (
                 '<div class="single_vehicle">' +
