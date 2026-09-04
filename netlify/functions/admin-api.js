@@ -105,80 +105,6 @@ exports.handler = async (event) => {
                 return respuesta(200, { sha: data.content.sha });
             }
 
-            case "eliminarFotos": {
-                const { id } = body;
-                if (!id) return respuesta(400, { error: "Falta el id del vehículo." });
-
-                const carpeta = `img/vehiculos/${id}`;
-                const listR = await fetch(`${ghBase}/${carpeta}?ref=${branch}`, { headers: ghHeaders });
-
-                if (listR.status === 404) {
-                    // Este vehículo no tenía fotos propias (o ya se habían borrado antes). No es un error.
-                    return respuesta(200, { borradas: 0 });
-                }
-                if (!listR.ok) {
-                    const e = await listR.json().catch(() => ({}));
-                    return respuesta(listR.status, { error: e.message || "No se pudo leer la carpeta de fotos" });
-                }
-
-                const archivos = await listR.json();
-                let borradas = 0;
-                const errores = [];
-
-                // GitHub no tiene un "borrar carpeta entera" — hay que borrar
-                // archivo por archivo, cada uno con su propio commit. Si alguna
-                // foto puntual falla, seguimos con las demás en vez de frenar
-                // todo (ya el catálogo se guardó bien antes de llegar acá).
-                for (const archivo of archivos) {
-                    if (archivo.type !== "file") continue;
-                    const delR = await fetch(`${ghBase}/${archivo.path}`, {
-                        method: "DELETE",
-                        headers: ghHeaders,
-                        body: JSON.stringify({
-                            message: `Eliminar foto (${id})`,
-                            sha: archivo.sha,
-                            branch
-                        })
-                    });
-                    if (delR.ok) {
-                        borradas++;
-                    } else {
-                        errores.push(archivo.path);
-                    }
-                }
-
-                return respuesta(200, { borradas, errores });
-            }
-
-            case "eliminarFoto": {
-                // Borra UNA foto puntual por su ruta exacta. Se usa cuando se
-                // edita un vehículo y se saca o reemplaza alguna foto suelta
-                // (no todo el vehículo) — para que esa foto vieja no quede
-                // huérfana en GitHub.
-                const { path } = body;
-                if (!path) return respuesta(400, { error: "Falta el path de la foto." });
-
-                const getR = await fetch(`${ghBase}/${path}?ref=${branch}`, { headers: ghHeaders });
-                if (getR.status === 404) {
-                    return respuesta(200, { borrada: false }); // ya no existía, no es error
-                }
-                if (!getR.ok) {
-                    const e = await getR.json().catch(() => ({}));
-                    return respuesta(getR.status, { error: e.message || "No se pudo leer la foto" });
-                }
-                const info = await getR.json();
-
-                const delR = await fetch(`${ghBase}/${path}`, {
-                    method: "DELETE",
-                    headers: ghHeaders,
-                    body: JSON.stringify({ message: `Eliminar foto: ${path}`, sha: info.sha, branch })
-                });
-                if (!delR.ok) {
-                    const e = await delR.json().catch(() => ({}));
-                    return respuesta(delR.status, { error: e.message || "No se pudo borrar la foto" });
-                }
-                return respuesta(200, { borrada: true });
-            }
 
             default:
                 return respuesta(400, { error: "Acción desconocida." });
@@ -212,7 +138,7 @@ async function actualizarSitemap(vehiculos, ghHeaders, ghBase, branch) {
     const paginasVehiculos = vehiculos
         .filter(v => v && v.id)
         .map(v => ({
-            loc: `${SITIO}/ficha.html?id=${encodeURIComponent(v.id)}`,
+            loc: `${SITIO}/${encodeURIComponent(v.id)}`,
             changefreq: "weekly",
             priority: "0.8"
         }));
