@@ -996,7 +996,7 @@ function tarjetaHTML(v) {
     const specs = [anioTexto, kmTexto].join(" · ");
 
     // Todos los vehículos comparten la misma ficha (ficha.html) y se identifican por su "id"
-    const enlaceHTML = `ficha.html?id=${encodeURIComponent(idDe(v))}`;
+    const enlaceHTML = `/${encodeURIComponent(idDe(v))}`;
 
     const overlay = `
                 <a href="${enlaceHTML}" class="vehiculo_img_overlay">
