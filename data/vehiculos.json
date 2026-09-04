@@ -206,21 +206,5 @@
       "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871144264-5.jpg",
       "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871145867-6.jpg"
     ]
-  },
-  {
-    "id": "citroen-123-123",
-    "marca": "Citroen",
-    "modelo": "123",
-    "anio": 123,
-    "km": 123,
-    "estado": "usado",
-    "combustible": "123",
-    "transmision": "123",
-    "descripcion": "123",
-    "fotos": [
-      "img/vehiculos/citroen-123-123/foto-1788553095149-0.webp",
-      "img/vehiculos/citroen-123-123/foto-1788553097267-1.webp",
-      "img/vehiculos/citroen-123-123/foto-1788553098778-2.webp"
-    ]
   }
 ]
