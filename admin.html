@@ -461,16 +461,23 @@ function renderListado() {
         const id = v.id || slugify(v);
         const img = (v.fotos && v.fotos[0]) || "";
         const km = v.km == null ? "—" : v.km.toLocaleString("es-AR") + " km";
+        const etiquetaVendido = v.vendido
+            ? '<br><span style="color:#c0392b;font-weight:700;font-size:12px;">VENDIDO</span>'
+            : "";
+        const botonVendido = v.vendido
+            ? `<button class="btn btn-secondary" onclick="marcarVendido(${i})">Reactivar</button>`
+            : `<button class="btn" style="background:#c0392b;color:#fff;border:1px solid #c0392b;" onclick="marcarVendido(${i})">Vendido</button>`;
         return `
         <tr>
             <td>${img ? `<img class="miniatura" src="${img}" onerror="this.style.visibility='hidden'">` : ""}</td>
             <td><strong>${v.marca}</strong><br>${v.modelo}</td>
             <td>${v.anio || "—"}</td>
-            <td>${v.estado === "0km" ? "0KM" : "Usado"}</td>
+            <td>${v.estado === "0km" ? "0KM" : "Usado"}${etiquetaVendido}</td>
             <td>${km}</td>
             <td>
                 <div class="acciones_fila">
                     <button class="btn btn-secondary" onclick="editarVehiculo(${i})">Editar</button>
+                    ${botonVendido}
                     <button class="btn btn-danger" onclick="eliminarVehiculo(${i})">Eliminar</button>
                 </div>
             </td>
@@ -608,6 +615,25 @@ async function eliminarVehiculo(indice) {
     }
 
     mostrarMensaje("Vehículo eliminado y publicado.", "ok");
+}
+
+async function marcarVendido(indice) {
+    const v = estado.vehiculos[indice];
+    const marcandoComoVendido = !v.vendido;
+
+    const mensajeConfirm = marcandoComoVendido
+        ? `¿Marcar "${v.marca} ${v.modelo}" como VENDIDO? Va a dejar de aparecer en el catálogo normal (Todos / 0km / Usados) y va a pasar a la sección "Vendidos". Las fotos y los datos no se borran, y podés reactivarlo cuando quieras.`
+        : `¿Volver a publicar "${v.marca} ${v.modelo}"? Va a aparecer de nuevo en el catálogo normal.`;
+    if (!confirm(mensajeConfirm)) return;
+
+    const nuevaLista = estado.vehiculos.map((x, i) => i === indice ? { ...x, vendido: marcandoComoVendido } : x);
+    await guardarJsonEnGithub(
+        nuevaLista,
+        marcandoComoVendido ? `Marcar vendido: ${v.marca} ${v.modelo}` : `Reactivar publicación: ${v.marca} ${v.modelo}`
+    );
+    estado.vehiculos = nuevaLista;
+    renderListado();
+    mostrarMensaje(marcandoComoVendido ? "Vehículo marcado como vendido." : "Vehículo publicado de nuevo.", "ok");
 }
 
 /* =========================================================
