@@ -466,7 +466,7 @@ function renderListado() {
             : "";
         const botonVendido = v.vendido
             ? `<button class="btn btn-secondary" onclick="marcarVendido(${i})">Reactivar</button>`
-            : `<button class="btn" style="background:#c0392b;color:#fff;border:1px solid #c0392b;" onclick="marcarVendido(${i})">Vendido</button>`;
+            : `<button class="btn" style="background:#c0392b;color:#fff;border:1px solid #c0392b;" onclick="marcarVendido(${i})">Marcar como VENDIDO</button>`;
         return `
         <tr>
             <td>${img ? `<img class="miniatura" src="${img}" onerror="this.style.visibility='hidden'">` : ""}</td>
