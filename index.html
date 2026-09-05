@@ -1762,10 +1762,14 @@
                 })
                 .then(function (vehiculos) {
                     if (!Array.isArray(vehiculos)) return;
+                    // Nunca mostramos vehículos vendidos en el carrusel del home
+                    // (si se venden, dejan de estar "a la venta", así que no
+                    // tiene sentido seguir promocionándolos acá).
+                    var disponibles = vehiculos.filter(function (v) { return !v.vendido; });
                     // Si el catálogo está vacío, dejamos el respaldo estático tal cual.
-                    if (vehiculos.length === 0) return;
+                    if (disponibles.length === 0) return;
 
-                    var destacados = vehiculos.slice(0, CANTIDAD_MAXIMA);
+                    var destacados = disponibles.slice(0, CANTIDAD_MAXIMA);
                     track.innerHTML = destacados.map(tarjetaVehiculoHTML).join("");
 
                     // Clave: el motor del carrusel (main.js) ya se había iniciado una
