@@ -671,6 +671,7 @@
                 <div class="estado_tab active" data-estado="todos">Todos</div>
                 <div class="estado_tab" data-estado="0km">0km</div>
                 <div class="estado_tab" data-estado="usado">Usados</div>
+                <div class="estado_tab" data-estado="vendido">Vendidos</div>
             </div>
 
             <!-- Buscador por texto -->
@@ -970,7 +971,14 @@ function poblarMarcas() {
 
 function aplicarFiltros() {
     return vehiculos.filter(v => {
-        if (filtros.estado !== "todos" && v.estado !== filtros.estado) return false;
+        if (filtros.estado === "vendido") {
+            // Pestaña "Vendidos": mostrar solamente los marcados como vendidos
+            if (!v.vendido) return false;
+        } else {
+            // Cualquier otra pestaña (Todos, 0km, Usados): nunca mostrar un vendido acá
+            if (v.vendido) return false;
+            if (filtros.estado !== "todos" && v.estado !== filtros.estado) return false;
+        }
         if (filtros.marca && v.marca !== filtros.marca) return false;
         if (filtros.busqueda) {
             const texto = (v.marca + " " + v.modelo).toLowerCase();
@@ -1009,10 +1017,15 @@ function tarjetaHTML(v) {
                     </span>
                 </a>`;
 
+    const cintaVendido = v.vendido
+        ? '<span style="position:absolute;top:12px;left:12px;background:#c0392b;color:#fff;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:700;letter-spacing:.5px;z-index:3;">VENDIDO</span>'
+        : '';
+
     return `
     <div class="col-12 col-md-6 col-lg-4">
         <div class="vehiculo_card">
             <div class="vehiculo_img">
+                ${cintaVendido}
                 <img src="${imagen}" alt="${v.marca} ${v.modelo}" onerror="this.onerror=null;this.src='${marcasInfo[v.marca]}';this.classList.add('foto_faltante');">${overlay}
             </div>
             <div class="vehiculo_body">
@@ -1091,7 +1104,7 @@ function inicializarDesdeURL() {
             document.getElementById("marcaSelect").value = marcaLimpia;
         }
     }
-    if (estadoParam && ["0km", "usado"].includes(estadoParam)) {
+    if (estadoParam && ["0km", "usado", "vendido"].includes(estadoParam)) {
         filtros.estado = estadoParam;
         document.querySelectorAll(".estado_tab").forEach(t => t.classList.remove("active"));
         document.querySelector(`.estado_tab[data-estado="${estadoParam}"]`).classList.add("active");
