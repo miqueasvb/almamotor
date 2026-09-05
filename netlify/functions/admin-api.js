@@ -1,4 +1,26 @@
 const RUTA_JSON = "data/vehiculos.json";
+const CARPETA_FOTOS = "img/vehiculos";
+
+// --- Validación de rutas: solo se puede tocar contenido dentro de
+// img/vehiculos/<id>/, nunca fuera de esa carpeta. Sin esto, alguien que
+// consiguiera (o adivinara) la contraseña del panel podría, por ejemplo,
+// pedir borrar o pisar "../../netlify/functions/admin-api.js" o cualquier
+// otro archivo del repo, mandando un "id" o "nombreArchivo" armado a
+// propósito. Estas funciones cortan eso de raíz: solo se permiten letras,
+// números, guiones y puntos — nada de "/" ni "..".
+function esSegmentoSeguro(valor) {
+    return typeof valor === "string" && valor.length > 0 && /^[a-zA-Z0-9._-]+$/.test(valor) && !valor.includes("..");
+}
+
+// Para "path" (que ya viene con la carpeta incluida, ej: img/vehiculos/xxx/foto.jpg):
+// exige que arranque con la carpeta de fotos y que cada segmento sea seguro.
+function esPathDeFotoSeguro(path) {
+    if (typeof path !== "string" || !path.startsWith(CARPETA_FOTOS + "/")) return false;
+    const resto = path.slice((CARPETA_FOTOS + "/").length);
+    const segmentos = resto.split("/");
+    if (segmentos.length !== 2) return false; // exactamente <id>/<archivo>
+    return segmentos.every(esSegmentoSeguro);
+}
 
 exports.handler = async (event) => {
     if (event.httpMethod !== "POST") {
@@ -52,7 +74,10 @@ exports.handler = async (event) => {
                 if (!id || !nombreArchivo || !base64) {
                     return respuesta(400, { error: "Faltan datos para subir la foto." });
                 }
-                const path = `img/vehiculos/${id}/${nombreArchivo}`;
+                if (!esSegmentoSeguro(id) || !esSegmentoSeguro(nombreArchivo)) {
+                    return respuesta(400, { error: "El id o el nombre de archivo tienen caracteres no permitidos." });
+                }
+                const path = `${CARPETA_FOTOS}/${id}/${nombreArchivo}`;
                 const r = await fetch(`${ghBase}/${path}`, {
                     method: "PUT",
                     headers: ghHeaders,
@@ -105,6 +130,92 @@ exports.handler = async (event) => {
                 return respuesta(200, { sha: data.content.sha });
             }
 
+            case "eliminarFotos": {
+                // Borra TODAS las fotos de un vehículo (se usa al eliminar el
+                // vehículo completo desde el panel).
+                const { id } = body;
+                if (!id) return respuesta(400, { error: "Falta el id del vehículo." });
+                if (!esSegmentoSeguro(id)) {
+                    return respuesta(400, { error: "El id tiene caracteres no permitidos." });
+                }
+
+                const carpeta = `${CARPETA_FOTOS}/${id}`;
+                const listR = await fetch(`${ghBase}/${carpeta}?ref=${branch}`, { headers: ghHeaders });
+
+                if (listR.status === 404) {
+                    // Este vehículo no tenía fotos propias (o ya se habían borrado antes). No es un error.
+                    return respuesta(200, { borradas: 0 });
+                }
+                if (!listR.ok) {
+                    const e = await listR.json().catch(() => ({}));
+                    return respuesta(listR.status, { error: e.message || "No se pudo leer la carpeta de fotos" });
+                }
+
+                const archivos = await listR.json();
+                let borradas = 0;
+                const errores = [];
+
+                // GitHub no tiene un "borrar carpeta entera" — hay que borrar
+                // archivo por archivo, cada uno con su propio commit. Si alguna
+                // foto puntual falla, seguimos con las demás en vez de frenar
+                // todo (ya el catálogo se guardó bien antes de llegar acá).
+                // Además, chequeamos que cada archivo listado siga dentro de
+                // la carpeta esperada (por más que esto ya lo controla GitHub,
+                // es una segunda capa de seguridad sin costo).
+                for (const archivo of archivos) {
+                    if (archivo.type !== "file") continue;
+                    if (!archivo.path.startsWith(carpeta + "/")) continue;
+                    const delR = await fetch(`${ghBase}/${archivo.path}`, {
+                        method: "DELETE",
+                        headers: ghHeaders,
+                        body: JSON.stringify({
+                            message: `Eliminar foto (${id})`,
+                            sha: archivo.sha,
+                            branch
+                        })
+                    });
+                    if (delR.ok) {
+                        borradas++;
+                    } else {
+                        errores.push(archivo.path);
+                    }
+                }
+
+                return respuesta(200, { borradas, errores });
+            }
+
+            case "eliminarFoto": {
+                // Borra UNA foto puntual por su ruta exacta. Se usa cuando se
+                // edita un vehículo y se saca o reemplaza alguna foto suelta
+                // (no todo el vehículo) — para que esa foto vieja no quede
+                // huérfana en GitHub.
+                const { path } = body;
+                if (!path) return respuesta(400, { error: "Falta el path de la foto." });
+                if (!esPathDeFotoSeguro(path)) {
+                    return respuesta(400, { error: "La ruta de la foto no es válida." });
+                }
+
+                const getR = await fetch(`${ghBase}/${path}?ref=${branch}`, { headers: ghHeaders });
+                if (getR.status === 404) {
+                    return respuesta(200, { borrada: false }); // ya no existía, no es error
+                }
+                if (!getR.ok) {
+                    const e = await getR.json().catch(() => ({}));
+                    return respuesta(getR.status, { error: e.message || "No se pudo leer la foto" });
+                }
+                const info = await getR.json();
+
+                const delR = await fetch(`${ghBase}/${path}`, {
+                    method: "DELETE",
+                    headers: ghHeaders,
+                    body: JSON.stringify({ message: `Eliminar foto: ${path}`, sha: info.sha, branch })
+                });
+                if (!delR.ok) {
+                    const e = await delR.json().catch(() => ({}));
+                    return respuesta(delR.status, { error: e.message || "No se pudo borrar la foto" });
+                }
+                return respuesta(200, { borrada: true });
+            }
 
             default:
                 return respuesta(400, { error: "Acción desconocida." });
