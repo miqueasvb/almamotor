@@ -207,5 +207,20 @@
       "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871144264-5.jpg",
       "img/vehiculos/renault-clio-mio-confort-plus-2014/foto-1787871145867-6.jpg"
     ]
+  },
+  {
+    "id": "ford-123-123",
+    "marca": "Ford",
+    "modelo": "123",
+    "anio": 123,
+    "km": 123,
+    "estado": "usado",
+    "combustible": "444",
+    "transmision": "123",
+    "descripcion": "4444",
+    "fotos": [
+      "img/vehiculos/ford-123-123/foto-1788573397596-0.webp",
+      "img/vehiculos/ford-123-123/foto-1788573399646-1.webp"
+    ]
   }
 ]
