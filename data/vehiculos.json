@@ -227,5 +227,26 @@
       "img/vehiculos/ford-ranger-raptor-2024/foto-1788660944490-7.jpg",
       "img/vehiculos/ford-ranger-raptor-2024/foto-1788660947767-9.jpg"
     ]
+  },
+  {
+    "id": "chevrolet-tracker-ltz-turbo-2023",
+    "marca": "Chevrolet",
+    "modelo": "Tracker LTZ Turbo",
+    "anio": 2023,
+    "km": 31000,
+    "estado": "usado",
+    "combustible": "Nafta",
+    "transmision": "Automática",
+    "fotos": [
+      "img/vehiculos/chevrolet-tracker-ltz-turbo-2023/foto-1788661459957-0.jpg",
+      "img/vehiculos/chevrolet-tracker-ltz-turbo-2023/foto-1788661462629-1.jpg",
+      "img/vehiculos/chevrolet-tracker-ltz-turbo-2023/foto-1788661464059-2.jpg",
+      "img/vehiculos/chevrolet-tracker-ltz-turbo-2023/foto-1788661465494-3.jpg",
+      "img/vehiculos/chevrolet-tracker-ltz-turbo-2023/foto-1788661466824-4.jpg",
+      "img/vehiculos/chevrolet-tracker-ltz-turbo-2023/foto-1788661468768-5.jpg",
+      "img/vehiculos/chevrolet-tracker-ltz-turbo-2023/foto-1788661470406-6.jpg",
+      "img/vehiculos/chevrolet-tracker-ltz-turbo-2023/foto-1788661472046-7.jpg",
+      "img/vehiculos/chevrolet-tracker-ltz-turbo-2023/foto-1788661473377-8.jpg"
+    ]
   }
 ]
