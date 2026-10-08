@@ -243,19 +243,5 @@
       "img/vehiculos/chevrolet-tracker-ltz-turbo-2023/foto-1788665583862-2.jpg",
       "img/vehiculos/chevrolet-tracker-ltz-turbo-2023/foto-1788665585637-3.jpg"
     ]
-  },
-  {
-    "id": "yamaha-sdf-s-n",
-    "marca": "Yamaha",
-    "modelo": "sdf",
-    "anio": null,
-    "km": null,
-    "estado": "usado",
-    "combustible": "fsdsfd",
-    "transmision": "fsdfsd",
-    "descripcion": "fsd",
-    "fotos": [
-      "img/vehiculos/yamaha-sdf-s-n/foto-1791475249536-0.jpg"
-    ]
   }
 ]
