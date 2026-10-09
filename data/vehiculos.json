@@ -243,5 +243,25 @@
       "img/vehiculos/chevrolet-tracker-ltz-turbo-2023/foto-1788665583862-2.jpg",
       "img/vehiculos/chevrolet-tracker-ltz-turbo-2023/foto-1788665585637-3.jpg"
     ]
+  },
+  {
+    "id": "citroen-berlingo-furgon-2017",
+    "marca": "Citroen",
+    "modelo": "Berlingo Furgon",
+    "anio": 2017,
+    "km": 47,
+    "estado": "usado",
+    "combustible": "Nafta",
+    "transmision": "Manual",
+    "fotos": [
+      "img/vehiculos/citroen-berlingo-furgon-2017/foto-1791580366163-0.jpg",
+      "img/vehiculos/citroen-berlingo-furgon-2017/foto-1791580370468-1.jpg",
+      "img/vehiculos/citroen-berlingo-furgon-2017/foto-1791580372937-2.jpg",
+      "img/vehiculos/citroen-berlingo-furgon-2017/foto-1791580375495-3.jpg",
+      "img/vehiculos/citroen-berlingo-furgon-2017/foto-1791580377867-4.jpg",
+      "img/vehiculos/citroen-berlingo-furgon-2017/foto-1791580379884-5.jpg",
+      "img/vehiculos/citroen-berlingo-furgon-2017/foto-1791580381767-6.jpg",
+      "img/vehiculos/citroen-berlingo-furgon-2017/foto-1791580383917-7.jpg"
+    ]
   }
 ]
