@@ -305,6 +305,8 @@
             overflow: hidden;
         }
         .vehiculo_img img {
+            position: relative;
+            z-index: 1;
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -312,6 +314,25 @@
             opacity: 1;
             display: block;
         }
+        /* Ajuste inteligente de fotos: si la foto tiene una proporción muy distinta
+           a la de la tarjeta (cuadradas, verticales, panorámicas) se muestra COMPLETA
+           (contain) sobre una versión borrosa de sí misma, en vez de recortarla. */
+        .vehiculo_img::before {
+            content: "";
+            position: absolute;
+            inset: -24px;
+            background-image: var(--bg);
+            background-size: cover;
+            background-position: center;
+            filter: blur(20px) brightness(0.92);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .vehiculo_img.fit_contain::before { opacity: 1; }
+        .vehiculo_img.fit_contain img { object-fit: contain; object-position: center; }
+        .vehiculo_img.fit_logo { background: #fff; }
+        .vehiculo_img.fit_logo::before { opacity: 0; }
+        .vehiculo_img.fit_logo img { object-fit: contain; object-position: center; padding: 22px 30px; box-sizing: border-box; }
         .vehiculo_img_overlay {
             position: absolute;
             inset: 0;
@@ -997,6 +1018,20 @@ function ordenar(lista) {
     return arr;
 }
 
+// Decide cómo mostrar cada foto dentro de la tarjeta (3:2):
+// - horizontales y verticales -> cover (como siempre)
+// - cuadradas o muy panorámicas -> contain sobre fondo borroso (se ven enteras)
+function ajustarFoto(img) {
+    const box = img.parentElement;
+    if (!box || !img.naturalWidth) return;
+    if (img.classList.contains('foto_faltante')) { box.classList.add('fit_logo'); return; }
+    const r = img.naturalWidth / img.naturalHeight;
+    box.style.setProperty('--bg', 'url("' + (img.currentSrc || img.src) + '")');
+    // Solo las CUADRADAS (o casi) y las muy panorámicas se muestran enteras.
+    // Las verticales y las horizontales normales quedan como siempre (cover).
+    box.classList.toggle('fit_contain', (r >= 0.85 && r < 1.2) || r > 2);
+}
+
 function tarjetaHTML(v) {
     const imagen = (v.fotos && v.fotos[0]) || marcasInfo[v.marca];
     const kmTexto = v.km == null ? "CONFIRMAR" : (v.km === 0 ? "0 km" : v.km.toLocaleString("es-AR") + " km");
@@ -1026,7 +1061,7 @@ function tarjetaHTML(v) {
         <div class="vehiculo_card">
             <div class="vehiculo_img">
                 ${cintaVendido}
-                <img src="${imagen}" alt="${v.marca} ${v.modelo}" onerror="this.onerror=null;this.src='${marcasInfo[v.marca]}';this.classList.add('foto_faltante');">${overlay}
+                <img src="${imagen}" alt="${v.marca} ${v.modelo}" loading="lazy" onload="ajustarFoto(this)" onerror="this.onerror=null;this.classList.add('foto_faltante');this.src='${marcasInfo[v.marca]}';">${overlay}
             </div>
             <div class="vehiculo_body">
                 <div class="vehiculo_marca">${v.marca}</div>
