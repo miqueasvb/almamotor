@@ -263,5 +263,25 @@
       "img/vehiculos/citroen-berlingo-furgon-2017/foto-1791580381767-6.jpg",
       "img/vehiculos/citroen-berlingo-furgon-2017/foto-1791580383917-7.jpg"
     ]
+  },
+  {
+    "id": "volkswagen-nivus-comfortline-2021",
+    "marca": "Volkswagen",
+    "modelo": "Nivus Comfortline",
+    "anio": 2021,
+    "km": 81000,
+    "estado": "usado",
+    "combustible": "Nafta",
+    "transmision": "Automática",
+    "fotos": [
+      "img/vehiculos/volkswagen-nivus-comfortline-2021/foto-1791822654234-0.jpg",
+      "img/vehiculos/volkswagen-nivus-comfortline-2021/foto-1791822657204-1.jpg",
+      "img/vehiculos/volkswagen-nivus-comfortline-2021/foto-1791822658944-2.jpg",
+      "img/vehiculos/volkswagen-nivus-comfortline-2021/foto-1791822660613-3.jpg",
+      "img/vehiculos/volkswagen-nivus-comfortline-2021/foto-1791822662266-4.jpg",
+      "img/vehiculos/volkswagen-nivus-comfortline-2021/foto-1791822664318-5.jpg",
+      "img/vehiculos/volkswagen-nivus-comfortline-2021/foto-1791822666244-6.jpg",
+      "img/vehiculos/volkswagen-nivus-comfortline-2021/foto-1791822668071-7.jpg"
+    ]
   }
 ]
