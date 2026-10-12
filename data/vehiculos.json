@@ -283,5 +283,24 @@
       "img/vehiculos/volkswagen-nivus-comfortline-2021/foto-1791822666244-6.jpg",
       "img/vehiculos/volkswagen-nivus-comfortline-2021/foto-1791822668071-7.jpg"
     ]
+  },
+  {
+    "id": "volkswagen-bora-2-0-2013",
+    "marca": "Volkswagen",
+    "modelo": "Bora 2.0",
+    "anio": 2013,
+    "km": 105000,
+    "estado": "usado",
+    "combustible": "Nafta",
+    "transmision": "Manual",
+    "fotos": [
+      "img/vehiculos/volkswagen-bora-2-0-2013/foto-1791822754289-0.jpg",
+      "img/vehiculos/volkswagen-bora-2-0-2013/foto-1791822757631-1.jpg",
+      "img/vehiculos/volkswagen-bora-2-0-2013/foto-1791822759503-2.jpg",
+      "img/vehiculos/volkswagen-bora-2-0-2013/foto-1791822766885-3.jpg",
+      "img/vehiculos/volkswagen-bora-2-0-2013/foto-1791822770570-4.jpg",
+      "img/vehiculos/volkswagen-bora-2-0-2013/foto-1791822772733-5.jpg",
+      "img/vehiculos/volkswagen-bora-2-0-2013/foto-1791822774678-6.jpg"
+    ]
   }
 ]
