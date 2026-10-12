@@ -302,5 +302,25 @@
       "img/vehiculos/volkswagen-bora-2-0-2013/foto-1791822772733-5.jpg",
       "img/vehiculos/volkswagen-bora-2-0-2013/foto-1791822774678-6.jpg"
     ]
+  },
+  {
+    "id": "toyota-yaris-xls-1-5-cvt-2025",
+    "marca": "Toyota",
+    "modelo": "Yaris XLS 1.5 CVT",
+    "anio": 2025,
+    "km": 0,
+    "estado": "0km",
+    "combustible": "Nafta",
+    "transmision": "Automática",
+    "fotos": [
+      "img/vehiculos/toyota-yaris-xls-1-5-cvt-2025/foto-1791823042865-0.jpg",
+      "img/vehiculos/toyota-yaris-xls-1-5-cvt-2025/foto-1791823045973-1.jpg",
+      "img/vehiculos/toyota-yaris-xls-1-5-cvt-2025/foto-1791823047736-2.jpg",
+      "img/vehiculos/toyota-yaris-xls-1-5-cvt-2025/foto-1791823049326-3.jpg",
+      "img/vehiculos/toyota-yaris-xls-1-5-cvt-2025/foto-1791823051211-4.jpg",
+      "img/vehiculos/toyota-yaris-xls-1-5-cvt-2025/foto-1791823052651-5.jpg",
+      "img/vehiculos/toyota-yaris-xls-1-5-cvt-2025/foto-1791823054222-6.jpg",
+      "img/vehiculos/toyota-yaris-xls-1-5-cvt-2025/foto-1791823055901-7.jpg"
+    ]
   }
 ]
