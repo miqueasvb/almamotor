@@ -316,5 +316,16 @@
       "img/vehiculos/yamaha-raptor-700-2019/foto-1793747491165-2.jpg",
       "img/vehiculos/yamaha-raptor-700-2019/foto-1793747493110-3.jpg"
     ]
+  },
+  {
+    "id": "yamaha-banshee-350-2011",
+    "marca": "Yamaha",
+    "modelo": "Banshee 350",
+    "anio": 2011,
+    "km": null,
+    "estado": "usado",
+    "fotos": [
+      "img/vehiculos/yamaha-banshee-350-2011/foto-1793747656092-0.jpg"
+    ]
   }
 ]
