@@ -302,5 +302,19 @@
       "img/vehiculos/volkswagen-bora-2-0-2013/foto-1791822772733-5.jpg",
       "img/vehiculos/volkswagen-bora-2-0-2013/foto-1791822774678-6.jpg"
     ]
+  },
+  {
+    "id": "yamaha-raptor-700-2019",
+    "marca": "Yamaha",
+    "modelo": "Raptor 700",
+    "anio": 2019,
+    "km": null,
+    "estado": "usado",
+    "fotos": [
+      "img/vehiculos/yamaha-raptor-700-2019/foto-1793747485345-0.jpg",
+      "img/vehiculos/yamaha-raptor-700-2019/foto-1793747488913-1.jpg",
+      "img/vehiculos/yamaha-raptor-700-2019/foto-1793747491165-2.jpg",
+      "img/vehiculos/yamaha-raptor-700-2019/foto-1793747493110-3.jpg"
+    ]
   }
 ]
