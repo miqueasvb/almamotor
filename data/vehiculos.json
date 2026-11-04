@@ -460,5 +460,25 @@
       "img/vehiculos/bmw-x6-2011/foto-1793797352506-4.jpg",
       "img/vehiculos/bmw-x6-2011/foto-1793797354908-5.jpg"
     ]
+  },
+  {
+    "id": "citroen-berlingo-furgon-2017",
+    "marca": "Citroen",
+    "modelo": "Berlingo Furgon",
+    "anio": 2017,
+    "km": 47000,
+    "estado": "usado",
+    "transmision": "Manual",
+    "fotos": [
+      "img/vehiculos/citroen-berlingo-furgon-2017/foto-1793797489014-0.jpg",
+      "img/vehiculos/citroen-berlingo-furgon-2017/foto-1793797496977-1.jpg",
+      "img/vehiculos/citroen-berlingo-furgon-2017/foto-1793797499178-2.jpg",
+      "img/vehiculos/citroen-berlingo-furgon-2017/foto-1793797501433-3.jpg",
+      "img/vehiculos/citroen-berlingo-furgon-2017/foto-1793797503805-4.jpg",
+      "img/vehiculos/citroen-berlingo-furgon-2017/foto-1793797505962-5.jpg",
+      "img/vehiculos/citroen-berlingo-furgon-2017/foto-1793797508137-6.jpg",
+      "img/vehiculos/citroen-berlingo-furgon-2017/foto-1793797510433-7.jpg",
+      "img/vehiculos/citroen-berlingo-furgon-2017/foto-1793797514336-8.jpg"
+    ]
   }
 ]
