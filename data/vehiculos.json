@@ -443,5 +443,22 @@
       "img/vehiculos/ram-2500-2020/foto-1793797209593-4.jpg",
       "img/vehiculos/ram-2500-2020/foto-1793797211828-5.jpg"
     ]
+  },
+  {
+    "id": "bmw-x6-2011",
+    "marca": "BMW",
+    "modelo": "X6",
+    "anio": 2011,
+    "km": 135000,
+    "estado": "usado",
+    "transmision": "Automatica",
+    "fotos": [
+      "img/vehiculos/bmw-x6-2011/foto-1793797341286-0.jpg",
+      "img/vehiculos/bmw-x6-2011/foto-1793797345579-1.jpg",
+      "img/vehiculos/bmw-x6-2011/foto-1793797347931-2.jpg",
+      "img/vehiculos/bmw-x6-2011/foto-1793797350137-3.jpg",
+      "img/vehiculos/bmw-x6-2011/foto-1793797352506-4.jpg",
+      "img/vehiculos/bmw-x6-2011/foto-1793797354908-5.jpg"
+    ]
   }
 ]
