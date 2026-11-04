@@ -499,5 +499,16 @@
       "img/vehiculos/fiat-palio-fire-2017/foto-1793797630740-6.jpg",
       "img/vehiculos/fiat-palio-fire-2017/foto-1793797636072-7.jpg"
     ]
+  },
+  {
+    "id": "yamaha-raptor-700-2020",
+    "marca": "Yamaha",
+    "modelo": "RAPTOR 700",
+    "anio": 2020,
+    "km": null,
+    "estado": "usado",
+    "fotos": [
+      "img/vehiculos/yamaha-raptor-700-2020/foto-1793797707238-0.jpg"
+    ]
   }
 ]
