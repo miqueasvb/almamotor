@@ -346,5 +346,26 @@
       "img/vehiculos/toyota-hilux-4x2-at-2-4-2018/foto-1793793596456-5.jpg",
       "img/vehiculos/toyota-hilux-4x2-at-2-4-2018/foto-1793793598436-6.jpg"
     ]
+  },
+  {
+    "id": "chevrolet-cruze-premier-at-2020",
+    "marca": "Chevrolet",
+    "modelo": "Cruze Premier At",
+    "anio": 2020,
+    "km": 91000,
+    "estado": "usado",
+    "combustible": "Nafta",
+    "transmision": "Automatica",
+    "fotos": [
+      "img/vehiculos/chevrolet-cruze-premier-at-2020/foto-1793796510895-0.jpg",
+      "img/vehiculos/chevrolet-cruze-premier-at-2020/foto-1793796514630-1.jpg",
+      "img/vehiculos/chevrolet-cruze-premier-at-2020/foto-1793796516453-2.jpg",
+      "img/vehiculos/chevrolet-cruze-premier-at-2020/foto-1793796518681-3.jpg",
+      "img/vehiculos/chevrolet-cruze-premier-at-2020/foto-1793796520807-4.jpg",
+      "img/vehiculos/chevrolet-cruze-premier-at-2020/foto-1793796522717-5.jpg",
+      "img/vehiculos/chevrolet-cruze-premier-at-2020/foto-1793796524426-6.jpg",
+      "img/vehiculos/chevrolet-cruze-premier-at-2020/foto-1793796526885-7.jpg",
+      "img/vehiculos/chevrolet-cruze-premier-at-2020/foto-1793796529316-8.jpg"
+    ]
   }
 ]
