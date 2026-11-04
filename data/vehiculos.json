@@ -527,5 +527,22 @@
       "img/vehiculos/chevrolet-prisma-ltz-2018/foto-1793797882507-4.jpg",
       "img/vehiculos/chevrolet-prisma-ltz-2018/foto-1793797884994-5.jpg"
     ]
+  },
+  {
+    "id": "renault-clio-mio-dynamique-1-2-2015",
+    "marca": "Renault",
+    "modelo": "Clio Mio Dynamique 1.2",
+    "anio": 2015,
+    "km": 169000,
+    "estado": "usado",
+    "transmision": "Manual",
+    "fotos": [
+      "img/vehiculos/renault-clio-mio-dynamique-1-2-2015/foto-1793799449462-0.jpg",
+      "img/vehiculos/renault-clio-mio-dynamique-1-2-2015/foto-1793799453670-1.jpg",
+      "img/vehiculos/renault-clio-mio-dynamique-1-2-2015/foto-1793799455736-2.jpg",
+      "img/vehiculos/renault-clio-mio-dynamique-1-2-2015/foto-1793799457450-3.jpg",
+      "img/vehiculos/renault-clio-mio-dynamique-1-2-2015/foto-1793799459855-4.jpg",
+      "img/vehiculos/renault-clio-mio-dynamique-1-2-2015/foto-1793799462159-5.jpg"
+    ]
   }
 ]
