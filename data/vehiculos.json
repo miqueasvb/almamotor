@@ -386,5 +386,25 @@
       "img/vehiculos/chevrolet-s10-high-country-4x4-at-2020/foto-1793796765197-5.jpg",
       "img/vehiculos/chevrolet-s10-high-country-4x4-at-2020/foto-1793796770066-6.jpg"
     ]
+  },
+  {
+    "id": "renault-symbol-luxe-1-6-2011",
+    "marca": "Renault",
+    "modelo": "Symbol Luxe 1.6",
+    "anio": 2011,
+    "km": 146000,
+    "estado": "usado",
+    "combustible": "Nafta",
+    "transmision": "Manual",
+    "fotos": [
+      "img/vehiculos/renault-symbol-luxe-1-6-2011/foto-1793796895222-0.jpg",
+      "img/vehiculos/renault-symbol-luxe-1-6-2011/foto-1793796899214-1.jpg",
+      "img/vehiculos/renault-symbol-luxe-1-6-2011/foto-1793796901551-2.jpg",
+      "img/vehiculos/renault-symbol-luxe-1-6-2011/foto-1793796904126-3.jpg",
+      "img/vehiculos/renault-symbol-luxe-1-6-2011/foto-1793796906911-4.jpg",
+      "img/vehiculos/renault-symbol-luxe-1-6-2011/foto-1793796909157-5.jpg",
+      "img/vehiculos/renault-symbol-luxe-1-6-2011/foto-1793796911322-6.jpg",
+      "img/vehiculos/renault-symbol-luxe-1-6-2011/foto-1793796913833-7.jpg"
+    ]
   }
 ]
