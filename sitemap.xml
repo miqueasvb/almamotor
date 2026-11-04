@@ -125,4 +125,9 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://www.almamotor.com.ar/renault-symbol-luxe-1-6-2011</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
