@@ -406,5 +406,24 @@
       "img/vehiculos/renault-symbol-luxe-1-6-2011/foto-1793796911322-6.jpg",
       "img/vehiculos/renault-symbol-luxe-1-6-2011/foto-1793796913833-7.jpg"
     ]
+  },
+  {
+    "id": "volkswagen-taos-comfort-at-2023",
+    "marca": "Volkswagen",
+    "modelo": "Taos Comfort At",
+    "anio": 2023,
+    "km": 121000,
+    "estado": "usado",
+    "combustible": "Nafta",
+    "transmision": "Automatica",
+    "fotos": [
+      "img/vehiculos/volkswagen-taos-comfort-at-2023/foto-1793796992471-0.jpg",
+      "img/vehiculos/volkswagen-taos-comfort-at-2023/foto-1793796995982-1.jpg",
+      "img/vehiculos/volkswagen-taos-comfort-at-2023/foto-1793796998192-2.jpg",
+      "img/vehiculos/volkswagen-taos-comfort-at-2023/foto-1793797000742-3.jpg",
+      "img/vehiculos/volkswagen-taos-comfort-at-2023/foto-1793797003415-4.jpg",
+      "img/vehiculos/volkswagen-taos-comfort-at-2023/foto-1793797005460-5.jpg",
+      "img/vehiculos/volkswagen-taos-comfort-at-2023/foto-1793797007659-6.jpg"
+    ]
   }
 ]
