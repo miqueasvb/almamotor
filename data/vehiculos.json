@@ -480,5 +480,24 @@
       "img/vehiculos/citroen-berlingo-furgon-2017/foto-1793797510433-7.jpg",
       "img/vehiculos/citroen-berlingo-furgon-2017/foto-1793797514336-8.jpg"
     ]
+  },
+  {
+    "id": "fiat-palio-fire-2017",
+    "marca": "Fiat",
+    "modelo": "Palio Fire",
+    "anio": 2017,
+    "km": 80000,
+    "estado": "usado",
+    "transmision": "Manual",
+    "fotos": [
+      "img/vehiculos/fiat-palio-fire-2017/foto-1793797606766-0.jpg",
+      "img/vehiculos/fiat-palio-fire-2017/foto-1793797611400-1.jpg",
+      "img/vehiculos/fiat-palio-fire-2017/foto-1793797615474-2.jpg",
+      "img/vehiculos/fiat-palio-fire-2017/foto-1793797619581-3.jpg",
+      "img/vehiculos/fiat-palio-fire-2017/foto-1793797622350-4.jpg",
+      "img/vehiculos/fiat-palio-fire-2017/foto-1793797626388-5.jpg",
+      "img/vehiculos/fiat-palio-fire-2017/foto-1793797630740-6.jpg",
+      "img/vehiculos/fiat-palio-fire-2017/foto-1793797636072-7.jpg"
+    ]
   }
 ]
