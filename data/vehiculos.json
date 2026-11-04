@@ -510,5 +510,22 @@
     "fotos": [
       "img/vehiculos/yamaha-raptor-700-2020/foto-1793797707238-0.jpg"
     ]
+  },
+  {
+    "id": "chevrolet-prisma-ltz-2018",
+    "marca": "Chevrolet",
+    "modelo": "Prisma LTZ",
+    "anio": 2018,
+    "km": 135000,
+    "estado": "usado",
+    "transmision": "Automatico",
+    "fotos": [
+      "img/vehiculos/chevrolet-prisma-ltz-2018/foto-1793797871550-0.jpg",
+      "img/vehiculos/chevrolet-prisma-ltz-2018/foto-1793797874883-1.jpg",
+      "img/vehiculos/chevrolet-prisma-ltz-2018/foto-1793797877590-2.jpg",
+      "img/vehiculos/chevrolet-prisma-ltz-2018/foto-1793797880086-3.jpg",
+      "img/vehiculos/chevrolet-prisma-ltz-2018/foto-1793797882507-4.jpg",
+      "img/vehiculos/chevrolet-prisma-ltz-2018/foto-1793797884994-5.jpg"
+    ]
   }
 ]
