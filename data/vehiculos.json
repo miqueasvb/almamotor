@@ -488,5 +488,25 @@
       "img/vehiculos/chevrolet-prisma-ltz-2018/foto-1793797882507-4.jpg",
       "img/vehiculos/chevrolet-prisma-ltz-2018/foto-1793797884994-5.jpg"
     ]
+  },
+  {
+    "id": "mini-mini-cooper-s-2017",
+    "marca": "Mini",
+    "modelo": "Mini Cooper S",
+    "anio": 2017,
+    "km": 54000,
+    "estado": "usado",
+    "combustible": "Nafta",
+    "transmision": "AT",
+    "fotos": [
+      "img/vehiculos/mini-mini-cooper-s-2017/foto-1793989298895-0.jpg",
+      "img/vehiculos/mini-mini-cooper-s-2017/foto-1793989301944-1.jpg",
+      "img/vehiculos/mini-mini-cooper-s-2017/foto-1793989304094-2.jpg",
+      "img/vehiculos/mini-mini-cooper-s-2017/foto-1793989305938-3.jpg",
+      "img/vehiculos/mini-mini-cooper-s-2017/foto-1793989308089-4.jpg",
+      "img/vehiculos/mini-mini-cooper-s-2017/foto-1793989310034-5.jpg",
+      "img/vehiculos/mini-mini-cooper-s-2017/foto-1793989312084-6.jpg",
+      "img/vehiculos/mini-mini-cooper-s-2017/foto-1793989314132-7.jpg"
+    ]
   }
 ]
