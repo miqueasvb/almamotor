@@ -509,5 +509,28 @@
       "img/vehiculos/mini-mini-cooper-s-2017/foto-1793989312084-6.jpg",
       "img/vehiculos/mini-mini-cooper-s-2017/foto-1793989314132-7.jpg"
     ]
+  },
+  {
+    "id": "volkswagen-golf-gti-2-0-2018",
+    "marca": "Volkswagen",
+    "modelo": "Golf GTI 2.0",
+    "anio": 2018,
+    "km": 74000,
+    "estado": "usado",
+    "combustible": "Nafta",
+    "transmision": "Automática DSG",
+    "descripcion": "Caja Automática DSG\nMotor 2.0 TSI Turbo",
+    "fotos": [
+      "img/vehiculos/volkswagen-golf-gti-2-0-2018/foto-1794583872921-0.jpg",
+      "img/vehiculos/volkswagen-golf-gti-2-0-2018/foto-1794583876268-1.jpg",
+      "img/vehiculos/volkswagen-golf-gti-2-0-2018/foto-1794583878110-2.jpg",
+      "img/vehiculos/volkswagen-golf-gti-2-0-2018/foto-1794583880053-3.jpg",
+      "img/vehiculos/volkswagen-golf-gti-2-0-2018/foto-1794583881897-4.jpg",
+      "img/vehiculos/volkswagen-golf-gti-2-0-2018/foto-1794583883739-5.jpg",
+      "img/vehiculos/volkswagen-golf-gti-2-0-2018/foto-1794583885890-6.jpg",
+      "img/vehiculos/volkswagen-golf-gti-2-0-2018/foto-1794583887835-7.jpg",
+      "img/vehiculos/volkswagen-golf-gti-2-0-2018/foto-1794583889781-8.jpg",
+      "img/vehiculos/volkswagen-golf-gti-2-0-2018/foto-1794583892239-9.jpg"
+    ]
   }
 ]
