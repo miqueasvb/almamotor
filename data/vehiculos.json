@@ -532,5 +532,25 @@
       "img/vehiculos/volkswagen-golf-gti-2-0-2018/foto-1794583889781-8.jpg",
       "img/vehiculos/volkswagen-golf-gti-2-0-2018/foto-1794583892239-9.jpg"
     ]
+  },
+  {
+    "id": "toyota-hilux-dx-4x2-2-4-2025",
+    "marca": "Toyota",
+    "modelo": "Hilux DX 4x2 2.4",
+    "anio": 2025,
+    "km": 62,
+    "estado": "usado",
+    "combustible": "Diésel",
+    "transmision": "Automática",
+    "descripcion": "Hilux DX AT 4x2 2.4",
+    "fotos": [
+      "img/vehiculos/toyota-hilux-dx-4x2-2-4-2025/foto-1795029783260-0.jpg",
+      "img/vehiculos/toyota-hilux-dx-4x2-2-4-2025/foto-1795029786429-1.jpg",
+      "img/vehiculos/toyota-hilux-dx-4x2-2-4-2025/foto-1795029788269-2.jpg",
+      "img/vehiculos/toyota-hilux-dx-4x2-2-4-2025/foto-1795029790009-3.jpg",
+      "img/vehiculos/toyota-hilux-dx-4x2-2-4-2025/foto-1795029791955-4.jpg",
+      "img/vehiculos/toyota-hilux-dx-4x2-2-4-2025/foto-1795029793800-5.jpg",
+      "img/vehiculos/toyota-hilux-dx-4x2-2-4-2025/foto-1795029795949-6.jpg"
+    ]
   }
 ]
